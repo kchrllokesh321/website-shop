@@ -3,21 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-
-
-
-
+<title>Sri Maruthi Enterprises | Furniture &amp; Electronics</title>
+<meta name="description" content="Sri Maruthi Enterprises — Furniture, Electronics and Home Solutions. Your Home. Our Craft.">
+<link rel="icon" href="assets/brand/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800;900&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
 :root{
   --navy:#062653;
   --navy-dark:#031936;
+  --navy-mid:#0a2f66;
   --navy-light:#0d376f;
   --orange:#F4511E;
   --orange-dark:#d93e10;
@@ -26,1191 +22,1010 @@
   --text:#14233a;
   --muted:#687589;
   --border:#e4e9ef;
-  --success:#1fa463;
-
-  --container:1280px;
-  --radius:18px;
-  --shadow:0 18px 55px rgba(4,25,55,.10);
-  --shadow-heavy:0 25px 80px rgba(4,25,55,.18);
+  --header-h:64px;
+  --footer-h:54px;
+  --container:1200px;
+  --radius:16px;
 }
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+html{scroll-behavior:smooth}
 body{
-  font-family:"DM Sans",Arial,sans-serif;
+  font-family:"Plus Jakarta Sans",Arial,sans-serif;
   color:var(--text);
-  background:var(--white);
-  line-height:1.6;
-  overflow-x:hidden;
+  background:var(--navy-dark);
+  line-height:1.5;
+}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+
+.app-shell{
+  min-height:100vh;
+  min-height:100dvh;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+}
+body.home-mode{
+  overflow:hidden;
+  height:100vh;
+  height:100dvh;
+}
+body.home-mode .app-shell{
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+body:not(.home-mode){
+  overflow:auto;
+  background:var(--offwhite);
 }
 
-body.admin-mode{
-  padding-top:50px;
-}
+.container{width:min(var(--container),calc(100% - 40px));margin-inline:auto}
 
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-button,
-input,
-textarea,
-select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-img{
-  display:block;
-  max-width:100%;
-}
-
-.container{
-  width:min(var(--container),calc(100% - 40px));
-  margin:auto;
-}
-
-.section{
-  padding:100px 0;
-}
-
-h1,h2,h3,h4{
-  font-family:"Manrope",sans-serif;
-  letter-spacing:-.035em;
-}
-
-h1{
-  font-size:clamp(44px,6vw,76px);
-  line-height:1.02;
-}
-
-h2{
-  font-size:clamp(34px,4vw,54px);
-  line-height:1.08;
-}
-
-h3{
-  font-size:22px;
-}
-
-.muted{
-  color:var(--muted);
-}
-
-/* =========================
-   ADMIN BAR
-========================= */
-
-.admin-bar{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  height:50px;
-  background:#111827;
-  color:#fff;
-  z-index:9999;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  gap:20px;
-  font-size:13px;
-}
-
-body.admin-mode .admin-bar{
-  display:flex;
-}
-
-.admin-bar strong{
-  color:#ffb39a;
-}
-
-.admin-btn{
-  border:0;
-  background:var(--orange);
-  color:#fff;
-  padding:7px 15px;
-  border-radius:7px;
-  font-weight:800;
-}
-
-/* =========================
-   HEADER
-========================= */
-
+/* Header */
 .site-header{
-  position:fixed;
-  left:0;
-  right:0;
-  top:0;
-  z-index:500;
+  height:var(--header-h);
   background:var(--navy);
   border-bottom:1px solid rgba(255,255,255,.10);
-  transition:.3s;
+  z-index:40;
 }
-
-body.admin-mode .site-header{
-  top:50px;
-}
-
-.site-header.scrolled{
-  box-shadow:0 10px 35px rgba(0,0,0,.18);
-}
-
 .nav{
-  min-height:92px;
+  height:100%;
   display:flex;
   align-items:center;
-  gap:28px;
+  gap:20px;
 }
-
 .brand{
   display:flex;
   align-items:center;
-  gap:13px;
+  gap:10px;
   flex-shrink:0;
 }
-
 .logo{
-  width:64px;
-  height:64px;
-  object-fit:cover;
+  width:42px;
+  height:42px;
+  object-fit:contain;
   border-radius:50%;
-  border:3px solid #fff;
   background:#fff;
-  box-shadow:0 5px 20px rgba(0,0,0,.25);
 }
-
 .brand-title{
-  font-family:"Manrope",sans-serif;
-  font-weight:900;
+  font-weight:800;
   color:#fff;
-  font-size:21px;
-  letter-spacing:.025em;
-  line-height:1.05;
+  font-size:15px;
+  letter-spacing:.02em;
+  line-height:1.1;
   white-space:nowrap;
 }
-
 .brand-caption{
   display:block;
   color:#ff7043;
-  font-size:9px;
-  letter-spacing:.15em;
-  font-weight:800;
-  margin-top:6px;
+  font-size:8px;
+  letter-spacing:.16em;
+  font-weight:700;
+  margin-top:3px;
 }
-
 .nav-links{
   margin-left:auto;
   display:flex;
   align-items:center;
-  gap:25px;
+  gap:22px;
 }
-
 .nav-links a{
   color:rgba(255,255,255,.86);
   font-size:13px;
-  font-weight:700;
-  transition:.2s;
+  font-weight:600;
+  padding:6px 0;
+  position:relative;
 }
-
-.nav-links a:hover{
-  color:#ff7043;
-}
-
-.appointment-btn{
+.nav-links a:hover{color:#ffb199}
+.nav-links a.is-active{color:#fff}
+.nav-links a.is-active:after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:2px;
   background:var(--orange);
-  color:#fff;
-  padding:13px 19px;
-  border-radius:9px;
-  font-size:12px;
-  font-weight:900;
-  white-space:nowrap;
-  transition:.25s;
+  border-radius:2px;
 }
-
-.appointment-btn:hover{
-  background:var(--orange-dark);
-  transform:translateY(-2px);
-}
-
 .menu-toggle{
   display:none;
-  border:0;
-  background:none;
+  margin-left:auto;
   color:#fff;
-  font-size:29px;
+  width:40px;height:40px;
+  font-size:22px;
 }
 
-/* =========================
-   HERO
-========================= */
-
-.hero{
-  min-height:760px;
-  padding:190px 0 100px;
-  background:
-    linear-gradient(105deg,var(--navy-dark),var(--navy) 62%,#0d376f);
-  color:#fff;
-  position:relative;
+/* Views */
+.view{display:none}
+.view.is-active{display:block}
+body.home-mode .view-home.is-active{
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
   overflow:hidden;
 }
 
-.hero:after{
+/* Hero */
+.hero{
+  position:relative;
+  min-height:0;
+  overflow:hidden;
+  background:linear-gradient(105deg,var(--navy-dark),var(--navy) 55%,var(--navy-light));
+}
+.hero-media{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.hero-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:78% 50%;
+}
+.hero-media:after{
   content:"";
   position:absolute;
-  width:650px;
-  height:650px;
-  right:-280px;
-  top:-180px;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:50%;
-  box-shadow:
-    0 0 0 70px rgba(255,255,255,.02),
-    0 0 0 140px rgba(255,255,255,.015);
+  inset:0;
+  background:linear-gradient(
+    90deg,
+    #031936 0%,
+    #031936 16%,
+    rgba(6,38,83,.92) 30%,
+    rgba(6,38,83,.55) 46%,
+    rgba(6,38,83,.18) 60%,
+    transparent 74%
+  );
 }
-
-.hero-grid{
+.hero-copy{
   position:relative;
   z-index:2;
-  display:grid;
-  grid-template-columns:1fr .9fr;
-  align-items:center;
-  gap:70px;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  max-width:560px;
+  padding:18px 0;
 }
-
 .eyebrow{
   display:inline-flex;
   align-items:center;
-  gap:9px;
-  padding:7px 12px;
-  border:1px solid rgba(255,112,67,.5);
-  border-radius:50px;
-  color:#ff805b;
+  gap:8px;
+  color:#ff8a65;
   font-size:11px;
-  font-weight:900;
+  font-weight:700;
   letter-spacing:.14em;
   text-transform:uppercase;
 }
-
 .eyebrow:before{
   content:"";
-  width:7px;
-  height:7px;
-  border-radius:50%;
+  width:7px;height:7px;border-radius:50%;
   background:var(--orange);
 }
-
 .hero h1{
-  margin-top:22px;
+  margin-top:10px;
+  color:#fff;
+  font-size:clamp(32px,5.6vh,58px);
+  line-height:1.05;
+  letter-spacing:-.03em;
+  font-weight:800;
 }
-
-.hero h1 span{
-  color:#ff7043;
-}
-
+.hero h1 span{color:#ff7043}
 .hero-description{
-  margin-top:25px;
-  max-width:650px;
+  margin-top:12px;
+  max-width:440px;
   color:rgba(255,255,255,.72);
-  font-size:17px;
+  font-size:clamp(13px,1.8vh,16px);
 }
-
-.hero-actions{
-  margin-top:32px;
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
+.hero-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
 .btn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:8px;
-  padding:14px 21px;
+  padding:11px 16px;
   border-radius:9px;
   font-size:13px;
-  font-weight:900;
+  font-weight:700;
   border:1px solid transparent;
-  transition:.25s;
+  transition:transform .2s,background .2s,border-color .2s;
 }
-
-.btn:hover{
-  transform:translateY(-2px);
-}
-
-.btn-orange{
-  background:var(--orange);
-  color:#fff;
-}
-
-.btn-white{
-  background:#fff;
-  color:var(--navy);
-}
-
-.btn-outline{
-  border-color:rgba(255,255,255,.25);
-  color:#fff;
+.btn:hover{transform:translateY(-1px)}
+.btn-orange{background:var(--orange);color:#fff}
+.btn-orange:hover{background:var(--orange-dark)}
+.btn-ghost{
   background:transparent;
-}
-
-.hero-image{
-  position:relative;
-}
-
-.hero-image img{
-  width:100%;
-  height:510px;
-  object-fit:cover;
-  border-radius:25px;
-  box-shadow:var(--shadow-heavy);
-}
-
-.hero-badge{
-  position:absolute;
-  bottom:-25px;
-  left:-25px;
-  background:#fff;
-  color:var(--navy);
-  padding:20px 24px;
-  border-radius:15px;
-  box-shadow:var(--shadow-heavy);
-}
-
-.hero-badge strong{
-  display:block;
-  font-family:Manrope;
-  font-size:30px;
-}
-
-.hero-badge span{
-  font-size:11px;
-  color:var(--muted);
-}
-
-/* =========================
-   BUSINESS STRIP
-========================= */
-
-.business-strip{
-  background:#fff;
-  border-bottom:1px solid var(--border);
-}
-
-.business-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-}
-
-.business-item{
-  padding:27px 25px;
-  border-right:1px solid var(--border);
-}
-
-.business-item:last-child{
-  border-right:0;
-}
-
-.business-item strong{
-  display:block;
-  color:var(--navy);
-  font-family:Manrope;
-  font-size:17px;
-}
-
-.business-item span{
-  display:block;
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
-}
-
-/* =========================
-   SECTION HEADER
-========================= */
-
-.section-header{
-  max-width:760px;
-}
-
-.section-header.center{
-  margin:auto;
-  text-align:center;
-}
-
-.section-header h2{
-  margin-top:16px;
-}
-
-.section-header p{
-  color:var(--muted);
-  margin-top:16px;
-}
-
-/* =========================
-   WHAT WE DO
-========================= */
-
-.what-we-do{
-  background:var(--offwhite);
-}
-
-.category-grid{
-  margin-top:45px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-}
-
-.category-card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:17px;
-  overflow:hidden;
-  transition:.3s;
-  position:relative;
-}
-
-.category-card:hover{
-  transform:translateY(-6px);
-  box-shadow:var(--shadow);
-  border-color:rgba(244,81,30,.3);
-}
-
-.category-image{
-  height:220px;
-  position:relative;
-  overflow:hidden;
-}
-
-.category-image img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transition:.5s;
-}
-
-.category-card:hover .category-image img{
-  transform:scale(1.05);
-}
-
-.category-number{
-  position:absolute;
-  top:15px;
-  left:15px;
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:var(--orange);
   color:#fff;
-  font-size:11px;
-  font-weight:900;
+  border-color:rgba(255,255,255,.28);
 }
+.btn-ghost:hover{border-color:#fff}
+.btn-navy{background:var(--navy);color:#fff}
 
-.category-content{
-  padding:23px;
+/* Shop by category */
+.shop{
+  background:#041c3f;
+  padding:10px 0 12px;
+  border-top:1px solid rgba(255,255,255,.06);
 }
-
-.category-content h3{
-  color:var(--navy);
-  font-size:21px;
-}
-
-.category-content p{
-  margin:7px 0 16px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.category-link{
-  color:var(--orange);
-  font-size:12px;
-  font-weight:900;
-}
-
-/* =========================
-   CATEGORY PAGE
-========================= */
-
-.page-view{
-  display:none;
-}
-
-.page-view.active{
-  display:block;
-}
-
-.category-page{
-  padding-top:145px;
-  min-height:100vh;
-  background:#f7f9fc;
-}
-
-.category-page-header{
-  background:var(--navy);
-  color:#fff;
-  padding:65px 0;
-}
-
-.category-page-header h1{
-  font-size:clamp(38px,5vw,62px);
-}
-
-.category-page-header p{
-  max-width:700px;
-  color:rgba(255,255,255,.68);
-  margin-top:15px;
-}
-
-.category-layout{
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:35px;
-  padding:50px 0 90px;
-}
-
-.category-sidebar{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:15px;
-  height:max-content;
-  position:sticky;
-  top:120px;
-}
-
-body.admin-mode .category-sidebar{
-  top:170px;
-}
-
-.sidebar-title{
-  padding:12px 12px 16px;
-  font-family:Manrope;
-  font-size:13px;
-  font-weight:900;
-  color:var(--navy);
-  border-bottom:1px solid var(--border);
-}
-
-.category-menu{
-  margin-top:8px;
-}
-
-.category-menu button{
-  width:100%;
-  border:0;
-  background:none;
-  text-align:left;
-  padding:12px;
-  border-radius:8px;
-  color:#4d5c70;
-  font-size:13px;
-  font-weight:700;
-  transition:.2s;
-}
-
-.category-menu button:hover,
-.category-menu button.active{
-  background:rgba(244,81,30,.08);
-  color:var(--orange);
-}
-
-.category-products{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:20px;
-}
-
-.product-box{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:16px;
-  overflow:hidden;
-  transition:.25s;
-}
-
-.product-box:hover{
-  box-shadow:var(--shadow);
-  transform:translateY(-4px);
-}
-
-.product-box-image{
-  height:250px;
-  overflow:hidden;
-}
-
-.product-box-image img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.product-box-body{
-  padding:20px;
-}
-
-.product-box-body h3{
-  color:var(--navy);
-  font-size:18px;
-}
-
-.product-box-body p{
-  margin-top:5px;
-  color:var(--muted);
-  font-size:12px;
-}
-
-.product-box-actions{
-  margin-top:15px;
+.shop-head{
   display:flex;
-  gap:8px;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
 }
-
-.small-btn{
-  border:0;
-  padding:9px 13px;
-  border-radius:7px;
-  background:var(--navy);
+.shop-head h2{
   color:#fff;
-  font-size:11px;
+  font-size:clamp(16px,2.2vh,22px);
   font-weight:800;
+  letter-spacing:-.02em;
 }
-
-.small-btn.orange{
-  background:var(--orange);
+.carousel-controls{display:flex;gap:8px}
+.carousel-btn{
+  width:32px;height:32px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;
+  display:grid;place-items:center;
+  transition:background .2s,border-color .2s;
 }
-
-/* =========================
-   CORPORATE ABOUT
-========================= */
-
-.about{
-  background:#fff;
-}
-
-.about-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:70px;
-  align-items:center;
-}
-
-.about-image img{
-  width:100%;
-  height:500px;
-  object-fit:cover;
-  border-radius:22px;
-  box-shadow:var(--shadow);
-}
-
-.about-copy p{
-  color:var(--muted);
-  margin-top:18px;
-}
-
-.about-points{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+.carousel-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.45)}
+.carousel-viewport{overflow:hidden}
+.carousel-track{
+  display:flex;
   gap:12px;
-  margin-top:28px;
+  transition:transform .4s ease;
+  will-change:transform;
 }
-
-.about-point{
-  padding:15px;
-  background:#f7f9fc;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:700;
-}
-
-.about-point span{
-  color:var(--orange);
-  margin-right:7px;
-}
-
-/* =========================
-   MANUFACTURING
-========================= */
-
-.manufacturing{
-  background:var(--navy);
-  color:#fff;
-}
-
-.manufacturing-grid{
-  display:grid;
-  grid-template-columns:.8fr 1.2fr;
-  gap:70px;
-  align-items:center;
-}
-
-.manufacturing p{
-  color:rgba(255,255,255,.68);
-  margin-top:17px;
-}
-
-.manufacturing-cards{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
-}
-
-.manufacturing-card{
-  padding:28px;
+.category-card{
+  flex:0 0 calc((100% - 48px)/5);
+  background:var(--navy-mid);
   border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.05);
-  border-radius:15px;
-}
-
-.manufacturing-card strong{
-  font-family:Manrope;
-  font-size:25px;
-  color:#ff7043;
-}
-
-.manufacturing-card h3{
-  margin-top:6px;
+  border-radius:14px;
+  padding:10px 12px 12px;
   color:#fff;
+  position:relative;
+  min-width:0;
+  text-align:left;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
 }
-
-.manufacturing-card span{
-  display:block;
-  margin-top:6px;
-  font-size:12px;
-  color:rgba(255,255,255,.6);
+.category-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(244,81,30,.45);
+  box-shadow:0 10px 24px rgba(0,0,0,.22);
 }
-
-/* =========================
-   APPOINTMENT
-========================= */
-
-.appointment{
-  background:#f7f9fc;
+.category-card:hover .card-icon img{transform:scale(1.06)}
+.category-card:hover .card-arrow{background:var(--orange-dark)}
+.card-icon{
+  height:clamp(56px,8vh,78px);
+  overflow:hidden;
+  border-radius:8px;
+  background:#08285a;
+  margin-bottom:8px;
 }
-
-.appointment-card{
-  background:var(--navy);
-  color:#fff;
-  border-radius:22px;
-  padding:55px;
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:50px;
-  align-items:center;
-  box-shadow:var(--shadow-heavy);
+.card-icon img{
+  width:112%;
+  height:112%;
+  margin:-6%;
+  object-fit:cover;
+  object-position:center;
+  transition:transform .25s;
 }
-
-.appointment-card p{
-  color:rgba(255,255,255,.68);
-  margin-top:15px;
-}
-
-.appointment-box{
-  background:#fff;
-  color:var(--text);
-  padding:30px;
-  border-radius:17px;
-}
-
-.appointment-box h3{
-  color:var(--navy);
-}
-
-.appointment-box p{
-  color:var(--muted);
+.category-card h3{
   font-size:13px;
+  font-weight:800;
+  line-height:1.2;
+  padding-right:34px;
+}
+.category-card p{
+  margin-top:3px;
+  font-size:10px;
+  line-height:1.35;
+  color:rgba(255,255,255,.62);
+  padding-right:34px;
+}
+.card-arrow{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:26px;height:26px;
+  border-radius:50%;
+  background:var(--orange);
+  color:#fff;
+  display:grid;place-items:center;
+  font-size:13px;
+  transition:background .2s;
 }
 
-.appointment-box .btn{
-  width:100%;
-  margin-top:18px;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
+/* Footer */
+.site-footer{
+  min-height:var(--footer-h);
   background:#031326;
   color:#fff;
-  padding:70px 0 30px;
-}
-
-.footer-grid{
-  display:grid;
-  grid-template-columns:1.3fr .8fr .8fr .8fr;
-  gap:45px;
-}
-
-.footer-logo{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.footer-logo img{
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  object-fit:cover;
-}
-
-.footer-logo strong{
-  font-family:Manrope;
-  font-size:18px;
-}
-
-.footer-brand p{
-  margin-top:18px;
-  color:rgba(255,255,255,.55);
-  font-size:12px;
-  max-width:370px;
-}
-
-.footer-col h4{
-  font-size:13px;
-  margin-bottom:15px;
-  color:#ff7043;
-}
-
-.footer-col a{
-  display:block;
-  color:rgba(255,255,255,.62);
-  font-size:12px;
-  margin:9px 0;
-}
-
-.footer-col a:hover{
-  color:#fff;
-}
-
-.footer-bottom{
   border-top:1px solid rgba(255,255,255,.08);
-  margin-top:50px;
-  padding-top:22px;
-  color:rgba(255,255,255,.4);
-  font-size:11px;
-  display:flex;
-  justify-content:space-between;
 }
-
-/* =========================
-   WHATSAPP
-========================= */
-
-.whatsapp{
-  position:fixed;
-  right:22px;
-  bottom:22px;
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  background:#20c76a;
-  color:#fff;
+.footer-row{
+  min-height:var(--footer-h);
   display:grid;
-  place-items:center;
-  font-size:13px;
-  font-weight:900;
-  box-shadow:0 15px 35px rgba(32,199,106,.35);
-  z-index:400;
+  grid-template-columns:1.2fr 1.4fr auto;
+  align-items:center;
+  gap:16px;
 }
+.footer-brand strong{display:block;font-size:12px;letter-spacing:.04em}
+.footer-brand span{display:block;color:#ff7043;font-size:8px;letter-spacing:.14em;font-weight:700;margin-top:2px}
+.footer-center{text-align:center;font-size:12px;color:rgba(255,255,255,.72)}
+.footer-center em{display:block;font-style:normal;color:rgba(255,255,255,.42);font-size:10px;margin-top:2px}
+.footer-social{display:flex;gap:14px;font-size:12px;font-weight:600}
+.footer-social a{color:rgba(255,255,255,.7)}
+.footer-social a:hover{color:#fff}
 
-/* =========================
-   ADMIN PANEL
-========================= */
-
-.admin-panel{
-  position:fixed;
-  right:0;
-  top:50px;
-  bottom:0;
-  width:360px;
-  background:#fff;
-  z-index:10000;
-  box-shadow:-15px 0 50px rgba(0,0,0,.18);
-  transform:translateX(100%);
-  transition:.3s;
-  overflow-y:auto;
+/* Inner pages */
+.page{
+  background:var(--offwhite);
+  min-height:100%;
 }
-
-body.admin-mode .admin-panel{
-  transform:translateX(0);
-}
-
-.admin-panel-header{
-  padding:20px;
+.page-hero{
   background:var(--navy);
   color:#fff;
-  display:flex;
-  justify-content:space-between;
+  padding:36px 0 28px;
+}
+.page-hero h1{
+  font-size:clamp(28px,4vw,48px);
+  letter-spacing:-.03em;
+  font-weight:800;
+}
+.page-hero p{margin-top:8px;max-width:640px;color:rgba(255,255,255,.68);font-size:15px}
+.page-body{padding:32px 0 48px}
+.crumb{font-size:12px;color:var(--muted);margin-bottom:16px}
+.crumb a:hover{color:var(--orange)}
+.split{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:36px;
   align-items:center;
 }
-
-.admin-panel-header h3{
-  font-size:16px;
+.split img{
+  width:100%;
+  height:360px;
+  object-fit:cover;
+  border-radius:18px;
 }
+.prose p{color:var(--muted);margin-top:12px}
+.points{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.point{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;font-weight:700}
+.point span{color:var(--orange);margin-right:6px}
 
-.admin-close{
-  border:0;
-  background:none;
-  color:#fff;
-  font-size:24px;
+.mfg-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start}
+.mfg-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mfg-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
+.mfg-card strong{color:var(--orange);font-size:22px}
+.mfg-card h3{margin-top:4px;font-size:16px}
+.mfg-card p{margin-top:6px;color:var(--muted);font-size:13px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.form-card,.info-card{
+  background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;
 }
-
-.admin-content{
-  padding:20px;
-}
-
-.admin-section{
-  padding-bottom:22px;
-  margin-bottom:22px;
-  border-bottom:1px solid var(--border);
-}
-
-.admin-section h4{
-  color:var(--navy);
-  font-size:13px;
-  margin-bottom:12px;
-}
-
-.admin-label{
-  display:block;
-  font-size:10px;
-  font-weight:900;
-  color:#667085;
-  margin:10px 0 5px;
-}
-
-.admin-input,
-.admin-textarea,
-.admin-select{
+label{display:block;font-size:12px;font-weight:700;margin:10px 0 6px}
+input,textarea,select{
   width:100%;
   border:1px solid var(--border);
   border-radius:8px;
-  padding:10px;
+  padding:10px 12px;
   outline:none;
-  font-size:12px;
 }
+input:focus,textarea:focus,select:focus{border-color:var(--orange)}
+textarea{min-height:110px;resize:vertical}
+.form-msg{margin-top:12px;color:#1fa463;font-size:13px;font-weight:700;display:none}
+.info-card h3{margin-bottom:8px}
+.info-card p{color:var(--muted);font-size:14px;margin-top:8px}
 
-.admin-textarea{
-  min-height:75px;
-  resize:vertical;
+.cat-grid,.product-grid,.sub-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
 }
+.tile,.product-box{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  text-align:left;
+  transition:transform .2s,box-shadow .2s;
+}
+.tile:hover,.product-box:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(4,25,55,.08)}
+.tile-img,.product-box-image{height:170px;background:var(--navy-mid);overflow:hidden}
+.tile-img img,.product-box-image img{width:100%;height:100%;object-fit:cover}
+.tile-body,.product-box-body{padding:14px 16px 16px}
+.tile-body h3,.product-box-body h3{font-size:16px;color:var(--navy)}
+.tile-body p,.product-box-body p{margin-top:4px;color:var(--muted);font-size:12px}
+.navy-tile .tile-img{height:120px}
+.navy-tile .tile-img img{object-fit:cover;transform:scale(1.08)}
 
-.admin-action{
+.layout-2{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:24px;
+}
+.side{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:10px;
+  height:max-content;
+}
+.side h4{font-size:12px;padding:8px 10px 12px;border-bottom:1px solid var(--border);color:var(--navy)}
+.side button{
   width:100%;
-  border:0;
-  padding:11px;
+  text-align:left;
+  padding:10px;
   border-radius:8px;
-  background:var(--navy);
-  color:#fff;
-  font-size:12px;
-  font-weight:800;
-  margin-top:8px;
+  font-size:13px;
+  font-weight:600;
+  color:#4d5c70;
 }
+.side button:hover{background:rgba(244,81,30,.08);color:var(--orange)}
+.side button.is-active{background:rgba(244,81,30,.1);color:var(--orange)}
 
-.admin-action.orange{
-  background:var(--orange);
+.detail{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:28px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
 }
+.detail-photo{background:#f0f3f7;cursor:zoom-in}
+.detail-photo img{width:100%;height:100%;min-height:420px;object-fit:contain}
+.detail-copy{padding:28px}
+.detail-copy h1{font-size:clamp(26px,3vw,38px);color:var(--navy);letter-spacing:-.03em}
+.detail-copy .muted{color:var(--muted);margin-top:8px}
+.detail-copy .long{margin-top:16px;color:#3b4a5e}
 
-.admin-action.danger{
-  background:#b42318;
-}
-
-.layer-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px 0;
-  border-bottom:1px solid #f0f2f5;
-  font-size:12px;
-}
-
-.layer-row input{
-  accent-color:var(--orange);
-}
-
-/* =========================
-   EDIT OVERLAY
-========================= */
-
-.editable{
-  position:relative;
-}
-
-body.admin-mode .editable:hover{
-  outline:2px dashed var(--orange);
-  outline-offset:3px;
-}
-
-.edit-badge{
+/* Viewer */
+.viewer{
+  position:fixed;inset:0;
+  background:rgba(3,14,30,.94);
+  z-index:80;
   display:none;
+  place-items:center;
+  padding:24px;
+}
+.viewer.is-open{display:grid}
+.viewer img{max-width:min(1100px,92vw);max-height:86vh;object-fit:contain}
+.viewer-close{
+  position:absolute;top:18px;right:18px;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.12);color:#fff;font-size:22px;
 }
 
-body.admin-mode .editable:hover .edit-badge{
-  display:block;
-  position:absolute;
-  top:5px;
-  right:5px;
-  background:var(--orange);
-  color:#fff;
-  font-size:9px;
-  font-weight:900;
-  padding:5px 7px;
-  border-radius:5px;
-  z-index:20;
+.mobile-nav{
+  display:none;
+  position:fixed;inset:var(--header-h) 0 0 0;
+  background:rgba(3,14,30,.96);
+  z-index:50;
+  padding:24px;
+  flex-direction:column;
+  gap:18px;
 }
+.mobile-nav.is-open{display:flex}
+.mobile-nav a{color:#fff;font-size:20px;font-weight:700}
+.mobile-nav a.is-active{color:#ff7043}
 
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:1100px){
-
-  .nav-links{
-    gap:14px;
-  }
-
-  .category-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .hero-grid,
-  .about-grid,
-  .manufacturing-grid,
-  .appointment-card{
-    grid-template-columns:1fr;
-  }
-
+@media (max-width:1100px){
+  .category-card{flex-basis:calc((100% - 24px)/3)}
+  .split,.mfg-grid,.form-grid,.detail,.layout-2{grid-template-columns:1fr}
+  .cat-grid,.product-grid,.sub-grid{grid-template-columns:repeat(2,1fr)}
 }
-
-@media(max-width:850px){
-
-  .nav-links,
-  .appointment-btn{
-    display:none;
+@media (max-width:850px){
+  .nav-links{display:none}
+  .menu-toggle{display:grid;place-items:center}
+  .footer-row{grid-template-columns:1fr;text-align:center;padding:10px 0;gap:8px}
+  .footer-social{justify-content:center}
+  .category-card{flex-basis:calc((100% - 12px)/2)}
+  .hero-copy{max-width:100%}
+  .hero-media img{object-position:70% 50%}
+  .hero-media:after{
+    background:linear-gradient(180deg,#031936 0%,rgba(6,38,83,.78) 42%,rgba(6,38,83,.2) 70%,transparent 100%);
   }
-
-  .menu-toggle{
-    display:block;
-    margin-left:auto;
-  }
-
-  .business-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .business-item{
-    border-bottom:1px solid var(--border);
-  }
-
-  .category-layout{
-    grid-template-columns:1fr;
-  }
-
-  .category-sidebar{
-    position:static;
-  }
-
-  .category-menu{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:5px;
-  }
-
-  .category-products{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .footer-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
 }
-
-@media(max-width:600px){
-
-  .container{
-    width:min(var(--container),calc(100% - 24px));
-  }
-
-  .section{
-    padding:70px 0;
-  }
-
-  .brand-title{
-    font-size:14px;
-  }
-
-  .brand-caption{
-    font-size:6px;
-  }
-
-  .logo{
-    width:51px;
-    height:51px;
-  }
-
-  .hero{
-    padding:145px 0 80px;
-  }
-
-  .hero h1{
-    font-size:44px;
-  }
-
-  .hero-image img{
-    height:370px;
-  }
-
-  .hero-badge{
-    left:10px;
-  }
-
-  .business-grid,
-  .category-grid,
-  .category-products,
-  .manufacturing-cards,
-  .about-points,
-  .footer-grid{
-    grid-template-columns:1fr;
-  }
-
-  .appointment-card{
-    padding:28px 20px;
-  }
-
-  .admin-panel{
-    width:100%;
-  }
-
-  .footer-bottom{
-    flex-direction:column;
-  }
-
+@media (max-width:600px){
+  .container{width:min(var(--container),calc(100% - 24px))}
+  .brand-title{font-size:12px}
+  .cat-grid,.product-grid,.sub-grid,.points,.mfg-cards{grid-template-columns:1fr}
+  .category-card{flex-basis:86%}
+  .hero h1{font-size:32px}
 }
-
+@media (max-height:760px){
+  :root{--header-h:58px;--footer-h:48px}
+  .card-icon{height:52px}
+  .hero h1{font-size:clamp(28px,5vh,42px)}
+  .shop{padding:8px 0 10px}
+}
 </style>
+</head>
+<body class="home-mode">
+<div class="app-shell">
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#/" data-nav="home" aria-label="Sri Maruthi Enterprises home">
+        <img class="logo" src="assets/brand/logo.png" alt="Sri Maruthi Enterprises logo">
+        <span>
+          <span class="brand-title">SRI MARUTHI ENTERPRISES</span>
+          <span class="brand-caption">YOUR HOME. OUR CRAFT.</span>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#/" data-nav="home">Home</a>
+        <a href="#/categories" data-nav="categories">Categories</a>
+        <a href="#/about" data-nav="about">About</a>
+        <a href="#/manufacturing" data-nav="manufacturing">Manufacturing</a>
+        <a href="#/contact" data-nav="contact">Contact</a>
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Open menu">☰</button>
+    </div>
+  </header>
 
+  <nav class="mobile-nav" id="mobile-nav" hidden>
+    <a href="#/" data-nav="home">Home</a>
+    <a href="#/categories" data-nav="categories">Categories</a>
+    <a href="#/about" data-nav="about">About</a>
+    <a href="#/manufacturing" data-nav="manufacturing">Manufacturing</a>
+    <a href="#/contact" data-nav="contact">Contact</a>
+    <a href="#/appointment" data-nav="appointment">Book an Appointment</a>
+  </nav>
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800;900&display=swap">
-<title>Sri Maruthi Enterprises | Furniture &amp; Electronics</title>
-<meta name="description" content="Sri Maruthi Enterprises — Furniture, Electronics and Home Solutions. Your Needs, Our Craft, Under One Roof.">
-<meta property="og:title" content="Sri Maruthi Enterprises | Furniture &amp; Electronics">
-<meta property="og:description" content
+  <main id="app">
+    <section class="view view-home is-active" id="view-home" data-view="home">
+      <div class="hero">
+        <div class="hero-media" aria-hidden="true">
+          <picture>
+            <source srcset="assets/hero/hero-home.webp" type="image/webp">
+            <img src="assets/hero/hero-home.png" alt="">
+          </picture>
+        </div>
+        <div class="container hero-copy">
+          <p class="eyebrow">Spaces that feel right</p>
+          <h1>Thoughtful Spaces<br><span>for Every Home.</span></h1>
+          <p class="hero-description">Curated for the way you live.<br>From everyday essentials to spaces you’ll love.</p>
+          <div class="hero-actions">
+            <a class="btn btn-orange" href="#/appointment">Book an Appointment →</a>
+            <a class="btn btn-ghost" id="whatsapp-hero" href="https://wa.me/?text=Hi%20Sri%20Maruthi%20Enterprises" target="_blank" rel="noopener">Chat on WhatsApp →</a>
+          </div>
+        </div>
+      </div>
+
+      <section class="shop" aria-label="Shop by Category">
+        <div class="container">
+          <div class="shop-head">
+            <h2>Shop by Category</h2>
+            <div class="carousel-controls">
+              <button class="carousel-btn" id="carousel-prev" type="button" aria-label="Previous categories">‹</button>
+              <button class="carousel-btn" id="carousel-next" type="button" aria-label="Next categories">›</button>
+            </div>
+          </div>
+          <div class="carousel-viewport" id="carousel-viewport">
+            <div class="carousel-track" id="carousel-track"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="view" id="view-page"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="footer-brand">
+        <strong>SRI MARUTHI ENTERPRISES</strong>
+        <span>YOUR HOME. OUR CRAFT.</span>
+      </div>
+      <div class="footer-center">
+        Rajampet | Railway Koduru | Bypass
+        <em>3 Branches in your region</em>
+      </div>
+      <div class="footer-social">
+        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com" target="_blank" rel="noopener">X</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Fullscreen image">
+  <button class="viewer-close" id="viewer-close" type="button" aria-label="Close">×</button>
+  <img id="viewer-image" alt="">
+</div>
+
+<script>
+const CONTENT = {
+  whatsapp: "https://wa.me/?text=Hi%20Sri%20Maruthi%20Enterprises",
+  social: {
+    instagram: "https://instagram.com",
+    x: "https://x.com",
+    youtube: "https://youtube.com"
+  }
+};
+
+const CATEGORIES = [
+  { id:"furniture", title:"Furniture", description:"Sofas, Cots, Dining, Storage & More", icon:"assets/categories/furniture-3d.png", alt:"3D furniture armchair", displayOrder:1 },
+  { id:"electronics", title:"Electronics", description:"TVs, Refrigerators, Washing Machines & More", icon:"assets/categories/electronics-3d.png", alt:"3D television and refrigerator", displayOrder:2 },
+  { id:"small-appliances", title:"Small Appliances", description:"For a Smarter Everyday", icon:"assets/categories/small-appliances-3d.png", alt:"3D small kitchen appliances", displayOrder:3 },
+  { id:"gift-items", title:"Gift Items", description:"Thoughtful Gifts for Every Occasion", icon:"assets/categories/gift-items-3d.png", alt:"3D gift and decor objects", displayOrder:4 },
+  { id:"baby-items", title:"Baby Items", description:"Safe, Smart & Comfortable", icon:"assets/categories/baby-items-3d.png", alt:"3D crib and teddy bear", displayOrder:5 }
+];
+
+const SUBCATEGORIES = {
+  furniture: [
+    { id:"sofas", title:"Sofas" },
+    { id:"cots", title:"Cots" },
+    { id:"beds", title:"Beds" },
+    { id:"diwana-sets", title:"Diwana Sets" },
+    { id:"dining-tables", title:"Dining Tables" },
+    { id:"dressing-tables", title:"Dressing Tables" },
+    { id:"office-tables", title:"Office Tables" }
+  ],
+  electronics: [
+    { id:"tv", title:"TVs" },
+    { id:"refrigerator", title:"Refrigerators" },
+    { id:"washing-machine", title:"Washing Machines" }
+  ],
+  "small-appliances": [{ id:"kitchen", title:"Kitchen Appliances" }],
+  "gift-items": [{ id:"gifts", title:"Thoughtful Gifts" }],
+  "baby-items": [{ id:"nursery", title:"Nursery" }]
+};
+
+const PRODUCTS = [
+  { id:"linen-sofa", category:"furniture", subcategory:"sofas", title:"Linen Lounge Sofa", shortDescription:"Soft seating for everyday living.", longDescription:"A calm three-seater designed for family rooms. Balanced proportions, supportive cushions and a quiet fabric that suits Indian homes.", image:"assets/products/sofa-01.webp", alt:"Grey linen sofa with rust cushions", displayOrder:1, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"premium-teak-cot", category:"furniture", subcategory:"cots", title:"Premium Teak Cot", shortDescription:"Strong, quiet joinery for restful nights.", longDescription:"Crafted in a warm teak finish with a slatted headboard and footboard. Built for daily use, easy to dress, and sized for a composed bedroom.", image:"assets/products/cot-01.webp", alt:"Teak wooden cot with white bedding", displayOrder:2, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"panel-bed", category:"furniture", subcategory:"beds", title:"Panel Bed", shortDescription:"A clean, grounded bedroom centrepiece.", longDescription:"Low visual noise, sturdy rails and a headboard that reads well against both painted and wood-panelled walls.", image:"assets/products/bed-01.webp", alt:"Wooden panel bed", displayOrder:3, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"diwana-set", category:"furniture", subcategory:"diwana-sets", title:"Diwana Lounge Set", shortDescription:"Conversation seating with a light footprint.", longDescription:"A compact lounge arrangement for living rooms that need flexibility without looking temporary.", image:"assets/products/diwana-01.webp", alt:"Diwana lounge set", displayOrder:4, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"dining-set", category:"furniture", subcategory:"dining-tables", title:"Family Dining Table", shortDescription:"Everyday meals, unhurried gatherings.", longDescription:"A solid dining table with a quiet grain and room for family seating. Pairs with simple chairs or a bench.", image:"assets/products/dining-01.webp", alt:"Wooden dining table and chairs", displayOrder:5, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"dressing-table", category:"furniture", subcategory:"dressing-tables", title:"Dressing Table", shortDescription:"Storage and mirror in one calm piece.", longDescription:"A dressing table with a balanced mirror, soft drawers and a finish that sits comfortably in a bedroom corner.", image:"assets/products/dressing-01.webp", alt:"Wooden dressing table with mirror", displayOrder:6, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"office-table", category:"furniture", subcategory:"office-tables", title:"Home Office Table", shortDescription:"Focused work without a bulky desk.", longDescription:"A practical work table with a clear surface and a silhouette that belongs in a home, not only an office.", image:"assets/products/office-01.webp", alt:"Wooden office table with chair", displayOrder:7, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"living-tv", category:"electronics", subcategory:"tv", title:"Living Room Television", shortDescription:"A clear picture for the family room.", longDescription:"Selected for everyday viewing. We help you match screen size to the wall, seating distance and the rest of the room.", image:"assets/products/tv-01.webp", alt:"Flat screen television", displayOrder:8, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"kitchen-set", category:"small-appliances", subcategory:"kitchen", title:"Everyday Kitchen Set", shortDescription:"Small appliances for a smarter everyday.", longDescription:"A practical starting set for daily cooking — compact, easy to store and chosen to sit well on an Indian kitchen counter.", image:"assets/products/kitchen-01.webp", alt:"Cookware and small kitchen appliances", displayOrder:9, cta:"Enquire Now", ctaLink:"#/appointment" }
+];
+
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+
+function catById(id){ return CATEGORIES.find(c => c.id === id); }
+function productById(id){ return PRODUCTS.find(p => p.id === id); }
+function productsOf(cat, sub){
+  return PRODUCTS
+    .filter(p => p.category === cat && (!sub || p.subcategory === sub))
+    .sort((a,b) => a.displayOrder - b.displayOrder);
+}
+
+function cardHTML(cat){
+  return `<a class="category-card" href="#/category/${cat.id}">
+    <div class="card-icon"><img src="${cat.icon}" alt="${cat.alt}"></div>
+    <h3>${cat.title}</h3>
+    <p>${cat.description}</p>
+    <span class="card-arrow" aria-hidden="true">→</span>
+  </a>`;
+}
+
+function renderHomeCards(){
+  const track = $("#carousel-track");
+  const items = [...CATEGORIES].sort((a,b)=>a.displayOrder-b.displayOrder);
+  track.innerHTML = items.map(cardHTML).join("");
+}
+
+let carouselBusy = false;
+function cardStep(){
+  const card = $("#carousel-track .category-card");
+  if (!card) return 0;
+  const styles = getComputedStyle($("#carousel-track"));
+  const gap = parseFloat(styles.gap) || 12;
+  return card.getBoundingClientRect().width + gap;
+}
+function applyCarousel(){
+  const track = $("#carousel-track");
+  track.style.transition = "none";
+  track.style.transform = "translateX(0)";
+}
+function moveCarousel(dir){
+  const track = $("#carousel-track");
+  if (!track || carouselBusy || !track.children.length) return;
+  const step = cardStep();
+  if (!step) return;
+  carouselBusy = true;
+  if (dir > 0){
+    track.style.transition = "transform .4s ease";
+    track.style.transform = `translateX(${-step}px)`;
+    let finished = false;
+    const done = () => {
+      if (finished) return;
+      finished = true;
+      track.removeEventListener("transitionend", done);
+      track.style.transition = "none";
+      track.appendChild(track.firstElementChild);
+      track.style.transform = "translateX(0)";
+      carouselBusy = false;
+    };
+    track.addEventListener("transitionend", done);
+    setTimeout(done, 450);
+  } else {
+    track.style.transition = "none";
+    track.insertBefore(track.lastElementChild, track.firstElementChild);
+    track.style.transform = `translateX(${-step}px)`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        track.style.transition = "transform .4s ease";
+        track.style.transform = "translateX(0)";
+      });
+    });
+    let finished = false;
+    const done = () => {
+      if (finished) return;
+      finished = true;
+      track.removeEventListener("transitionend", done);
+      carouselBusy = false;
+    };
+    track.addEventListener("transitionend", done);
+    setTimeout(done, 450);
+  }
+}
+
+function bindCarousel(){
+  $("#carousel-prev").addEventListener("click", () => moveCarousel(-1));
+  $("#carousel-next").addEventListener("click", () => moveCarousel(1));
+  const vp = $("#carousel-viewport");
+  let startX = null;
+  vp.addEventListener("pointerdown", e => { startX = e.clientX; vp.setPointerCapture(e.pointerId); });
+  vp.addEventListener("pointerup", e => {
+    if (startX == null) return;
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 40) moveCarousel(dx < 0 ? 1 : -1);
+    startX = null;
+  });
+  window.addEventListener("resize", applyCarousel);
+}
+
+function setActiveNav(name){
+  $$(".nav-links a, .mobile-nav a").forEach(a => {
+    a.classList.toggle("is-active", a.dataset.nav === name);
+  });
+}
+
+function closeMobile(){
+  const nav = $("#mobile-nav");
+  nav.classList.remove("is-open");
+  nav.hidden = true;
+}
+
+function pageFrame(title, lead, inner, nav){
+  setActiveNav(nav);
+  return `<div class="page">
+    <div class="page-hero"><div class="container">
+      <h1>${title}</h1>
+      ${lead ? `<p>${lead}</p>` : ""}
+    </div></div>
+    <div class="page-body"><div class="container">${inner}</div></div>
+  </div>`;
+}
+
+function renderCategories(){
+  const cards = [...CATEGORIES].sort((a,b)=>a.displayOrder-b.displayOrder).map(c => `
+    <a class="tile navy-tile" href="#/category/${c.id}">
+      <div class="tile-img"><img src="${c.icon}" alt="${c.alt}"></div>
+      <div class="tile-body"><h3>${c.title}</h3><p>${c.description}</p></div>
+    </a>`).join("");
+  $("#view-page").innerHTML = pageFrame("Categories", "Browse the home, room by room.", `<div class="cat-grid">${cards}</div>`, "categories");
+}
+
+function renderCategory(catId, subId){
+  const cat = catById(catId);
+  if (!cat){ location.hash = "#/categories"; return; }
+  const subs = SUBCATEGORIES[catId] || [];
+  if (subId){
+    renderProducts(catId, subId);
+    return;
+  }
+  const tiles = subs.map(s => `
+    <a class="tile" href="#/category/${cat.id}/${s.id}">
+      <div class="tile-img"><img src="${cat.icon}" alt=""></div>
+      <div class="tile-body"><h3>${s.title}</h3><p>${cat.title}</p></div>
+    </a>`).join("");
+  $("#view-page").innerHTML = pageFrame(cat.title, cat.description, `
+    <p class="crumb"><a href="#/categories">Categories</a> / ${cat.title}</p>
+    <div class="sub-grid">${tiles || "<p>Products coming soon.</p>"}</div>
+  `, "categories");
+}
+
+function renderProducts(catId, subId){
+  const cat = catById(catId);
+  const subs = SUBCATEGORIES[catId] || [];
+  const sub = subs.find(s => s.id === subId);
+  const list = productsOf(catId, subId);
+  const side = subs.map(s => `<button type="button" class="${s.id===subId?"is-active":""}" data-go="#/category/${catId}/${s.id}">${s.title}</button>`).join("");
+  const cards = list.map(p => `
+    <a class="product-box" href="#/product/${p.id}">
+      <div class="product-box-image"><img src="${p.image}" alt="${p.alt}"></div>
+      <div class="product-box-body">
+        <h3>${p.title}</h3>
+        <p>${p.shortDescription}</p>
+      </div>
+    </a>`).join("") || `<p>No products in this group yet.</p>`;
+  $("#view-page").innerHTML = pageFrame(sub ? sub.title : cat.title, cat.description, `
+    <p class="crumb"><a href="#/categories">Categories</a> / <a href="#/category/${catId}">${cat.title}</a> / ${sub ? sub.title : "All"}</p>
+    <div class="layout-2">
+      <aside class="side"><h4>${cat.title}</h4>${side}</aside>
+      <div class="product-grid">${cards}</div>
+    </div>
+  `, "categories");
+  $$(".side button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.go; }));
+}
+
+function renderProduct(id){
+  const p = productById(id);
+  if (!p){ location.hash = "#/categories"; return; }
+  const cat = catById(p.category);
+  const sub = (SUBCATEGORIES[p.category]||[]).find(s => s.id === p.subcategory);
+  $("#view-page").innerHTML = pageFrame(p.title, p.shortDescription, `
+    <p class="crumb"><a href="#/categories">Categories</a> / <a href="#/category/${p.category}">${cat.title}</a> / <a href="#/category/${p.category}/${p.subcategory}">${sub?sub.title:""}</a></p>
+    <article class="detail">
+      <button class="detail-photo" type="button" id="open-viewer" aria-label="View image fullscreen">
+        <img src="${p.image}" alt="${p.alt}">
+      </button>
+      <div class="detail-copy">
+        <h1>${p.title}</h1>
+        <p class="muted">${p.shortDescription}</p>
+        <p class="long">${p.longDescription}</p>
+        <div class="hero-actions" style="margin-top:22px">
+          <a class="btn btn-orange" href="${p.ctaLink}">${p.cta}</a>
+          <a class="btn btn-navy" href="${CONTENT.whatsapp}" target="_blank" rel="noopener">Chat on WhatsApp</a>
+        </div>
+      </div>
+    </article>
+  `, "categories");
+  $("#open-viewer").addEventListener("click", () => openViewer(p.image, p.alt));
+}
+
+function renderAbout(){
+  $("#view-page").innerHTML = pageFrame("Building homes with trust.", "A regional showroom business for furniture, electronics and everyday home goods.", `
+    <div class="split">
+      <div class="prose">
+        <p>Sri Maruthi Enterprises helps families furnish rooms that feel settled — not staged. From cots and sofas to appliances that earn their place on the counter, the work is to choose well and explain clearly.</p>
+        <p>Three branches keep the showroom close: Rajampet, Railway Koduru and Bypass.</p>
+        <div class="points">
+          <div class="point"><span>—</span>In-house furniture craft</div>
+          <div class="point"><span>—</span>Electronics you can see working</div>
+          <div class="point"><span>—</span>Guidance, not a hard sell</div>
+          <div class="point"><span>—</span>Appointment-led planning</div>
+        </div>
+      </div>
+      <img src="assets/sections/about.webp" alt="Sri Maruthi Enterprises showroom building">
+    </div>
+  `, "about");
+}
+
+function renderManufacturing(){
+  $("#view-page").innerHTML = pageFrame("Craftsmanship you can trust.", "Furniture made with measured joins, honest timber and a finish that lasts.", `
+    <div class="mfg-grid">
+      <img src="assets/sections/manufacturing.webp" alt="Hands working timber in the workshop" style="width:100%;height:100%;min-height:280px;object-fit:cover;border-radius:18px">
+      <div class="mfg-cards">
+        <div class="mfg-card"><strong>01</strong><h3>Select</h3><p>Timber and materials chosen for the room they will live in.</p></div>
+        <div class="mfg-card"><strong>02</strong><h3>Make</h3><p>Workshop cutting, joining and finishing under a single eye.</p></div>
+        <div class="mfg-card"><strong>03</strong><h3>Check</h3><p>Edges, hardware and sit-test before anything reaches the floor.</p></div>
+        <div class="mfg-card"><strong>04</strong><h3>Place</h3><p>Delivered and set so the piece belongs in the home.</p></div>
+      </div>
+    </div>
+  `, "manufacturing");
+}
+
+function formPage(kind){
+  const isAppt = kind === "appointment";
+  return `
+    <div class="form-grid">
+      <form class="form-card" id="lead-form">
+        <h3>${isAppt ? "Book an appointment" : "Send a message"}</h3>
+        <label for="name">Name</label>
+        <input id="name" name="title" required autocomplete="name">
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" required autocomplete="tel">
+        <label for="branch">Preferred branch</label>
+        <select id="branch" name="branch">
+          <option>Rajampet</option>
+          <option>Railway Koduru</option>
+          <option>Bypass</option>
+        </select>
+        <label for="note">${isAppt ? "What would you like to plan?" : "Message"}</label>
+        <textarea id="note" name="longDescription" required></textarea>
+        <button class="btn btn-orange" type="submit" style="margin-top:14px">${isAppt ? "Book appointment" : "Send message"}</button>
+        <p class="form-msg" id="form-msg">Thank you. We will reach you shortly.</p>
+      </form>
+      <aside class="info-card">
+        <h3>Visit us</h3>
+        <p>Rajampet · Railway Koduru · Bypass</p>
+        <p>3 branches in your region.</p>
+        <img src="${isAppt ? "assets/sections/appointment.webp" : "assets/sections/showroom.webp"}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">
+      </aside>
+    </div>`;
+}
+
+function bindForm(){
+  const form = $("#lead-form");
+  if (!form) return;
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    $("#form-msg").style.display = "block";
+    form.reset();
+  });
+}
+
+function renderContact(){
+  $("#view-page").innerHTML = pageFrame("We’re here to help.", "Visit a branch or leave a message. Internal notes stay in the same tab.", formPage("contact"), "contact");
+  bindForm();
+}
+function renderAppointment(){
+  $("#view-page").innerHTML = pageFrame("Book an appointment.", "Plan a room with someone who has walked the floor.", formPage("appointment"), "appointment");
+  bindForm();
+}
+
+function showHome(on){
+  document.body.classList.toggle("home-mode", on);
+  $("#view-home").classList.toggle("is-active", on);
+  $("#view-page").classList.toggle("is-active", !on);
+  if (on){
+    setActiveNav("home");
+    requestAnimationFrame(applyCarousel);
+  }
+}
+
+function route(){
+  closeMobile();
+  closeViewer();
+  const raw = location.hash.replace(/^#/, "") || "/";
+  const parts = raw.split("/").filter(Boolean);
+  const top = parts[0] || "home";
+  if (!parts.length){ showHome(true); return; }
+  showHome(false);
+  if (top === "categories") return renderCategories();
+  if (top === "category") return renderCategory(parts[1], parts[2]);
+  if (top === "product") return renderProduct(parts[1]);
+  if (top === "about") return renderAbout();
+  if (top === "manufacturing") return renderManufacturing();
+  if (top === "contact") return renderContact();
+  if (top === "appointment") return renderAppointment();
+  showHome(true);
+}
+
+function openViewer(src, alt){
+  $("#viewer-image").src = src;
+  $("#viewer-image").alt = alt || "";
+  $("#viewer").classList.add("is-open");
+}
+function closeViewer(){
+  $("#viewer").classList.remove("is-open");
+  $("#viewer-image").src = "";
+}
+
+function init(){
+  renderHomeCards();
+  bindCarousel();
+  $("#whatsapp-hero").href = CONTENT.whatsapp;
+  $(".menu-toggle").addEventListener("click", () => {
+    const nav = $("#mobile-nav");
+    const open = !nav.classList.contains("is-open");
+    nav.hidden = !open;
+    nav.classList.toggle("is-open", open);
+  });
+  $("#viewer-close").addEventListener("click", closeViewer);
+  $("#viewer").addEventListener("click", e => { if (e.target.id === "viewer") closeViewer(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeViewer(); });
+  window.addEventListener("hashchange", route);
+  route();
+}
+init();
+</script>
+</body>
+</html>
