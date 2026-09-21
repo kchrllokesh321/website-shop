@@ -1,0 +1,158 @@
+SRI MARUTHI ENTERPRISES — IMAGE ASSET GENERATION & MANAGEMENT SPEC
+
+All website imagery is a controlled asset library. Generate/approve assets BEFORE final UI implementation. Cursor must use the attached final assets and must NOT randomly select, replace, or invent images.
+
+GLOBAL ART DIRECTION
+--------------------
+Premium Indian home/lifestyle showroom.
+Warm, modern, refined, realistic, trustworthy, aspirational but approachable.
+
+Avoid stock-photo appearance, excessive luxury clichés, futuristic interiors, distorted furniture, clutter, malformed products, watermarks, unwanted text, accidental logos, or unrealistic objects.
+
+HERO — hero-home.webp
+---------------------
+Designed specifically for the right side of the homepage hero.
+
+Composition:
+LEFT = visually quiet/darker negative space for navy gradient and text.
+RIGHT/CENTER-RIGHT = strong living-room/furniture subject.
+
+The image must support a LEFT-side gradient fade while keeping the RIGHT photographic area clear.
+
+Do not embed headline, buttons, navigation or logo in the image.
+
+Recommended working size: 1920×1080 or larger.
+
+CATEGORY 3D ICON SYSTEM
+-----------------------
+Five individual assets:
+furniture-3d.png
+electronics-3d.png
+small-appliances-3d.png
+gift-items-3d.png
+baby-items-3d.png
+
+STRICTLY 3D.
+
+Do not use photographs, stock images, emojis, flat SVG icons, outline icons, cartoon icons or unrelated illustrations.
+
+All five must share:
+- same camera angle
+- same perspective
+- same scale
+- same lighting direction
+- same studio lighting
+- same material realism
+- same shadow softness
+- same visual density
+- same rendering quality
+
+Furniture:
+premium 3D sofa/furniture object.
+
+Electronics:
+modern 3D TV/electronics object.
+
+Small Appliances:
+compact 3D appliance composition such as air fryer/blender/coffee appliance.
+
+Gift Items:
+premium 3D gift box/ribbon/gifting object.
+
+Baby Items:
+premium 3D baby/home object such as tasteful crib with soft toy.
+
+Prefer transparent/clean isolation. Do not embed category text or arrows.
+
+PRODUCT IMAGE SYSTEM
+--------------------
+All products should belong to one premium catalog visual language: consistent camera height, lighting, focal-length feel, product scale and quality.
+
+Initial furniture groups:
+Cots
+Sofas
+Beds
+Diwana Sets
+Dining Tables
+Dressing Tables
+Office Tables
+
+Electronics:
+TV
+Refrigerator
+Washing Machine
+
+Kitchen/appliances:
+representative kitchenware and small appliances.
+
+SUPPORTING
+----------
+About image: authentic home/furniture/business story; avoid generic handshake imagery.
+
+Manufacturing images: woodworking, furniture production, skilled hands, workshop, quality process.
+
+Branch/showroom images: clean premium showroom/storefront concepts. If real branch references are unavailable, treat generated branch images as concept assets until replaced with real photographs.
+
+Contact: warm showroom/customer-service visual.
+
+Appointment: warm consultation/home-planning visual.
+
+FILE RULES
+----------
+Use WebP for photographic assets.
+Use PNG for 3D category icons when transparency is needed.
+
+Suggested structure:
+assets/
+  hero/hero-home.webp
+  categories/
+    furniture-3d.png
+    electronics-3d.png
+    small-appliances-3d.png
+    gift-items-3d.png
+    baby-items-3d.png
+  products/
+  sections/
+
+IMAGE QA
+--------
+[ ] no malformed objects
+[ ] no distorted furniture
+[ ] no accidental text
+[ ] no watermarks
+[ ] no accidental logos
+[ ] no strange shadows
+[ ] correct perspective
+[ ] consistent lighting
+[ ] correct composition
+[ ] no important subject cropped
+
+HERO QA
+--------
+[ ] supports left-side navy gradient
+[ ] main subject right/center-right
+[ ] no critical details at extreme left
+[ ] works with responsive cropping
+[ ] website does not need to distort image
+
+CATEGORY QA
+-----------
+[ ] all five are 3D
+[ ] one consistent family
+[ ] same perspective
+[ ] same lighting
+[ ] same scale
+[ ] recognizable at small card size
+[ ] no embedded text
+[ ] no embedded arrows
+[ ] integrates with solid navy cards
+
+SEPARATION OF RESPONSIBILITIES
+------------------------------
+IMAGE GENERATION creates:
+visual asset, composition, lighting, product appearance, background/transparent treatment.
+
+WEBSITE UI creates:
+text, titles, descriptions, arrows, buttons, gradients, borders, hover states, navigation, carousel, layout and responsiveness.
+
+Do NOT bake UI elements into images.

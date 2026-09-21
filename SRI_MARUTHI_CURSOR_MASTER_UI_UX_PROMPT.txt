@@ -1,0 +1,321 @@
+SRI MARUTHI ENTERPRISES — CURSOR MASTER UI/UX PROMPT
+
+This is a controlled revision of an already-generated website. Do NOT build from scratch, redesign, replace the architecture, or remove approved screens.
+
+ATTACHMENTS:
+1. Previous/generated website code — functional baseline.
+2. This UI/UX prompt — visual and interaction source of truth.
+3. Image specification — image source/asset rules.
+4. Final generated image assets.
+5. Approved screenshots — visual QA references.
+
+FIRST: inspect the complete repository before editing. Identify framework, entry point, routing/state, Header, Hero, Categories, Carousel, Footer, About, Manufacturing, Contact, Appointment, Product Listing, Product Detail, Fullscreen Viewer, assets, responsive CSS, and CRM assumptions. Do not modify until the architecture is understood.
+
+============================================================
+LOCKED HOMEPAGE
+============================================================
+
+The homepage is a TRUE SINGLE-VIEWPORT composition.
+
+Target: 100vw × 100vh.
+
+Within one viewport:
+HEADER + HERO + SHOP BY CATEGORY + COMPACT FOOTER.
+
+NO homepage vertical scrolling. NO browser vertical scrollbar.
+
+Do not merely hide overflow; calculate the layout so content actually fits.
+
+Test at:
+1366×768
+1440×900
+1920×1080
+
+============================================================
+BRAND
+============================================================
+
+Brand: SRI MARUTHI ENTERPRISES
+Brand line: YOUR HOME. OUR CRAFT.
+Font: Plus Jakarta Sans
+Colors: deep navy, blue, white, orange.
+
+EXISTING SME LOGO IS LOCKED.
+Do not redesign, recolor, replace, regenerate, crop, or distort it.
+
+============================================================
+HEADER
+============================================================
+
+Left: existing logo, brand name, YOUR HOME. OUR CRAFT.
+Right: Home, Categories, About, Manufacturing, Contact.
+
+No search. No header appointment CTA. No unnecessary icons.
+
+Use correct UI terminology: primary navigation, active item, hover state, focus state.
+
+Default nav: clean.
+Hover: subtle.
+Active: clear but restrained.
+No permanent hover-only underline.
+
+============================================================
+HERO
+============================================================
+
+Eyebrow:
+SPACES THAT FEEL RIGHT
+
+Headline:
+Thoughtful Spaces
+for Every Home.
+
+First line white. Second line orange.
+
+Description:
+Curated for the way you live.
+From everyday essentials to spaces you’ll love.
+
+Only two CTAs:
+Book an Appointment
+Chat on WhatsApp
+
+NO hero counter. NO pagination dots.
+
+HERO GRADIENT IS MANDATORY.
+
+Keep the deep navy/blue gradient treatment.
+
+Hero image is on the RIGHT.
+It must visually fade/merge into navy toward the LEFT side.
+The RIGHT side remains photographic and clear.
+Do not place a heavy opaque gradient over the entire image.
+Do not clip the image.
+Do not let the category section overlap/cut the hero media.
+
+Use correct:
+hero media container, image mask, gradient fade, object-fit, object-position, overflow, aspect ratio.
+
+============================================================
+SHOP BY CATEGORY
+============================================================
+
+Heading: Shop by Category
+
+Five initial categories:
+1. Furniture
+2. Electronics
+3. Small Appliances
+4. Gift Items
+5. Baby Items
+
+CATEGORY CARDS MUST USE STRICTLY 3D CATEGORY ICONS.
+
+NO photographic category images.
+NO stock images.
+NO emojis.
+NO Font Awesome/flat icons.
+NO generic outline icons.
+NO random illustrations.
+
+Use the attached final 3D assets.
+
+The five icons must share:
+same rendering language, perspective, lighting, material treatment, scale, and shadow treatment.
+
+Card style:
+solid navy/blue; subtle border; clean rounded corners; white typography; orange circular arrow.
+
+Descriptions:
+Furniture — Sofas, Cots, Dining, Storage & More
+Electronics — TVs, Refrigerators, Washing Machines & More
+Small Appliances — For a Smarter Everyday
+Gift Items — Thoughtful Gifts for Every Occasion
+Baby Items — Safe, Smart & Comfortable
+
+============================================================
+CATEGORY HOVER UX
+============================================================
+
+DEFAULT:
+clean; no underline; no decorative line; no fake active indicator; no permanent glow; no extra text.
+
+HOVER:
+subtle lift/elevation, subtle border emphasis, subtle 3D icon movement/scale, subtle shadow increase, slightly stronger orange arrow.
+
+FOCUS:
+accessible keyboard focus.
+
+ACTIVE:
+clear only when actually selected.
+
+Hover-only elements must disappear when the pointer leaves.
+
+============================================================
+CATEGORY CAROUSEL
+============================================================
+
+Implement a REAL horizontal carousel:
+
+carousel viewport
+→ category track
+→ category cards
+
+Previous and Next are functional controls.
+
+The track must physically translate horizontally.
+No vertical scrolling.
+No decorative arrows.
+Support desktop click and touch/swipe where appropriate.
+
+Initial desktop state should show the five approved categories when space permits.
+
+============================================================
+FOOTER
+============================================================
+
+Compact and inside homepage viewport.
+
+Left:
+SRI MARUTHI ENTERPRISES
+YOUR HOME. OUR CRAFT.
+
+Center:
+Rajampet | Railway Koduru | Bypass
+3 Branches in your region
+
+Right:
+Instagram | X | YouTube
+
+No appointment CTA. No WhatsApp CTA. No large footer menus.
+
+External social links may open a new tab. Internal navigation stays same-tab.
+
+============================================================
+INTERNAL VIEWS
+============================================================
+
+Preserve the single-application/state architecture:
+
+home
+categories
+category
+subcategory
+products
+product
+image-viewer
+about
+manufacturing
+contact
+appointment
+
+Required flow:
+HOME → CATEGORIES → CATEGORY → SUBCATEGORY → PRODUCT LISTING → PRODUCT DETAIL → FULLSCREEN IMAGE VIEWER
+
+Example:
+Home → Furniture → Cots → Product → Fullscreen Image
+
+Internal navigation remains in the same tab.
+
+Preserve existing About, Manufacturing, Contact, Appointment, Categories, Product Listing, Product Detail, and Fullscreen Viewer. Correct implementation only; do not unnecessarily redesign them.
+
+Furniture supports:
+Sofas, Cots, Beds, Diwana Sets, Dining Tables, Dressing Tables, Office Tables.
+
+============================================================
+CRM
+============================================================
+
+DO NOT BUILD ANOTHER CRM.
+
+Venu Kalyan's CRM is the content source. Website is the presentation layer.
+
+Support:
+IMAGE / ICON
+CATEGORY
+SUBCATEGORY
+TITLE
+SHORT DESCRIPTION
+LONG DESCRIPTION
+ALT TEXT
+DISPLAY ORDER
+CTA TEXT
+OPTIONAL CTA LINK
+
+Category:
+category + 3D icon + title + description + display order.
+
+Product:
+product image + category + subcategory + title + short description + long description + alt + display order + CTA + CTA link.
+
+No public admin editor.
+
+============================================================
+RESPONSIVE
+============================================================
+
+Maintain the viewport composition on desktop/tablet/mobile where practical:
+100vw × 100vh.
+
+Rebalance typography, spacing, hero media, card dimensions and navigation rather than turning the homepage into an uncontrolled long-scroll page.
+
+============================================================
+UI/UX PRINCIPLES
+============================================================
+
+Use visual hierarchy, Gestalt proximity/similarity, figure-ground, contrast, focal point, cognitive fluency, Hick’s Law, progressive disclosure, recognition over recall, consistency, whitespace, alignment, rhythm, balance, restrained motion and clear interaction affordances.
+
+Every interaction should make clear:
+what is clickable, what changed, where the user is, and how to return.
+
+============================================================
+IMPLEMENTATION ORDER
+============================================================
+
+1. Inspect repository.
+2. Fix homepage viewport geometry.
+3. Fix hero media and gradient.
+4. Integrate attached final assets.
+5. Implement 3D category cards.
+6. Fix functional carousel.
+7. Fix hover/focus/active states.
+8. Verify all existing views.
+9. Verify CRM compatibility.
+10. Final responsive and visual QA.
+
+Do not modify everything simultaneously.
+
+============================================================
+FINAL QA
+============================================================
+
+[ ] 1366×768 fits with no homepage scrollbar
+[ ] 1440×900 fits
+[ ] 1920×1080 fits
+[ ] hero does not collide with categories
+[ ] hero image is not clipped
+[ ] hero gradient exists
+[ ] left-side image fade exists
+[ ] right side remains photographic
+[ ] five category cards initially
+[ ] 3D icons only
+[ ] no category photographs
+[ ] solid navy/blue cards
+[ ] orange arrows
+[ ] carousel actually moves
+[ ] no vertical carousel scroll
+[ ] hover/focus states work
+[ ] no permanent hover underline
+[ ] same-tab internal navigation
+[ ] product flow works
+[ ] fullscreen viewer works
+[ ] Escape closes viewer
+[ ] logo unchanged
+[ ] no search
+[ ] no second CRM
+[ ] no public admin editor
+
+FINAL RULE:
+INSPECT → PLAN → MODIFY → TEST → VISUAL QA.
+
+Do not creatively redesign. Do not change already-approved elements. Do not replace attached assets. Do not start from scratch.

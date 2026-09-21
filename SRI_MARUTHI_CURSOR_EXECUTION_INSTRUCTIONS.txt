@@ -1,0 +1,147 @@
+SRI MARUTHI ENTERPRISES — CURSOR EXECUTION INSTRUCTIONS
+
+ATTACH TO CURSOR
+----------------
+1. Previous/generated website code — functional baseline.
+2. SRI_MARUTHI_CURSOR_MASTER_UI_UX_PROMPT.txt
+3. SRI_MARUTHI_IMAGE_ASSET_GENERATION_SPEC.txt
+4. Final generated image assets.
+5. Approved screenshots/reference images.
+
+DO NOT start by saying "build this website". Say:
+"Inspect this existing project and implement the attached locked specification without redesigning the existing website."
+
+PROMPT 1 — INSPECTION ONLY
+--------------------------
+Read the attached specifications and inspect the complete project.
+
+Identify:
+- framework
+- entry point
+- routing/state
+- Home
+- Header
+- Hero
+- Categories
+- Carousel
+- Footer
+- About
+- Manufacturing
+- Contact
+- Appointment
+- Product Listing
+- Product Detail
+- Fullscreen Viewer
+- assets
+- responsive CSS
+- CRM/content assumptions
+
+Identify the exact causes of:
+1. homepage vertical overflow
+2. hero/category collision
+3. current category carousel behavior
+
+DO NOT MODIFY CODE YET.
+
+Return:
+1. architecture
+2. relevant files/components
+3. navigation/state model
+4. asset model
+5. exact causes
+6. minimal implementation plan
+
+PROMPT 2 — HOMEPAGE GEOMETRY
+----------------------------
+Implement ONLY the homepage viewport corrections.
+
+Fix:
+- 100vw × 100vh composition
+- header/hero/category/footer geometry
+- hero media collision
+- hero image clipping
+- hero gradient/fade
+- responsive viewport behavior
+
+Do not redesign other screens.
+
+PROMPT 3 — IMAGE + CATEGORY INTEGRATION
+----------------------------------------
+Integrate the attached final assets.
+
+Replace category photographs with the supplied 3D category assets.
+
+Do not generate or select replacements.
+
+Implement:
+- consistent 3D icon sizing
+- solid navy/blue card colors
+- spacing
+- orange circular arrows
+- restrained hover
+- no permanent hover underline
+- accessible focus
+
+Do not modify unrelated areas.
+
+PROMPT 4 — CAROUSEL
+--------------------
+Fix only the category carousel.
+
+Use a real carousel viewport + horizontal track + previous/next controls.
+
+The track must physically translate.
+
+Verify:
+- next works
+- previous works
+- no vertical scrolling
+- no layout shift
+- five initial cards display correctly
+- touch behavior remains usable
+
+Do not redesign the cards.
+
+PROMPT 5 — FINAL QA
+-------------------
+Perform a complete QA pass against the locked specification.
+
+Check:
+- single viewport
+- hero gradient
+- hero image composition
+- 3D category assets
+- card colors
+- carousel
+- hover/focus behavior
+- same-tab navigation
+- product flow
+- fullscreen viewer
+- About
+- Manufacturing
+- Contact
+- Appointment
+- CRM compatibility
+- responsive behavior
+
+Fix only specification violations.
+
+Do not make creative changes.
+
+DO NOT ALLOW CURSOR TO:
+- rebuild from scratch
+- change logo
+- change brand colors
+- add search
+- add header/footer CTA
+- turn homepage into long scroll
+- replace 3D icons
+- use random stock images
+- create another CRM
+- expose admin editor
+- redesign approved screens
+- add unnecessary animation
+- add permanent hover underlines
+
+FINAL WORKFLOW:
+INSPECT → PLAN → MODIFY ONE AREA → TEST → VISUAL QA → NEXT AREA.
