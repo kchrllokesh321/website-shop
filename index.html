@@ -663,22 +663,22 @@ const CATEGORIES = [
 
 const SUBCATEGORIES = {
   furniture: [
-    { id:"sofas", title:"Sofas" },
-    { id:"cots", title:"Cots" },
-    { id:"beds", title:"Beds" },
-    { id:"diwana-sets", title:"Diwana Sets" },
-    { id:"dining-tables", title:"Dining Tables" },
-    { id:"dressing-tables", title:"Dressing Tables" },
-    { id:"office-tables", title:"Office Tables" }
+    { id:"sofas", title:"Sofas", image:"assets/products/sofa-01.webp" },
+    { id:"cots", title:"Cots", image:"assets/products/cot-01.webp" },
+    { id:"beds", title:"Beds", image:"assets/products/bed-01.webp" },
+    { id:"diwana-sets", title:"Diwana Sets", image:"assets/products/diwana-01.webp" },
+    { id:"dining-tables", title:"Dining Tables", image:"assets/products/dining-01.webp" },
+    { id:"dressing-tables", title:"Dressing Tables", image:"assets/products/dressing-01.webp" },
+    { id:"office-tables", title:"Office Tables", image:"assets/products/office-01.webp" }
   ],
   electronics: [
-    { id:"tv", title:"TVs" },
-    { id:"refrigerator", title:"Refrigerators" },
-    { id:"washing-machine", title:"Washing Machines" }
+    { id:"tv", title:"TVs", image:"assets/products/tv-01.webp" },
+    { id:"refrigerator", title:"Refrigerators", image:"assets/categories/electronics-3d.png" },
+    { id:"washing-machine", title:"Washing Machines", image:"assets/categories/electronics-3d.png" }
   ],
-  "small-appliances": [{ id:"kitchen", title:"Kitchen Appliances" }],
-  "gift-items": [{ id:"gifts", title:"Thoughtful Gifts" }],
-  "baby-items": [{ id:"nursery", title:"Nursery" }]
+  "small-appliances": [{ id:"kitchen", title:"Kitchen Appliances", image:"assets/products/kitchen-01.webp" }],
+  "gift-items": [{ id:"gifts", title:"Thoughtful Gifts", image:"assets/categories/gift-items-3d.png" }],
+  "baby-items": [{ id:"nursery", title:"Nursery", image:"assets/categories/baby-items-3d.png" }]
 };
 
 const PRODUCTS = [
@@ -832,7 +832,7 @@ function renderCategory(catId, subId){
   }
   const tiles = subs.map(s => `
     <a class="tile" href="#/category/${cat.id}/${s.id}">
-      <div class="tile-img"><img src="${cat.icon}" alt=""></div>
+      <div class="tile-img"><img src="${s.image || cat.icon}" alt="${s.title}"></div>
       <div class="tile-body"><h3>${s.title}</h3><p>${cat.title}</p></div>
     </a>`).join("");
   $("#view-page").innerHTML = pageFrame(cat.title, cat.description, `
