@@ -299,7 +299,7 @@ body.home-mode .view-home.is-active{
   background:var(--navy-mid);
   border:1px solid rgba(255,255,255,.12);
   border-radius:14px;
-  padding:10px 12px 12px;
+  padding:6px 8px 8px;
   color:#fff;
   position:relative;
   min-width:0;
@@ -311,20 +311,20 @@ body.home-mode .view-home.is-active{
   border-color:rgba(244,81,30,.45);
   box-shadow:0 10px 24px rgba(0,0,0,.22);
 }
-.category-card:hover .card-icon img{transform:scale(1.06)}
+.category-card:hover .card-icon img{transform:translateY(-2px)}
 .category-card:hover .card-arrow{background:var(--orange-dark)}
 .card-icon{
-  height:clamp(56px,8vh,78px);
+  height:clamp(80px,10vh,100px);
   overflow:hidden;
   border-radius:8px;
   background:#08285a;
-  margin-bottom:8px;
+  margin-bottom:5px;
 }
 .card-icon img{
-  width:112%;
-  height:112%;
-  margin:-6%;
-  object-fit:cover;
+  width:100%;
+  height:100%;
+  margin:0;
+  object-fit:contain;
   object-position:center;
   transition:transform .25s;
 }
@@ -332,20 +332,13 @@ body.home-mode .view-home.is-active{
   font-size:13px;
   font-weight:800;
   line-height:1.2;
-  padding-right:34px;
-}
-.category-card p{
-  margin-top:3px;
-  font-size:10px;
-  line-height:1.35;
-  color:rgba(255,255,255,.62);
-  padding-right:34px;
+  padding:1px 30px 0 2px;
 }
 .card-arrow{
   position:absolute;
-  right:10px;
-  bottom:10px;
-  width:26px;height:26px;
+  right:7px;
+  bottom:7px;
+  width:24px;height:24px;
   border-radius:50%;
   background:var(--orange);
   color:#fff;
@@ -687,7 +680,7 @@ textarea{min-height:110px;resize:vertical}
 }
 @media (max-height:760px){
   :root{--header-h:58px;--footer-h:48px}
-  .card-icon{height:52px}
+  .card-icon{height:80px}
   .hero h1{font-size:clamp(28px,5vh,42px)}
   .shop{padding:8px 0 10px}
 }
@@ -867,10 +860,9 @@ function productsOf(cat, sub){
 }
 
 function cardHTML(cat){
-  return `<a class="category-card" href="#/category/${cat.id}">
+  return `<a class="category-card" href="#/category/${cat.id}" aria-label="Open ${cat.title} category">
     <div class="card-icon"><img src="${cat.icon}" alt="${cat.alt}"></div>
     <h3>${cat.title}</h3>
-    <p>${cat.description}</p>
     <span class="card-arrow" aria-hidden="true">→</span>
   </a>`;
 }
