@@ -136,7 +136,15 @@ body:not(.home-mode){
   margin-left:auto;
   color:#fff;
   width:40px;height:40px;
-  font-size:22px;
+  place-items:center;
+}
+.menu-toggle:before{
+  content:"";
+  width:20px;
+  height:2px;
+  border-radius:2px;
+  background:#fff;
+  box-shadow:0 -6px 0 #fff,0 6px 0 #fff;
 }
 
 /* Views */
@@ -699,7 +707,7 @@ textarea{min-height:110px;resize:vertical}
         <a href="#/manufacturing" data-nav="manufacturing">Manufacturing</a>
         <a href="#/contact" data-nav="contact">Contact</a>
       </nav>
-      <button class="menu-toggle" type="button" aria-label="Open menu">☰</button>
+      <button class="menu-toggle" type="button" aria-label="Open menu"></button>
     </div>
   </header>
 
