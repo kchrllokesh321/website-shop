@@ -22,8 +22,8 @@
   --text:#14233a;
   --muted:#687589;
   --border:#e4e9ef;
-  --header-h:68px;
-  --footer-h:74px;
+  --header-h:72px;
+  --footer-h:76px;
   --container:1200px;
   --radius:16px;
 }
@@ -103,8 +103,8 @@ body:not(.home-mode){
   flex-shrink:0;
 }
 .logo{
-  width:44px;
-  height:44px;
+  width:46px;
+  height:46px;
   object-fit:contain;
   border-radius:50%;
   background:#fff;
@@ -339,7 +339,7 @@ body.home-mode .view-home.is-active{
   border-color:rgba(244,81,30,.45);
   box-shadow:0 10px 24px rgba(0,0,0,.22);
 }
-.category-card:hover .card-object{transform:translateY(-2px) scale(1.025)}
+.category-card:hover .card-object{transform:scale(1.54) translateY(-2px)}
 .category-card:hover .card-arrow{background:var(--orange-dark)}
 .card-visual{
   height:58px;
@@ -353,12 +353,12 @@ body.home-mode .view-home.is-active{
   content:"";
   position:absolute;
   z-index:-1;
-  left:20%;
-  right:20%;
-  bottom:4px;
-  height:7px;
+  left:16%;
+  right:16%;
+  bottom:3px;
+  height:8px;
   border-radius:50%;
-  background:rgba(0,0,0,.38);
+  background:rgba(0,0,0,.44);
   filter:blur(5px);
 }
 .card-object{
@@ -366,7 +366,8 @@ body.home-mode .view-home.is-active{
   height:69px;
   object-fit:contain;
   object-position:center;
-  filter:drop-shadow(0 6px 6px rgba(0,0,0,.26));
+  filter:drop-shadow(0 6px 6px rgba(0,0,0,.3));
+  transform:scale(1.48) translateY(-1px);
   transition:transform .25s;
   position:relative;
   z-index:2;
@@ -395,7 +396,7 @@ body.home-mode .view-home.is-active{
   margin-top:2px;
   padding:0 28px 0 2px;
   color:rgba(255,255,255,.58);
-  font-size:8px;
+  font-size:9px;
   line-height:1.25;
   min-height:20px;
 }
@@ -438,8 +439,8 @@ body.home-mode .view-home.is-active{
   grid-column:1/-1;
   align-self:start;
   text-align:center;
-  color:rgba(255,255,255,.34);
-  font-size:8px;
+  color:rgba(255,255,255,.42);
+  font-size:9px;
   letter-spacing:.015em;
 }
 
@@ -754,7 +755,7 @@ textarea{min-height:110px;resize:vertical}
   .viewer-arrow{width:38px;height:38px}
 }
 @media (max-height:760px){
-  :root{--header-h:66px;--footer-h:68px}
+  :root{--header-h:72px;--footer-h:76px}
   .hero h1{font-size:clamp(28px,5vh,42px)}
   .shop{padding:7px 0 8px}
 }
