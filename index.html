@@ -44,11 +44,15 @@ button{cursor:pointer;background:none;border:0}
 :focus-visible{outline:2px solid var(--orange);outline-offset:3px}
 
 .app-shell{
+  width:100%;
+  min-width:0;
   min-height:100vh;
   min-height:100dvh;
   display:grid;
   grid-template-rows:auto 1fr auto;
+  grid-template-columns:minmax(0,1fr);
 }
+main,.view,.site-header,.site-footer,.hero,.shop{min-width:0}
 body.home-mode{
   overflow:hidden;
   height:100vh;
@@ -285,6 +289,7 @@ body.home-mode .view-home.is-active{
 .carousel-viewport{overflow:hidden}
 .carousel-track{
   display:flex;
+  min-width:0;
   gap:12px;
   transition:transform .4s ease;
   will-change:transform;
