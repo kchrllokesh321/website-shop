@@ -24,6 +24,9 @@
   --border:#e4e9ef;
   --header-h:72px;
   --footer-h:76px;
+  --band-max:1280px;
+  --band-inset:clamp(32px,6vw,112px);
+  --nav-gap:clamp(22px,2.2vw,32px);
   --container:1200px;
   /* One fluid grid shared by header, hero copy, category section and footer */
   --home-grid:1216px;
@@ -103,8 +106,8 @@ body:not(.home-mode){
     linear-gradient(90deg,transparent 58%,rgba(255,255,255,.018));
 }
 .nav{
-  /* Header-only container. Do not reuse .page-container — that grid is shared with hero, categories and footer. */
-  width:min(1280px,calc(100% - 2 * clamp(16px,4vw,56px)));
+  /* Header container only. .page-container stays on the hero and category section. */
+  width:min(var(--band-max),calc(100% - var(--band-inset)));
   margin-inline:auto;
   height:100%;
   display:flex;
@@ -115,7 +118,7 @@ body:not(.home-mode){
 .brand{
   display:flex;
   align-items:center;
-  gap:clamp(12px,1vw,14px);
+  gap:12px;
   flex:0 0 auto;
   min-width:0;
 }
@@ -136,10 +139,12 @@ body:not(.home-mode){
 }
 .brand-caption{
   display:block;
-  color:#ff7043;
+  color:var(--orange);
   font-size:9px;
   letter-spacing:.08em;
   font-weight:600;
+  line-height:1;
+  text-transform:uppercase;
   margin-top:3px;
 }
 .nav-links{
@@ -147,11 +152,11 @@ body:not(.home-mode){
   flex:0 0 auto;
   display:flex;
   align-items:center;
-  gap:clamp(20px,2vw,32px);
+  gap:var(--nav-gap);
 }
 .nav-links a{
-  color:rgba(255,255,255,.86);
-  font-size:13px;
+  color:#fff;
+  font-size:14px;
   font-weight:600;
   line-height:1;
   padding:10px 0;
@@ -445,31 +450,79 @@ body.home-mode .view-home.is-active{
   color:#fff;
   border-top:1px solid rgba(255,255,255,.08);
 }
+.footer-inner{
+  width:min(var(--band-max),calc(100% - var(--band-inset)));
+  margin-inline:auto;
+}
 .footer-row{
   height:100%;
   display:grid;
   grid-template-columns:1fr auto 1fr;
-  grid-template-rows:1fr 16px;
+  grid-template-rows:1fr auto;
   align-items:center;
-  column-gap:16px;
+  column-gap:24px;
 }
-.footer-brand{justify-self:start}
-.footer-center{justify-self:center}
-.footer-social{justify-self:end}
-.footer-brand strong{display:block;font-size:12px;letter-spacing:.04em}
-.footer-brand span{display:block;color:#ff7043;font-size:8px;letter-spacing:.14em;font-weight:700;margin-top:2px}
-.footer-center{text-align:center;font-size:12px;color:rgba(255,255,255,.72)}
-.footer-center em{display:block;font-style:normal;color:rgba(255,255,255,.42);font-size:10px;margin-top:2px}
-.footer-social{display:flex;gap:14px;font-size:12px;font-weight:600}
-.footer-social a{color:rgba(255,255,255,.7)}
+.footer-brand{
+  justify-self:start;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:4px;
+}
+.footer-logo{
+  width:44px;
+  height:44px;
+  object-fit:contain;
+  border-radius:50%;
+  background:#fff;
+}
+.footer-brand span{
+  color:var(--orange);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  line-height:1;
+}
+.footer-center{
+  justify-self:center;
+  text-align:center;
+  font-size:13px;
+  font-weight:500;
+  color:#fff;
+}
+.footer-center em{
+  display:block;
+  font-style:normal;
+  font-weight:400;
+  color:rgba(255,255,255,.55);
+  font-size:11px;
+  margin-top:3px;
+}
+.footer-social{
+  justify-self:end;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.footer-social a{
+  color:rgba(255,255,255,.78);
+  width:22px;
+  height:22px;
+  display:grid;
+  place-items:center;
+}
 .footer-social a:hover{color:#fff}
+.footer-social svg{width:20px;height:20px;display:block}
 .footer-copy{
   grid-column:1/-1;
   align-self:start;
-  text-align:center;
-  color:rgba(255,255,255,.42);
-  font-size:9px;
-  letter-spacing:.015em;
+  text-align:left;
+  color:rgba(255,255,255,.55);
+  font-size:11px;
+  line-height:1;
+  letter-spacing:.01em;
+  padding-bottom:6px;
 }
 
 /* Inner pages */
@@ -766,8 +819,9 @@ textarea{min-height:110px;resize:vertical}
     row-gap:6px;
   }
   .footer-brand,.footer-center,.footer-social{justify-self:center}
+  .footer-brand{align-items:center}
   .footer-social{justify-content:center}
-  .footer-copy{align-self:center}
+  .footer-copy{align-self:center;text-align:center;padding-bottom:0}
   .category-card{flex-basis:calc((100% - var(--card-gap))/2)}
   /* Below the desktop composition the homepage flows and scrolls; the hero keeps a bounded height */
   body.home-mode{overflow:auto;height:auto}
@@ -802,7 +856,7 @@ textarea{min-height:110px;resize:vertical}
   .hero-actions{flex-direction:column;align-items:flex-start}
   .hero-actions .btn{width:auto;max-width:100%}
   .footer-row > *{min-width:0;max-width:100%}
-  .footer-center{font-size:11px;overflow-wrap:anywhere}
+  .footer-center{font-size:13px;overflow-wrap:break-word}
   :root{--hero-media-pos:66% 60%}
   .catalog-heading{align-items:flex-start;flex-direction:column}
   .catalog-sort{width:100%}
@@ -892,9 +946,9 @@ textarea{min-height:110px;resize:vertical}
   </main>
 
   <footer class="site-footer">
-    <div class="page-container footer-row">
+    <div class="footer-inner footer-row">
       <div class="footer-brand">
-        <strong>SRI MARUTHI ENTERPRISES</strong>
+        <img class="footer-logo" src="assets/brand/logo.png" alt="Sri Maruthi Enterprises">
         <span>YOUR HOME. OUR CRAFT.</span>
       </div>
       <div class="footer-center">
@@ -902,9 +956,15 @@ textarea{min-height:110px;resize:vertical}
         <em>3 Branches in your region</em>
       </div>
       <div class="footer-social">
-        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://x.com" target="_blank" rel="noopener">X</a>
-        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3.6" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg>
+        </a>
+        <a href="https://x.com" target="_blank" rel="noopener" aria-label="X">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.7 10.3 21.4 3h-1.6l-5.8 6.4L9.2 3H3.5l7 10.1L3.5 21h1.6l6.2-6.8L15.2 21h5.7l-7.2-10.7Zm-2.2 2.4-.7-1-5.6-7.6h2.4l4.5 6.2.7 1 5.9 8h-2.4l-4.8-6.6Z"/></svg>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12.2s0-3.2-.4-4.6c-.2-.9-.9-1.6-1.8-1.8C18.2 5.4 12 5.4 12 5.4s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 9 2 12.2 2 12.2s0 3.2.4 4.6c.2.9.9 1.6 1.8 1.8 1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.4.4-4.6.4-4.6ZM10 15.5v-6.6l5.2 3.3-5.2 3.3Z"/></svg>
+        </a>
       </div>
       <p class="footer-copy">© 2026 Sri Maruthi Enterprises. All rights reserved.</p>
     </div>
