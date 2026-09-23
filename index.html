@@ -75,6 +75,13 @@ body.home-mode{
 body.home-mode .app-shell{
   height:100vh;
   height:100dvh;
+  max-height:100vh;
+  max-height:100dvh;
+  min-height:0;
+  overflow:hidden;
+}
+body.home-mode main{
+  min-height:0;
   overflow:hidden;
 }
 body:not(.home-mode){
@@ -152,28 +159,25 @@ body:not(.home-mode){
   flex:0 0 auto;
   display:flex;
   align-items:center;
-  gap:var(--nav-gap);
+  gap:2px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:9999px;
+  padding:4px;
+  background:rgba(255,255,255,.025);
 }
 .nav-links a{
   color:#fff;
-  font-size:14px;
+  font-size:13px;
   font-weight:600;
   line-height:1;
-  padding:10px 0;
-  position:relative;
+  padding:8px 14px;
+  border-radius:9999px;
+  white-space:nowrap;
 }
 .nav-links a:hover{color:#ffb199}
-.nav-links a.is-active{color:#fff}
-.nav-links a.is-active:after{
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:2px;
-  width:22px;
-  height:2px;
-  transform:translateX(-50%);
+.nav-links a.is-active{
   background:var(--orange);
-  border-radius:2px;
+  color:#fff;
 }
 .menu-toggle{
   display:none;
@@ -467,14 +471,14 @@ body.home-mode .view-home.is-active{
   display:flex;
   flex-direction:column;
   align-items:flex-start;
-  gap:4px;
+  gap:3px;
 }
-.footer-logo{
-  width:44px;
-  height:44px;
-  object-fit:contain;
-  border-radius:50%;
-  background:#fff;
+.footer-brand strong{
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.03em;
+  line-height:1.1;
 }
 .footer-brand span{
   color:var(--orange);
@@ -809,30 +813,26 @@ textarea{min-height:110px;resize:vertical}
   .nav-links{display:none}
   .menu-toggle{display:grid;place-items:center}
   /* Footer 1 stacks: brand → branches → social → copyright */
-  .site-footer{height:auto;min-height:var(--footer-h)}
+  .site-footer{height:auto}
   .footer-row{
     grid-template-columns:1fr;
     grid-template-rows:auto;
     justify-items:center;
     text-align:center;
-    padding:12px 0 10px;
-    row-gap:6px;
+    padding:6px 0 4px;
+    row-gap:3px;
   }
   .footer-brand,.footer-center,.footer-social{justify-self:center}
   .footer-brand{align-items:center}
-  .footer-social{justify-content:center}
-  .footer-copy{align-self:center;text-align:center;padding-bottom:0}
+  .footer-brand strong{font-size:11px}
+  .footer-center{font-size:12px}
+  .footer-center em{font-size:10px;margin-top:1px}
+  .footer-social{justify-content:center;gap:18px}
+  .footer-social svg{width:18px;height:18px}
+  .footer-copy{align-self:center;text-align:center;padding-bottom:2px;font-size:10px}
   .category-card{flex-basis:calc((100% - var(--card-gap))/2)}
-  /* Below the desktop composition the homepage flows and scrolls; the hero keeps a bounded height */
-  body.home-mode{overflow:auto;height:auto}
-  body.home-mode .app-shell{height:auto;min-height:100dvh;overflow:visible}
-  body.home-mode .view-home.is-active{display:block;height:auto;overflow:visible}
-  .hero{
-    min-height:clamp(340px,54vh,480px);
-    display:flex;
-    align-items:center;
-  }
-  .hero-copy{height:auto;padding:32px 0 40px}
+  /* Homepage stays one viewport: hero yields height, footer stays on screen */
+  .hero-copy{padding:10px 0}
   /* Full-bleed hero media behind the copy with localized darkening instead of a navy strip */
   :root{
     --hero-media-w:100%;
@@ -845,6 +845,12 @@ textarea{min-height:110px;resize:vertical}
       linear-gradient(180deg,rgba(4,28,63,.55) 0%,rgba(4,28,63,.25) 55%,rgba(4,28,63,0) 100%);
   }
 }
+@media (max-width:850px) and (max-height:700px){
+  .hero-copy{padding:2px 0}
+  .shop{padding:2px 0 4px}
+  .shop-head{margin-bottom:2px}
+  .footer-row{padding:3px 0 2px;row-gap:2px}
+}
 @media (max-width:600px){
   .container{width:min(var(--container),calc(100% - 24px))}
   .brand-title{font-size:12px}
@@ -856,7 +862,7 @@ textarea{min-height:110px;resize:vertical}
   .hero-actions{flex-direction:column;align-items:flex-start}
   .hero-actions .btn{width:auto;max-width:100%}
   .footer-row > *{min-width:0;max-width:100%}
-  .footer-center{font-size:13px;overflow-wrap:break-word}
+  .footer-center{font-size:12px;overflow-wrap:break-word}
   :root{--hero-media-pos:66% 60%}
   .catalog-heading{align-items:flex-start;flex-direction:column}
   .catalog-sort{width:100%}
@@ -948,11 +954,11 @@ textarea{min-height:110px;resize:vertical}
   <footer class="site-footer">
     <div class="footer-inner footer-row">
       <div class="footer-brand">
-        <img class="footer-logo" src="assets/brand/logo.png" alt="Sri Maruthi Enterprises">
+        <strong>SRI MARUTHI ENTERPRISES</strong>
         <span>YOUR HOME. OUR CRAFT.</span>
       </div>
       <div class="footer-center">
-        Rajampet | Railway Koduru | Bypass
+        Rajampet (2) | Railway Koduru (1)
         <em>3 Branches in your region</em>
       </div>
       <div class="footer-social">
