@@ -26,7 +26,8 @@
   --footer-h:76px;
   --container:1200px;
   --home-grid:1216px;
-  --home-gutter:32px;
+  --home-gutter:clamp(16px,4vw,56px);
+  --hero-media-w:66%;
   --card-gap:16px;
   --radius:16px;
 }
@@ -192,32 +193,35 @@ body.home-mode .view-home.is-active{
     linear-gradient(180deg,rgba(4,28,63,0) 52%,#041c3f 100%),
     linear-gradient(105deg,var(--navy-dark),var(--navy) 58%,var(--navy-light));
 }
+/* Bleed media layer: anchored to the viewport edge, wider than the text column, not tied to the grid */
 .hero-media{
   position:absolute;
-  top:0;right:0;bottom:0;
+  inset-block:0;
+  right:0;
+  width:var(--hero-media-w);
+  z-index:1;
   pointer-events:none;
-  display:flex;
-  justify-content:flex-end;
 }
 .hero-media img{
-  width:auto;
+  display:block;
+  width:100%;
   height:100%;
-  max-width:none;
-  object-fit:contain;
-  object-position:right center;
-  /* Two independent fades (left + bottom) reveal the hero navy through the photo */
+  object-fit:cover;
+  /* Right-anchored so any horizontal crop removes the photo's own navy left field, never the lamp/sofa */
+  object-position:right 56%;
+  /* Two independent alpha masks: a short left emergence and a bottom dissolve into the hero navy */
   -webkit-mask-image:
-    linear-gradient(90deg,transparent 0%,rgba(0,0,0,.28) 14%,rgba(0,0,0,.72) 30%,#000 46%),
-    linear-gradient(180deg,#000 58%,rgba(0,0,0,.72) 76%,rgba(0,0,0,.22) 92%,transparent 100%);
+    linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 9%,rgba(0,0,0,.82) 21%,#000 32%),
+    linear-gradient(180deg,#000 56%,rgba(0,0,0,.7) 76%,rgba(0,0,0,.2) 92%,transparent 100%);
   -webkit-mask-composite:source-in;
   mask-image:
-    linear-gradient(90deg,transparent 0%,rgba(0,0,0,.28) 14%,rgba(0,0,0,.72) 30%,#000 46%),
-    linear-gradient(180deg,#000 58%,rgba(0,0,0,.72) 76%,rgba(0,0,0,.22) 92%,transparent 100%);
+    linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 9%,rgba(0,0,0,.82) 21%,#000 32%),
+    linear-gradient(180deg,#000 56%,rgba(0,0,0,.7) 76%,rgba(0,0,0,.2) 92%,transparent 100%);
   mask-composite:intersect;
 }
 .hero-copy{
   position:relative;
-  z-index:2;
+  z-index:3;
   height:100%;
   display:flex;
   flex-direction:column;
@@ -735,11 +739,14 @@ textarea{min-height:110px;resize:vertical}
   .footer-row{grid-template-columns:1fr;text-align:center;padding:10px 0;gap:8px}
   .footer-social{justify-content:center}
   .category-card{flex-basis:calc((100% - var(--card-gap))/2)}
+  /* Mobile/tablet: text becomes the foreground block; the photo sits behind at reduced opacity */
+  .hero-media{width:100%}
   .hero-media img{
-    opacity:.68;
-    -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.3) 40%,#000 70%,rgba(0,0,0,.2) 96%,transparent 100%);
+    opacity:.55;
+    object-position:right 60%;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.35) 38%,#000 68%,rgba(0,0,0,.2) 96%,transparent 100%);
     -webkit-mask-composite:source-over;
-    mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.3) 40%,#000 70%,rgba(0,0,0,.2) 96%,transparent 100%);
+    mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.35) 38%,#000 68%,rgba(0,0,0,.2) 96%,transparent 100%);
     mask-composite:add;
   }
 }
