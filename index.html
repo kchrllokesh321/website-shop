@@ -87,7 +87,7 @@ body:not(.home-mode){
 .site-header{
   height:var(--header-h);
   background:var(--navy);
-  border-bottom:1px solid rgba(255,255,255,.10);
+  border-bottom:1px solid rgba(255,255,255,.08);
   z-index:40;
   position:relative;
   overflow:hidden;
@@ -96,13 +96,15 @@ body:not(.home-mode){
   content:"";
   position:absolute;
   inset:0;
+  z-index:0;
   pointer-events:none;
   background:
     radial-gradient(circle at 84% 130%,rgba(87,133,182,.14),transparent 34%),
     linear-gradient(90deg,transparent 58%,rgba(255,255,255,.018));
 }
 .nav{
-  width:min(var(--home-grid),calc(100% - var(--home-gutter)*2));
+  /* Header-only container. Do not reuse .page-container — that grid is shared with hero, categories and footer. */
+  width:min(1280px,calc(100% - 2 * clamp(16px,4vw,56px)));
   margin-inline:auto;
   height:100%;
   display:flex;
@@ -113,13 +115,13 @@ body:not(.home-mode){
 .brand{
   display:flex;
   align-items:center;
-  gap:clamp(10px,1vw,13px);
+  gap:clamp(12px,1vw,14px);
   flex:0 0 auto;
   min-width:0;
 }
 .logo{
-  width:clamp(40px,3.7vw,50px);
-  height:clamp(40px,3.7vw,50px);
+  width:clamp(40px,4.8vw,50px);
+  height:clamp(40px,4.8vw,50px);
   object-fit:contain;
   border-radius:50%;
   background:#fff;
@@ -145,7 +147,7 @@ body:not(.home-mode){
   flex:0 0 auto;
   display:flex;
   align-items:center;
-  gap:clamp(20px,2.2vw,32px);
+  gap:clamp(20px,2vw,32px);
 }
 .nav-links a{
   color:rgba(255,255,255,.86);
