@@ -354,7 +354,13 @@ body.home-mode .view-home.is-active{
 .carousel-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.45)}
 #carousel-next{background:var(--orange);border-color:var(--orange)}
 #carousel-next:hover{background:var(--orange-dark);border-color:var(--orange-dark)}
-.carousel-viewport{overflow:hidden}
+.carousel-viewport{
+  overflow:hidden;
+  touch-action:pan-y;
+  /* Room for the 3px hover lift so the top edge is not clipped */
+  padding-top:12px;
+  margin-top:-12px;
+}
 .carousel-track{
   display:flex;
   min-width:0;
@@ -514,6 +520,7 @@ body.home-mode .view-home.is-active{
   line-height:1.3;
   white-space:nowrap;
 }
+.footer-sme,.footer-mobile-line{display:none}
 .footer-dash{color:var(--orange);font-style:normal;margin-right:4px}
 .footer-social{display:flex;align-items:center;gap:20px}
 .footer-social a{
@@ -882,35 +889,68 @@ textarea{min-height:110px;resize:vertical}
 @media (max-width:850px){
   .nav-links{display:none}
   .menu-toggle{display:grid;place-items:center}
-  /* Footer 1 stacks: brand → branches → social → copyright */
+  /* Mobile footer: one horizontal row, then a centered subline. Desktop rules stay above. */
   .site-footer{height:auto}
+  .footer-inner{width:calc(100% - 16px)}
   .footer-row{
-    grid-template-columns:1fr;
-    justify-items:center;
-    text-align:center;
-    padding:4px 0 6px;
-    row-gap:0;
+    display:flex;
+    align-items:center;
+    height:auto;
+    padding:4px 0 0;
+    gap:0;
   }
   .footer-zone{
+    flex-direction:row;
     align-items:center;
-    border-left:0;
-    border-top:1px solid rgba(255,255,255,.14);
-    padding:5px 0;
-    width:100%;
+    justify-content:center;
+    gap:0;
+    border-top:0;
+    border-left:1px solid rgba(255,255,255,.18);
+    padding:0 6px;
+    width:auto;
   }
-  .footer-brand{border-top:0;padding-top:8px}
-  .footer-zone strong{font-size:14px;white-space:normal}
-  .footer-zone span{font-size:12px;white-space:normal}
-  .footer-social{justify-content:center;gap:18px}
-  .footer-social svg{width:18px;height:18px}
-  .branch-popover{width:min(360px,calc(100vw - 24px))}
+  .footer-brand{border-left:0;padding-left:2px;flex:0 0 auto}
+  .footer-branches{flex:1 1 auto;min-width:0;padding:0 6px}
+  .footer-social-zone{flex:0 0 auto;padding-right:0}
+  .footer-full,.footer-brand > span,.footer-branches > span,.footer-social-zone > span{display:none}
+  .footer-sme{
+    display:block;
+    color:#fff;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.04em;
+    line-height:1;
+  }
+  .footer-branches strong{font-size:10px;font-weight:700;white-space:nowrap}
+  .footer-social{gap:0}
+  .footer-social a{width:44px;height:44px}
+  .footer-social svg{width:16px;height:16px}
+  .footer-mobile-line{
+    display:block;
+    margin:0;
+    padding:0 8px 8px;
+    text-align:center;
+    color:rgba(255,255,255,.62);
+    font-size:10px;
+    font-weight:500;
+    line-height:1.3;
+  }
+  .branch-popover{
+    position:fixed;
+    left:50%;
+    top:50%;
+    bottom:auto;
+    transform:translate(-50%,-50%);
+    width:min(360px,calc(100vw - 24px));
+  }
   .category-card{flex-basis:210px;width:210px;height:210px}
   .hero-copy{padding:36px 0 24px}
 }
 @media (max-width:850px) and (max-height:700px){
   .hero-copy{padding:28px 0 20px}
   .shop{padding:8px 0 12px}
-  .footer-row{padding:8px 0 10px}
+  .footer-row{padding:2px 0 0}
+  .footer-mobile-line{padding-bottom:6px}
 }
 @media (max-width:600px){
   .container{width:min(var(--container),calc(100% - 24px))}
@@ -922,9 +962,10 @@ textarea{min-height:110px;resize:vertical}
   .hero h1{font-size:28px}
   .hero-actions{flex-direction:column;align-items:flex-start}
   .hero-actions .btn{width:auto;max-width:100%}
-  .footer-row > *{min-width:0;max-width:100%}
-  .footer-zone strong{font-size:14px}
-  .footer-zone span{font-size:12px}
+  .footer-branches strong{font-size:9px}
+  .footer-sme{font-size:12px}
+  .footer-social a{width:40px;height:40px}
+  .footer-social svg{width:15px;height:15px}
   .catalog-heading{align-items:flex-start;flex-direction:column}
   .catalog-sort{width:100%}
   .detail-photo{height:300px}
@@ -1026,7 +1067,8 @@ textarea{min-height:110px;resize:vertical}
   <footer class="site-footer">
     <div class="footer-inner footer-row">
       <div class="footer-zone footer-brand">
-        <strong>SRI MARUTHI ENTERPRISES</strong>
+        <strong class="footer-full">SRI MARUTHI ENTERPRISES</strong>
+        <strong class="footer-sme">SME</strong>
         <span><i class="footer-dash">–</i> Quality Homes, Happier Families.</span>
       </div>
       <button class="footer-zone footer-branches" id="branches-toggle" type="button" aria-expanded="false" aria-controls="branch-popover">
@@ -1048,6 +1090,7 @@ textarea{min-height:110px;resize:vertical}
         <span><i class="footer-dash">–</i> © 2026 Sri Maruthi Enterprises. All rights reserved.</span>
       </div>
     </div>
+    <p class="footer-mobile-line">Quality Homes, Happier Families. · © 2026</p>
     <div class="branch-popover" id="branch-popover" hidden>
       <header>
         <strong>Our branches</strong>
@@ -1198,32 +1241,44 @@ function bindCarousel(){
   const vp = $("#carousel-viewport");
   let startX = null;
   let dragged = false;
-  vp.addEventListener("pointerdown", e => {
-    if (e.button !== 0) return;
-    startX = e.clientX;
-    dragged = false;
-    vp.setPointerCapture(e.pointerId);
-  });
-  vp.addEventListener("pointermove", e => {
+  let lastX = null;
+  function endSwipe(clientX, clientY){
     if (startX == null) return;
-    if (Math.abs(e.clientX - startX) > 10) dragged = true;
-  });
-  vp.addEventListener("pointerup", e => {
-    if (startX == null) return;
-    const dx = e.clientX - startX;
-    const wasDrag = Math.abs(dx) > 40;
+    const dx = clientX - startX;
+    const wasDrag = Math.abs(dx) > 28;
     startX = null;
-    if (vp.hasPointerCapture(e.pointerId)) vp.releasePointerCapture(e.pointerId);
+    lastX = null;
     if (wasDrag){
       moveCarousel(dx < 0 ? 1 : -1);
       dragged = true;
       return;
     }
-    const hit = document.elementFromPoint(e.clientX, e.clientY);
+    const hit = document.elementFromPoint(clientX, clientY);
     const card = hit && hit.closest("a.category-card");
     if (card) location.hash = card.getAttribute("href");
+  }
+  vp.addEventListener("pointerdown", e => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    startX = lastX = e.clientX;
+    dragged = false;
+    if (vp.setPointerCapture){
+      try{ vp.setPointerCapture(e.pointerId); }catch(err){}
+    }
   });
-  vp.addEventListener("pointercancel", () => { startX = null; dragged = false; });
+  vp.addEventListener("pointermove", e => {
+    if (startX == null) return;
+    lastX = e.clientX;
+    if (Math.abs(e.clientX - startX) > 8) dragged = true;
+  });
+  vp.addEventListener("pointerup", e => {
+    if (vp.hasPointerCapture && vp.hasPointerCapture(e.pointerId)) vp.releasePointerCapture(e.pointerId);
+    endSwipe(e.clientX, e.clientY);
+  });
+  vp.addEventListener("pointercancel", e => {
+    const x = lastX == null ? startX : lastX;
+    if (x != null && startX != null && Math.abs(x - startX) > 28) endSwipe(x, e.clientY || 0);
+    else { startX = null; lastX = null; dragged = false; }
+  });
   vp.addEventListener("click", e => {
     if (!dragged) return;
     e.preventDefault();
