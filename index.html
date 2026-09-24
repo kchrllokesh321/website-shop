@@ -268,7 +268,7 @@ body.home-mode .view-home.is-active{
 .hero h1{
   margin-top:0;
   color:#fff;
-  font-size:clamp(32px,5.6vh,58px);
+  font-size:clamp(28px,calc(5.6vh - 4px),54px);
   line-height:1.05;
   letter-spacing:-.03em;
   font-weight:800;
@@ -919,7 +919,7 @@ textarea{min-height:110px;resize:vertical}
   .category-card{flex-basis:210px;width:210px;height:210px}
   .hero-description br{display:none}
   .hero-description{font-size:14px}
-  .hero h1{font-size:32px}
+  .hero h1{font-size:28px}
   .hero-actions{flex-direction:column;align-items:flex-start}
   .hero-actions .btn{width:auto;max-width:100%}
   .footer-row > *{min-width:0;max-width:100%}
@@ -933,7 +933,7 @@ textarea{min-height:110px;resize:vertical}
 }
 @media (max-height:760px) and (min-width:851px){
   :root{--header-h:72px;--footer-h:76px}
-  .hero h1{font-size:clamp(30px,5.4vh,44px)}
+  .hero h1{font-size:clamp(26px,calc(5.4vh - 4px),40px)}
   .shop{padding:6px 0 10px}
 }
 </style>
@@ -1211,9 +1211,17 @@ function bindCarousel(){
   vp.addEventListener("pointerup", e => {
     if (startX == null) return;
     const dx = e.clientX - startX;
-    if (Math.abs(dx) > 40) moveCarousel(dx < 0 ? 1 : -1);
+    const wasDrag = Math.abs(dx) > 40;
     startX = null;
     if (vp.hasPointerCapture(e.pointerId)) vp.releasePointerCapture(e.pointerId);
+    if (wasDrag){
+      moveCarousel(dx < 0 ? 1 : -1);
+      dragged = true;
+      return;
+    }
+    const hit = document.elementFromPoint(e.clientX, e.clientY);
+    const card = hit && hit.closest("a.category-card");
+    if (card) location.hash = card.getAttribute("href");
   });
   vp.addEventListener("pointercancel", () => { startX = null; dragged = false; });
   vp.addEventListener("click", e => {
