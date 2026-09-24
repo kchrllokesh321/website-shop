@@ -351,8 +351,11 @@ body.home-mode .view-home.is-active{
   border:1px solid rgba(255,255,255,.2);
   color:#fff;
   display:grid;place-items:center;
+  padding:0;
+  line-height:0;
   transition:background .2s,border-color .2s;
 }
+.carousel-btn svg{width:16px;height:16px;display:block}
 .carousel-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.45)}
 #carousel-next{background:var(--orange);border-color:var(--orange)}
 #carousel-next:hover{background:var(--orange-dark);border-color:var(--orange-dark)}
@@ -1073,8 +1076,8 @@ textarea{min-height:110px;resize:vertical}
           <div class="shop-head">
             <h2>Shop by Category</h2>
             <div class="carousel-controls">
-              <button class="carousel-btn" id="carousel-prev" type="button" aria-label="Previous categories">‹</button>
-              <button class="carousel-btn" id="carousel-next" type="button" aria-label="Next categories">›</button>
+              <button class="carousel-btn" id="carousel-prev" type="button" aria-label="Previous categories"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.25 6.75 9 12l5.25 5.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="carousel-btn" id="carousel-next" type="button" aria-label="Next categories"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.75 6.75 15 12l-5.25 5.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
           </div>
           <div class="carousel-viewport" id="carousel-viewport">
