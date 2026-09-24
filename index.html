@@ -31,13 +31,9 @@
   /* One fluid grid shared by header, hero copy, category section and footer */
   --home-grid:1216px;
   --home-gutter:clamp(16px,4vw,56px);
-  /* Hero media compositing (desktop defaults; overridden per breakpoint) */
-  --hero-media-w:clamp(58%,66vw,72%);
-  --hero-media-pos:right 56%;
-  --hero-media-opacity:1;
-  --hero-mask-x:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.4) 7%,rgba(0,0,0,.82) 17%,#000 28%);
-  --hero-mask-y:linear-gradient(180deg,#000 56%,rgba(0,0,0,.7) 76%,rgba(0,0,0,.2) 92%,transparent 100%);
-  --hero-shade:none;
+  /* Full-bleed hero. Shop tone is a step apart from the hero fade so the join is a shift, not a seam. */
+  --hero-fade:#071c3c;
+  --shop-bg:#0c325f;
   --card-gap:16px;
   --radius:16px;
 }
@@ -67,22 +63,20 @@ button{cursor:pointer;background:none;border:0}
   grid-template-columns:minmax(0,1fr);
 }
 main,.view,.site-header,.site-footer,.hero,.shop{min-width:0}
+/* Below 1024px the homepage scrolls. The single-viewport lock is desktop-only. */
 body.home-mode{
-  overflow:hidden;
-  height:100vh;
-  height:100dvh;
+  overflow:auto;
+  height:auto;
 }
 body.home-mode .app-shell{
-  height:100vh;
-  height:100dvh;
-  max-height:100vh;
-  max-height:100dvh;
-  min-height:0;
-  overflow:hidden;
+  height:auto;
+  max-height:none;
+  min-height:100dvh;
+  overflow:visible;
 }
 body.home-mode main{
   min-height:0;
-  overflow:hidden;
+  overflow:visible;
 }
 body:not(.home-mode){
   overflow:auto;
@@ -129,12 +123,21 @@ body:not(.home-mode){
   flex:0 0 auto;
   min-width:0;
 }
-.logo{
+.logo-badge{
   width:clamp(40px,4.8vw,50px);
   height:clamp(40px,4.8vw,50px);
-  object-fit:contain;
   border-radius:50%;
+  overflow:hidden;
   background:#fff;
+  flex:0 0 auto;
+}
+.logo{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  /* Scale crops the badge's internal white ring so the roof mark sits larger and centered. */
+  transform:scale(1.32);
+  transform-origin:center 47%;
 }
 .brand-title{
   font-weight:700;
@@ -192,17 +195,15 @@ body:not(.home-mode){
 .view{display:none}
 .view.is-active{display:block}
 body.home-mode .view-home.is-active{
-  height:100%;
-  min-height:0;
-  display:grid;
-  grid-template-rows:minmax(0,1fr) auto;
-  overflow:hidden;
+  height:auto;
+  display:block;
+  overflow:visible;
 }
 
 /* Hero */
 .hero{
   position:relative;
-  min-height:0;
+  min-height:560px;
   overflow:hidden;
   background:#031936;
 }
@@ -210,15 +211,26 @@ body.home-mode .view-home.is-active{
   position:absolute;
   inset:0;
   width:100%;
+  height:100%;
   z-index:1;
   pointer-events:none;
 }
+.hero-media picture,
 .hero-media img{
   display:block;
   width:100%;
   height:100%;
+}
+.hero-media img{
+  position:absolute;
+  top:0;
+  right:0;
+  height:100%;
+  /* Source file includes a flat navy panel on the left. Scale the photographic side to cover the hero. */
+  width:175%;
+  max-width:none;
   object-fit:cover;
-  object-position:62% center;
+  object-position:right center;
 }
 .hero-media:before{
   content:"";
@@ -226,16 +238,16 @@ body.home-mode .view-home.is-active{
   inset:0;
   z-index:2;
   pointer-events:none;
-  background:linear-gradient(90deg,rgba(3,25,54,.88) 0%,rgba(3,25,54,.6) 36%,rgba(3,25,54,.2) 64%,rgba(3,25,54,.06) 100%);
+  background:linear-gradient(90deg,rgba(3,25,54,.78) 0%,rgba(3,25,54,.55) 32%,rgba(3,25,54,.28) 58%,rgba(3,25,54,.12) 100%);
 }
 .hero-media:after{
   content:"";
   position:absolute;
   left:0;right:0;bottom:0;
-  height:24%;
+  height:28%;
   z-index:3;
   pointer-events:none;
-  background:linear-gradient(to bottom,rgba(8,36,72,0),#082448 100%);
+  background:linear-gradient(to bottom,rgba(7,28,60,0) 0%,var(--hero-fade) 100%);
 }
 .hero-copy{
   position:relative;
@@ -245,7 +257,7 @@ body.home-mode .view-home.is-active{
   flex-direction:column;
   justify-content:center;
   align-items:flex-start;
-  padding:18px 0;
+  padding:48px 0 20px;
 }
 .hero-copy > *{max-width:600px}
 .eyebrow{
@@ -275,8 +287,15 @@ body.home-mode .view-home.is-active{
 .hero-description{
   margin-top:12px;
   max-width:560px;
-  color:rgba(255,255,255,.72);
+  color:rgba(255,255,255,.86);
   font-size:clamp(13px,1.95vh,16px);
+  line-height:1.45;
+}
+.hero-subline{
+  margin-top:6px;
+  max-width:560px;
+  color:rgba(255,255,255,.72);
+  font-size:clamp(13px,1.8vh,15px);
   line-height:1.45;
 }
 .hero-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
@@ -318,7 +337,7 @@ body.home-mode .view-home.is-active{
 
 /* Shop by category */
 .shop{
-  background:#082448;
+  background:var(--shop-bg);
   padding:6px 0 10px;
 }
 .shop-head{
@@ -355,7 +374,7 @@ body.home-mode .view-home.is-active{
 }
 .category-card{
   /* 5 equal squares across the shared grid: width derives from container and gap */
-  flex:0 0 calc((100% - var(--card-gap)*4)/5);
+  flex:0 0 calc((100% - var(--card-gap)*4)/5 - 5px);
   aspect-ratio:1/1;
   display:flex;
   flex-direction:column;
@@ -374,7 +393,7 @@ body.home-mode .view-home.is-active{
   border-color:rgba(244,81,30,.45);
   box-shadow:0 10px 24px rgba(0,0,0,.22);
 }
-.category-card:hover .card-object{transform:translateY(16%) scale(1.04)}
+.category-card:hover .card-object{transform:translateY(12%) scale(1.04)}
 .category-card:hover .card-arrow{background:var(--orange-dark)}
 .card-visual{
   flex:1 1 auto;
@@ -401,12 +420,12 @@ body.home-mode .view-home.is-active{
   z-index:1;
 }
 .card-object{
-  width:128%;
+  width:168%;
   height:auto;
   object-fit:contain;
   object-position:center bottom;
   /* Each PNG keeps about 22% clear space under the object; slide that margin past the ground line */
-  transform:translateY(16%);
+  transform:translateY(12%);
   transform-origin:center bottom;
   transition:transform .25s;
   position:relative;
@@ -426,7 +445,7 @@ body.home-mode .view-home.is-active{
   color:rgba(255,255,255,.58);
   font-size:10px;
   line-height:1.3;
-  min-height:26px;
+  min-height:0;
 }
 .card-arrow{
   position:absolute;
@@ -464,9 +483,9 @@ body.home-mode .view-home.is-active{
   display:flex;
   flex-direction:column;
   justify-content:center;
-  gap:2px;
+  gap:8px;
   min-width:0;
-  padding:4px 14px;
+  padding:8px 14px;
 }
 .footer-zone + .footer-zone{border-left:1px solid rgba(255,255,255,.18)}
 .footer-brand{align-items:flex-start;padding-left:0}
@@ -481,19 +500,19 @@ body.home-mode .view-home.is-active{
 .footer-social-zone{align-items:flex-end;padding-right:0}
 .footer-zone strong{
   color:#fff;
-  font-size:12px;
+  font-size:14px;
   font-weight:700;
   letter-spacing:.02em;
-  line-height:1.1;
+  line-height:1.25;
   white-space:nowrap;
 }
 .footer-zone span{
-  color:rgba(255,255,255,.62);
-  font-size:10px;
+  color:rgba(255,255,255,.72);
+  font-size:12px;
   font-weight:500;
   letter-spacing:0;
   text-transform:none;
-  line-height:1.15;
+  line-height:1.3;
   white-space:nowrap;
 }
 .footer-dash{color:var(--orange);font-style:normal;margin-right:4px}
@@ -822,8 +841,35 @@ textarea{min-height:110px;resize:vertical}
 .mobile-nav a{color:#fff;font-size:20px;font-weight:700}
 .mobile-nav a.is-active{color:#ff7043}
 
+@media (min-width:1024px){
+  body.home-mode{
+    overflow:hidden;
+    height:100vh;
+    height:100dvh;
+  }
+  body.home-mode .app-shell{
+    height:100vh;
+    height:100dvh;
+    max-height:100vh;
+    max-height:100dvh;
+    min-height:0;
+    overflow:hidden;
+  }
+  body.home-mode main{
+    min-height:0;
+    overflow:hidden;
+  }
+  body.home-mode .view-home.is-active{
+    height:100%;
+    min-height:0;
+    display:grid;
+    grid-template-rows:minmax(0,1fr) auto;
+    overflow:hidden;
+  }
+  .hero{min-height:0}
+}
 @media (max-width:1100px){
-  .category-card{flex-basis:calc((100% - var(--card-gap)*2)/3)}
+  .category-card{flex-basis:calc((100% - var(--card-gap)*2)/3 - 5px)}
   .split,.mfg-grid,.form-grid,.detail,.layout-2,.catalog-top{grid-template-columns:1fr}
   .catalog-top img{height:180px}
   .cat-grid,.product-grid,.sub-grid{grid-template-columns:repeat(2,1fr)}
@@ -847,46 +893,33 @@ textarea{min-height:110px;resize:vertical}
     padding:5px 0;
     width:100%;
   }
-  .footer-brand{border-top:0;padding-top:2px}
-  .footer-zone strong{font-size:11px;white-space:normal}
-  .footer-zone span{font-size:10px;white-space:normal}
+  .footer-brand{border-top:0;padding-top:8px}
+  .footer-zone strong{font-size:14px;white-space:normal}
+  .footer-zone span{font-size:12px;white-space:normal}
   .footer-social{justify-content:center;gap:18px}
   .footer-social svg{width:18px;height:18px}
   .branch-popover{width:min(360px,calc(100vw - 24px))}
-  .category-card{flex-basis:calc((100% - var(--card-gap))/2)}
-  /* Homepage stays one viewport: hero yields height, footer stays on screen */
-  .hero-copy{padding:10px 0}
-  /* Full-bleed hero media behind the copy with localized darkening instead of a navy strip */
-  :root{
-    --hero-media-w:100%;
-    --hero-media-pos:68% 55%;
-    --hero-media-opacity:.9;
-    --hero-mask-x:linear-gradient(90deg,#000,#000);
-    --hero-mask-y:linear-gradient(180deg,#000 52%,rgba(0,0,0,.65) 76%,rgba(0,0,0,.15) 94%,transparent 100%);
-    --hero-shade:
-      linear-gradient(90deg,rgba(4,28,63,.72) 0%,rgba(4,28,63,.5) 45%,rgba(4,28,63,.18) 100%),
-      linear-gradient(180deg,rgba(4,28,63,.55) 0%,rgba(4,28,63,.25) 55%,rgba(4,28,63,0) 100%);
-  }
+  .category-card{flex-basis:calc((100% - var(--card-gap))/2 - 5px)}
+  .hero-copy{padding:36px 0 24px}
 }
 @media (max-width:850px) and (max-height:700px){
-  .hero-copy{padding:2px 0}
-  .shop{padding:2px 0 4px}
-  .shop-head{margin-bottom:2px}
-  .footer-row{padding:3px 0 2px;row-gap:2px}
+  .hero-copy{padding:28px 0 20px}
+  .shop{padding:8px 0 12px}
+  .footer-row{padding:8px 0 10px}
 }
 @media (max-width:600px){
   .container{width:min(var(--container),calc(100% - 24px))}
   .brand-title{font-size:12px}
   .cat-grid,.product-grid,.sub-grid,.points,.mfg-cards{grid-template-columns:1fr}
-  .category-card{flex-basis:calc((100% - var(--card-gap))/2)}
+  .category-card{flex-basis:calc((100% - var(--card-gap))/2 - 5px)}
   .hero-description br{display:none}
   .hero-description{font-size:14px}
   .hero h1{font-size:32px}
   .hero-actions{flex-direction:column;align-items:flex-start}
   .hero-actions .btn{width:auto;max-width:100%}
   .footer-row > *{min-width:0;max-width:100%}
-  .footer-zone strong{font-size:11px}
-  :root{--hero-media-pos:66% 60%}
+  .footer-zone strong{font-size:14px}
+  .footer-zone span{font-size:12px}
   .catalog-heading{align-items:flex-start;flex-direction:column}
   .catalog-sort{width:100%}
   .detail-photo{height:300px}
@@ -905,7 +938,7 @@ textarea{min-height:110px;resize:vertical}
   <header class="site-header">
     <div class="nav">
       <a class="brand" href="#/" data-nav="home" aria-label="Sri Maruthi Enterprises home">
-        <img class="logo" src="assets/brand/logo.png" alt="Sri Maruthi Enterprises logo">
+        <span class="logo-badge"><img class="logo" src="assets/brand/logo.png" alt="Sri Maruthi Enterprises logo"></span>
         <span>
           <span class="brand-title">SRI MARUTHI ENTERPRISES</span>
           <span class="brand-caption">Since 2020.</span>
@@ -947,6 +980,7 @@ textarea{min-height:110px;resize:vertical}
         <div class="page-container hero-copy">
           <h1>Thoughtful Spaces for Every Home.</h1>
           <p class="hero-description">From furniture to appliances — all in one place.</p>
+          <p class="hero-subline">Trusted by families across Rajampet &amp; Railway Koduru.</p>
           <div class="hero-actions">
             <a class="btn btn-orange" href="#/appointment">Book an Appointment →</a>
             <a class="btn btn-ghost" id="whatsapp-hero" href="https://wa.me/?text=Hi%20Sri%20Maruthi%20Enterprises" target="_blank" rel="noopener">Chat on WhatsApp →</a>
@@ -959,6 +993,10 @@ textarea{min-height:110px;resize:vertical}
             <span>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13.5v2.2a2 2 0 0 0 2 2h1.2v-6H7a2 2 0 0 0-2 1.8Z" stroke="currentColor" stroke-width="1.6"/><path d="M19 13.5v2.2a2 2 0 0 1-2 2h-1.2v-6H17a2 2 0 0 1 2 1.8Z" stroke="currentColor" stroke-width="1.6"/><path d="M5 13.2V12a7 7 0 0 1 14 0v1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
               Reliable Support
+            </span>
+            <span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 8h10.2v7.2H3.5V8Z" stroke="currentColor" stroke-width="1.6"/><path d="M13.7 11h3.4l2.4 2.6v1.6h-5.8V11Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.2" cy="16.8" r="1.35" stroke="currentColor" stroke-width="1.6"/><circle cx="16.6" cy="16.8" r="1.35" stroke="currentColor" stroke-width="1.6"/></svg>
+              Delivery &amp; Support
             </span>
           </div>
         </div>
@@ -1105,6 +1143,7 @@ function cardHTML(cat){
       <img class="card-object" src="${visual}" alt="${cat.alt}">
     </div>
     <h3>${cat.title}</h3>
+    <p>${cat.description}</p>
     <span class="card-arrow" aria-hidden="true">→</span>
   </a>`;
 }
@@ -1157,7 +1196,12 @@ function bindCarousel(){
   const vp = $("#carousel-viewport");
   let startX = null;
   let dragged = false;
-  vp.addEventListener("pointerdown", e => { startX = e.clientX; dragged = false; });
+  vp.addEventListener("pointerdown", e => {
+    if (e.button !== 0) return;
+    startX = e.clientX;
+    dragged = false;
+    vp.setPointerCapture(e.pointerId);
+  });
   vp.addEventListener("pointermove", e => {
     if (startX == null) return;
     if (Math.abs(e.clientX - startX) > 10) dragged = true;
@@ -1167,6 +1211,7 @@ function bindCarousel(){
     const dx = e.clientX - startX;
     if (Math.abs(dx) > 40) moveCarousel(dx < 0 ? 1 : -1);
     startX = null;
+    if (vp.hasPointerCapture(e.pointerId)) vp.releasePointerCapture(e.pointerId);
   });
   vp.addEventListener("pointercancel", () => { startX = null; dragged = false; });
   vp.addEventListener("click", e => {
