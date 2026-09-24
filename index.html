@@ -31,9 +31,8 @@
   /* One fluid grid shared by header, hero copy, category section and footer */
   --home-grid:1216px;
   --home-gutter:clamp(16px,4vw,56px);
-  /* Full-bleed hero. Shop tone is a step apart from the hero fade so the join is a shift, not a seam. */
-  --hero-fade:#071c3c;
-  --shop-bg:#0c325f;
+  /* Fade ends on the same color as the category band so the join is not a hard edge. */
+  --shop-bg:#0a2d58;
   --card-gap:16px;
   --radius:16px;
 }
@@ -134,10 +133,8 @@ body:not(.home-mode){
 .logo{
   width:100%;
   height:100%;
-  object-fit:cover;
-  /* Scale crops the badge's internal white ring so the roof mark sits larger and centered. */
-  transform:scale(1.32);
-  transform-origin:center 47%;
+  object-fit:contain;
+  object-position:center;
 }
 .brand-title{
   font-weight:700;
@@ -215,22 +212,15 @@ body.home-mode .view-home.is-active{
   z-index:1;
   pointer-events:none;
 }
-.hero-media picture,
 .hero-media img{
+  position:absolute;
+  inset:0;
   display:block;
   width:100%;
   height:100%;
-}
-.hero-media img{
-  position:absolute;
-  top:0;
-  right:0;
-  height:100%;
-  /* Source file includes a flat navy panel on the left. Scale the photographic side to cover the hero. */
-  width:175%;
   max-width:none;
   object-fit:cover;
-  object-position:right center;
+  object-position:center 62%;
 }
 .hero-media:before{
   content:"";
@@ -238,16 +228,16 @@ body.home-mode .view-home.is-active{
   inset:0;
   z-index:2;
   pointer-events:none;
-  background:linear-gradient(90deg,rgba(3,25,54,.78) 0%,rgba(3,25,54,.55) 32%,rgba(3,25,54,.28) 58%,rgba(3,25,54,.12) 100%);
+  background:linear-gradient(90deg,rgba(3,25,54,.78) 0%,rgba(3,25,54,.52) 34%,rgba(3,25,54,.22) 62%,rgba(3,25,54,.08) 100%);
 }
 .hero-media:after{
   content:"";
   position:absolute;
   left:0;right:0;bottom:0;
-  height:28%;
+  height:46%;
   z-index:3;
   pointer-events:none;
-  background:linear-gradient(to bottom,rgba(7,28,60,0) 0%,var(--hero-fade) 100%);
+  background:linear-gradient(to bottom,rgba(10,45,88,0) 0%,rgba(10,45,88,.45) 48%,var(--shop-bg) 100%);
 }
 .hero-copy{
   position:relative;
@@ -393,7 +383,7 @@ body.home-mode .view-home.is-active{
   border-color:rgba(244,81,30,.45);
   box-shadow:0 10px 24px rgba(0,0,0,.22);
 }
-.category-card:hover .card-object{transform:translateY(12%) scale(1.04)}
+.category-card:hover .card-object{transform:translateY(10%) scale(1.03)}
 .category-card:hover .card-arrow{background:var(--orange-dark)}
 .card-visual{
   flex:1 1 auto;
@@ -420,12 +410,12 @@ body.home-mode .view-home.is-active{
   z-index:1;
 }
 .card-object{
-  width:168%;
+  width:230%;
   height:auto;
   object-fit:contain;
   object-position:center bottom;
   /* Each PNG keeps about 22% clear space under the object; slide that margin past the ground line */
-  transform:translateY(12%);
+  transform:translateY(10%);
   transform-origin:center bottom;
   transition:transform .25s;
   position:relative;
@@ -592,9 +582,11 @@ body.home-mode .view-home.is-active{
 .catalog-top p{margin-top:7px;color:var(--muted);font-size:14px}
 .catalog-top img{
   width:100%;
-  height:140px;
-  object-fit:cover;
-  border-radius:0;
+  height:180px;
+  object-fit:contain;
+  object-position:center;
+  background:#f3f5f8;
+  border-radius:12px;
 }
 .catalog-heading{
   display:flex;
@@ -688,8 +680,12 @@ textarea{min-height:110px;resize:vertical}
 .tile:hover,.product-box:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(4,25,55,.08)}
 .tile-img{height:150px;background:var(--navy-mid);overflow:hidden}
 .product-box-image{height:100px;background:#f3f5f8;overflow:hidden}
-.tile-img img,.product-box-image img{width:100%;height:100%;object-fit:cover}
-.product-box-image img{object-fit:contain}
+.tile-img img,.product-box-image img,.gallery-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+}
 .tile-body{padding:14px 16px 16px}
 .product-box-body{padding:10px 12px 11px}
 .tile-body h3,.product-box-body h3{font-size:16px;color:var(--navy)}
@@ -704,8 +700,8 @@ textarea{min-height:110px;resize:vertical}
   font-size:11px;
   font-weight:800;
 }
-.navy-tile .tile-img{height:120px}
-.navy-tile .tile-img img{object-fit:cover;transform:scale(1.08)}
+.navy-tile .tile-img{height:140px;background:#f3f5f8}
+.navy-tile .tile-img img{object-fit:contain;transform:none}
 .sub-grid{grid-template-columns:repeat(4,1fr)}
 .sub-grid .tile-img{height:110px}
 .sub-grid .tile-body{padding:11px 13px 13px}
@@ -765,7 +761,7 @@ textarea{min-height:110px;resize:vertical}
   overflow:hidden;
 }
 .gallery-thumb.is-active{border:2px solid var(--orange)}
-.gallery-thumb img{width:100%;height:100%;object-fit:cover}
+.gallery-thumb img{width:100%;height:100%;object-fit:contain;object-position:center}
 .detail-copy{padding:12px 0 0}
 .detail-copy h1{font-size:clamp(26px,3vw,38px);color:var(--navy);letter-spacing:-.03em}
 .detail-copy .muted{color:var(--muted);margin-top:8px}
@@ -826,7 +822,7 @@ textarea{min-height:110px;resize:vertical}
 }
 .viewer-thumb{width:58px;height:46px;border:1px solid rgba(255,255,255,.4);overflow:hidden}
 .viewer-thumb.is-active{border:2px solid var(--orange)}
-.viewer-thumb img{width:100%;height:100%;object-fit:cover}
+.viewer-thumb img{width:100%;height:100%;object-fit:contain;object-position:center}
 
 .mobile-nav{
   display:none;
@@ -972,10 +968,7 @@ textarea{min-height:110px;resize:vertical}
     <section class="view view-home is-active" id="view-home" data-view="home">
       <div class="hero">
         <div class="hero-media" aria-hidden="true">
-          <picture>
-            <source srcset="assets/hero/hero-home.webp" type="image/webp">
-            <img src="assets/hero/hero-home.png" alt="">
-          </picture>
+          <img src="assets/hero/hero-living.png" alt="">
         </div>
         <div class="page-container hero-copy">
           <h1>Thoughtful Spaces for Every Home.</h1>
