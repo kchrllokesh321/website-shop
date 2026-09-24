@@ -364,14 +364,14 @@ body.home-mode .view-home.is-active{
 }
 .category-card{
   /* 5 equal squares across the shared grid: width derives from container and gap */
-  flex:0 0 calc((100% - var(--card-gap)*4)/5 - 5px);
+  flex:0 0 calc((100% - var(--card-gap)*4)/5 - 13px);
   aspect-ratio:1/1;
   display:flex;
   flex-direction:column;
   background:var(--navy-mid);
   border:1px solid rgba(255,255,255,.12);
   border-radius:14px;
-  padding:10px 12px 12px;
+  padding:6px 8px 8px;
   color:#fff;
   position:relative;
   min-width:0;
@@ -383,7 +383,7 @@ body.home-mode .view-home.is-active{
   border-color:rgba(244,81,30,.45);
   box-shadow:0 10px 24px rgba(0,0,0,.22);
 }
-.category-card:hover .card-object{transform:translateY(10%) scale(1.03)}
+.category-card:hover .card-object{transform:translateY(8%) scale(1.03)}
 .category-card:hover .card-arrow{background:var(--orange-dark)}
 .card-visual{
   flex:1 1 auto;
@@ -392,7 +392,7 @@ body.home-mode .view-home.is-active{
   display:flex;
   align-items:flex-end;
   justify-content:center;
-  margin-bottom:6px;
+  margin-bottom:2px;
   overflow:hidden;
   isolation:isolate;
 }
@@ -410,12 +410,13 @@ body.home-mode .view-home.is-active{
   z-index:1;
 }
 .card-object{
-  width:230%;
+  width:210%;
+  max-width:none;
   height:auto;
   object-fit:contain;
   object-position:center bottom;
   /* Each PNG keeps about 22% clear space under the object; slide that margin past the ground line */
-  transform:translateY(10%);
+  transform:translateY(8%);
   transform-origin:center bottom;
   transition:transform .25s;
   position:relative;
@@ -865,7 +866,7 @@ textarea{min-height:110px;resize:vertical}
   .hero{min-height:0}
 }
 @media (max-width:1100px){
-  .category-card{flex-basis:calc((100% - var(--card-gap)*2)/3 - 5px)}
+  .category-card{flex-basis:calc((100% - var(--card-gap)*2)/3 - 13px)}
   .split,.mfg-grid,.form-grid,.detail,.layout-2,.catalog-top{grid-template-columns:1fr}
   .catalog-top img{height:180px}
   .cat-grid,.product-grid,.sub-grid{grid-template-columns:repeat(2,1fr)}
@@ -895,7 +896,7 @@ textarea{min-height:110px;resize:vertical}
   .footer-social{justify-content:center;gap:18px}
   .footer-social svg{width:18px;height:18px}
   .branch-popover{width:min(360px,calc(100vw - 24px))}
-  .category-card{flex-basis:calc((100% - var(--card-gap))/2 - 5px)}
+  .category-card{flex-basis:calc((100% - var(--card-gap))/2 - 13px)}
   .hero-copy{padding:36px 0 24px}
 }
 @media (max-width:850px) and (max-height:700px){
@@ -907,7 +908,7 @@ textarea{min-height:110px;resize:vertical}
   .container{width:min(var(--container),calc(100% - 24px))}
   .brand-title{font-size:12px}
   .cat-grid,.product-grid,.sub-grid,.points,.mfg-cards{grid-template-columns:1fr}
-  .category-card{flex-basis:calc((100% - var(--card-gap))/2 - 5px)}
+  .category-card{flex-basis:calc((100% - var(--card-gap))/2 - 13px)}
   .hero-description br{display:none}
   .hero-description{font-size:14px}
   .hero h1{font-size:32px}
