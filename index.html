@@ -247,7 +247,7 @@ body.home-mode .view-home.is-active{
   flex-direction:column;
   justify-content:center;
   align-items:flex-start;
-  padding:48px 0 20px;
+  padding:28px 0 36px;
 }
 .hero-copy > *{max-width:600px}
 .eyebrow{
@@ -383,7 +383,11 @@ body.home-mode .view-home.is-active{
   border-color:rgba(244,81,30,.45);
   box-shadow:0 10px 24px rgba(0,0,0,.22);
 }
-.category-card:hover .card-object{transform:translateY(8%) scale(1.03)}
+.category-card:hover .card-object{transform:translate(-50%, var(--ground, 22%)) scale(1.03)}
+.card-object-electronics{--ground:26%}
+.card-object-small-appliances{--ground:30%}
+.card-object-gift-items{--ground:32%}
+.card-object-baby-items{--ground:25%}
 .category-card:hover .card-arrow{background:var(--orange-dark)}
 .card-visual{
   flex:1 1 auto;
@@ -400,26 +404,28 @@ body.home-mode .view-home.is-active{
   content:"";
   position:absolute;
   left:50%;
-  bottom:6px;
-  width:62%;
-  height:18px;
+  bottom:2px;
+  width:55%;
+  height:10px;
   transform:translateX(-50%);
-  background:radial-gradient(ellipse at center,rgba(0,0,0,.42) 0%,rgba(0,0,0,.18) 44%,rgba(0,0,0,0) 74%);
-  filter:blur(6px);
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.4) 0%,rgba(0,0,0,.16) 42%,rgba(0,0,0,0) 72%);
+  filter:blur(3px);
   pointer-events:none;
   z-index:1;
 }
 .card-object{
-  width:210%;
+  position:absolute;
+  left:50%;
+  bottom:0;
+  width:200%;
   max-width:none;
   height:auto;
   object-fit:contain;
   object-position:center bottom;
-  /* Each PNG keeps about 22% clear space under the object; slide that margin past the ground line */
-  transform:translateY(8%);
+  /* PNG keeps ~23% clear space under the object; shift that past the ground line */
+  transform:translate(-50%, var(--ground, 22%));
   transform-origin:center bottom;
   transition:transform .25s;
-  position:relative;
   z-index:2;
 }
 .category-card h3{
@@ -1134,7 +1140,7 @@ function cardHTML(cat){
   const visual = cat.visualAsset || cat.image || cat.icon;
   return `<a class="category-card" href="#/category/${cat.id}" aria-label="Open ${cat.title} category">
     <div class="card-visual">
-      <img class="card-object" src="${visual}" alt="${cat.alt}">
+      <img class="card-object card-object-${cat.id}" src="${visual}" alt="${cat.alt}">
     </div>
     <h3>${cat.title}</h3>
     <p>${cat.description}</p>
