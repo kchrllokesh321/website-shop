@@ -734,6 +734,56 @@ textarea{min-height:110px;resize:vertical}
   font-size:11px;
   font-weight:800;
 }
+.listing{min-width:0}
+.filter-toggle{
+  display:none;
+  padding:8px 14px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--navy);
+  background:#fff;
+}
+.filter-panel{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px 22px;
+  align-items:flex-start;
+  padding:12px 14px;
+  margin-bottom:14px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+.filter-group{border:0;padding:0;margin:0;min-width:0}
+.filter-group legend{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  padding:6px 11px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  color:#4d5c70;
+  background:#fff;
+}
+.chip:hover{border-color:var(--orange);color:var(--orange)}
+.chip.is-active{background:var(--navy);border-color:var(--navy);color:#fff}
+.check{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#4d5c70;margin:2px 12px 2px 0}
+.check input{width:auto;accent-color:var(--orange)}
+.filter-clear{
+  margin-left:auto;
+  align-self:flex-end;
+  font-size:12px;
+  font-weight:700;
+  color:var(--orange);
+  padding:6px 0;
+}
+.filter-clear:hover{text-decoration:underline}
+.load-more-wrap{display:flex;justify-content:center;margin-top:18px}
+.load-more-wrap[hidden]{display:none}
+.no-results,.load-error{grid-column:1/-1;padding:24px;text-align:center;color:var(--muted);font-size:14px}
 .product-box-actions{display:flex;gap:6px;margin-top:10px}
 .product-box-actions .btn{flex:1;padding:7px 8px;font-size:11px;border-radius:8px}
 .sub-grid{grid-template-columns:repeat(4,1fr)}
@@ -996,6 +1046,11 @@ body.home-mode .wa-float{display:none}
   .branch-list a{white-space:normal}
   .side{max-height:none}
   .side .side-list{max-height:220px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .filter-toggle{display:inline-block}
+  .filter-panel{display:none;flex-direction:column;gap:12px}
+  .filter-panel.is-open{display:flex}
+  .filter-clear{margin-left:0;align-self:flex-start}
+  .catalog-heading{flex-direction:row;align-items:flex-start;justify-content:space-between}
   .category-card{flex-basis:210px;width:210px;height:210px}
   .hero{min-height:0}
   .hero-copy{padding:20px 0 16px;justify-content:flex-start}
@@ -1037,7 +1092,7 @@ body.home-mode .wa-float{display:none}
   .footer-sme{font-size:12px}
   .footer-social a{width:40px;height:40px}
   .footer-social svg{width:15px;height:15px}
-  .catalog-heading{align-items:flex-start;flex-direction:column}
+  .catalog-heading h1{font-size:26px}
   .catalog-sort{width:100%}
   .detail-photo{height:300px}
   .spec-list{grid-template-columns:1fr}
@@ -1330,22 +1385,10 @@ const DEFAULT_SPECS = [
   ["Assembly","Professional installation included"]
 ];
 const DEFAULT_CARE = "Dust with a soft, dry cloth. Keep away from direct heat and standing moisture. Use coasters and felt pads, and arrange periodic hardware checks.";
-const PRODUCTS = [
-  { id:"linen-sofa", category:"furniture", subcategory:"sofas", type:"3-seater", title:"Linen Lounge Sofa", shortDescription:"Soft seating for everyday living.", longDescription:"A calm three-seater designed for family rooms. Balanced proportions, supportive cushions and a quiet fabric that suits Indian homes.", price:"₹ 28,999", image:"assets/products/sofa-01.webp", images:["assets/products/sofa-01.webp"], alt:"Grey linen sofa with rust cushions", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:1, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"premium-teak-cot", category:"furniture", subcategory:"cots", type:"premium-teak-wood-cot", title:"Premium Teak Wood Cot", shortDescription:"Elegant design. Built to last.", longDescription:"Crafted from high-quality teak wood, this premium cot offers durable, elegant and superior comfort. Perfect for modern homes, it combines traditional craftsmanship with contemporary design.", price:"₹ 32,999", image:"assets/products/cot-01.webp", images:["assets/products/cot-01.webp","assets/products/cot-detail-headboard.webp","assets/products/cot-detail-footboard.webp"], alt:"Premium teak wood cot with white bedding", specifications:[["Material","Teak wood"],["Size","King size"],["Finish","Natural teak polish"],["Storage","Non-storage"],["Assembly","Professional installation"],["Warranty","Demo product — confirm in store"]], careInstructions:DEFAULT_CARE, displayOrder:2, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"classic-wood-cot", category:"furniture", subcategory:"cots", type:"wood-cot", title:"Classic Wooden Cot", shortDescription:"Simple lines for an easy bedroom.", longDescription:"Demo catalog product using the supplied cot reference image. Confirm material, size and availability in store.", price:"₹ 18,999", image:"assets/products/cot-detail-headboard.webp", images:["assets/products/cot-detail-headboard.webp","assets/products/cot-01.webp"], alt:"Classic wooden cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:3, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"modern-upholstered-cot", category:"furniture", subcategory:"cots", type:"premium-teak-wood-cot", title:"Modern Upholstered Cot", shortDescription:"A softer profile for modern rooms.", longDescription:"Demo catalog product. Final upholstery, dimensions and pricing should be confirmed through the showroom CRM.", price:"₹ 24,999", image:"assets/products/bed-01.webp", images:["assets/products/bed-01.webp"], alt:"Modern upholstered cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:4, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"storage-cot", category:"furniture", subcategory:"cots", type:"storage-cot", title:"Storage Cot", shortDescription:"Useful storage in a composed frame.", longDescription:"Demo catalog product. Storage configuration and exact dimensions are subject to showroom confirmation.", price:"₹ 28,999", image:"assets/products/cot-detail-footboard.webp", images:["assets/products/cot-detail-footboard.webp","assets/products/cot-01.webp"], alt:"Storage cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:5, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"metal-frame-cot", category:"furniture", subcategory:"cots", type:"metal-cot", title:"Metal Frame Cot", shortDescription:"A practical frame with clean lines.", longDescription:"Demo catalog product. Frame gauge, finish and dimensions should be confirmed in store.", price:"₹ 12,999", image:"assets/products/cot-detail-headboard.webp", images:["assets/products/cot-detail-headboard.webp","assets/products/cot-01.webp"], alt:"Metal frame cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:6, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"solid-wood-cot", category:"furniture", subcategory:"cots", type:"wood-cot", title:"Solid Wood Cot", shortDescription:"Warm timber and dependable support.", longDescription:"Demo catalog product using the supplied cot imagery. Confirm timber species, dimensions and availability in store.", price:"₹ 22,999", image:"assets/products/cot-01.webp", images:["assets/products/cot-01.webp","assets/products/cot-detail-headboard.webp"], alt:"Solid wood cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:7, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"panel-bed", category:"furniture", subcategory:"beds", type:"duroflex", title:"Panel Bed", shortDescription:"A clean, grounded bedroom centrepiece.", longDescription:"Low visual noise, sturdy rails and a headboard that reads well against both painted and wood-panelled walls.", price:"₹ 26,999", image:"assets/products/bed-01.webp", images:["assets/products/bed-01.webp"], alt:"Wooden panel bed", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:8, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"diwana-set", category:"furniture", subcategory:"diwan", type:"wooden-diwan", title:"Diwana Lounge Set", shortDescription:"Conversation seating with a light footprint.", longDescription:"A compact lounge arrangement for living rooms that need flexibility without looking temporary.", price:"₹ 21,999", image:"assets/products/diwana-01.webp", images:["assets/products/diwana-01.webp","assets/products/diwana-detail.webp"], alt:"Diwana lounge set", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:9, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"dining-set", category:"furniture", subcategory:"dining-tables", type:"6-seater-dining", title:"Family Dining Table", shortDescription:"Everyday meals, unhurried gatherings.", longDescription:"A solid dining table with a quiet grain and room for family seating. Pairs with simple chairs or a bench.", price:"₹ 29,999", image:"assets/products/dining-01.webp", images:["assets/products/dining-01.webp"], alt:"Wooden dining table and chairs", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:9, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"dressing-table", category:"furniture", subcategory:"dressing-tables", type:"storage-dressing", title:"Dressing Table", shortDescription:"Storage and mirror in one calm piece.", longDescription:"A dressing table with a balanced mirror, soft drawers and a finish that sits comfortably in a bedroom corner.", price:"₹ 14,999", image:"assets/products/dressing-01.webp", images:["assets/products/dressing-01.webp"], alt:"Wooden dressing table with mirror", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:10, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"office-table", category:"furniture", subcategory:"office-tables", type:"executive-desk", title:"Home Office Table", shortDescription:"Focused work without a bulky desk.", longDescription:"A practical work table with a clear surface and a silhouette that belongs in a home, not only an office.", price:"₹ 16,999", image:"assets/products/office-01.webp", images:["assets/products/office-01.webp"], alt:"Wooden office table with chair", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:11, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"living-tv", category:"electronics", subcategory:"tv", type:"led-tv", title:"Living Room Television", shortDescription:"A clear picture for the family room.", longDescription:"Selected for everyday viewing. We help you match screen size to the wall, seating distance and the rest of the room.", price:"Price on request", image:"assets/products/tv-01.webp", images:["assets/products/tv-01.webp"], alt:"Flat screen television", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:12, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"kitchen-set", category:"small-appliances", subcategory:"kitchen", type:"mixer-grinder", title:"Everyday Kitchen Set", shortDescription:"Small appliances for a smarter everyday.", longDescription:"A practical starting set for daily cooking — compact, easy to store and chosen to sit well on an Indian kitchen counter.", price:"Price on request", image:"assets/products/kitchen-01.webp", images:["assets/products/kitchen-01.webp"], alt:"Cookware and small kitchen appliances", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:13, cta:"Enquire Now", ctaLink:"#/appointment" }
-];
+// Product data lives in data/products-<category>.json (one file per category) and is
+// fetched on demand. Add a product by adding one JSON entry; `image` may be any hosted URL.
+const PRODUCT_FILES = Object.fromEntries(CATEGORIES.map(c => [c.id, `data/products-${c.id}.json`]));
+const productCache = {};
 
 const $ = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
@@ -1360,8 +1403,63 @@ function findSubByTypeId(catId, typeId){
   return subsOf(catId).find(s => (s.types || []).some(t => t.id === typeId)) || null;
 }
 
-function productsOf(catId, subId, typeId){
-  return PRODUCTS
+function formatPrice(value){
+  if (value === null || value === undefined || value === "" || Number.isNaN(Number(value))) return "Price on request";
+  return "₹ " + Number(value).toLocaleString("en-IN");
+}
+function labelize(key){
+  return String(key).replace(/[_-]+/g, " ").replace(/\b\w/g, ch => ch.toUpperCase());
+}
+
+// Maps a raw JSON entry onto the shape the renderers use.
+function normalizeProduct(raw){
+  const specs = raw.specs && typeof raw.specs === "object" ? raw.specs : {};
+  const image = raw.image || "";
+  const images = Array.isArray(raw.images) && raw.images.length ? raw.images : [image];
+  return {
+    id: raw.id,
+    category: raw.category,
+    subcategory: raw.subCategory || raw.subcategory,
+    type: raw.type,
+    title: raw.name || raw.title || raw.id,
+    shortDescription: raw.description || raw.shortDescription || "",
+    longDescription: raw.longDescription || raw.description || "",
+    priceValue: raw.price === null || raw.price === undefined || raw.price === "" ? null : Number(raw.price),
+    price: formatPrice(raw.price),
+    image,
+    images,
+    alt: raw.alt || raw.name || "",
+    material: specs.material || null,
+    specifications: Object.entries(specs).map(([k, v]) => [labelize(k), String(v)]),
+    careInstructions: raw.care || DEFAULT_CARE,
+    displayOrder: Number(raw.displayOrder) || 500,
+    cta: "Enquire Now",
+    ctaLink: "#/appointment",
+    placeholder: false
+  };
+}
+
+async function loadProducts(catId){
+  if (productCache[catId]) return productCache[catId];
+  const file = PRODUCT_FILES[catId];
+  if (!file) return [];
+  productCache[catId] = fetch(file, { cache: "no-cache" })
+    .then(res => { if (!res.ok) throw new Error(`${file}: ${res.status}`); return res.json(); })
+    .then(list => (Array.isArray(list) ? list : []).map(normalizeProduct))
+    .catch(err => {
+      console.error("Product data failed to load", err);
+      delete productCache[catId];
+      throw err;
+    });
+  return productCache[catId];
+}
+async function loadAllProducts(){
+  const lists = await Promise.all(CATEGORIES.map(c => loadProducts(c.id).catch(() => [])));
+  return lists.flat();
+}
+
+function productsOf(list, catId, subId, typeId){
+  return list
     .filter(p => p.category === catId && (!subId || p.subcategory === subId) && (!typeId || p.type === typeId))
     .sort((a,b) => a.displayOrder - b.displayOrder);
 }
@@ -1377,11 +1475,13 @@ function placeholderProduct(cat, sub, type, n){
     type: type.id,
     title: `${type.title} — Product ${n}`,
     shortDescription: "Placeholder product. Replace with the showroom listing.",
-    longDescription: `Placeholder listing under ${cat.title} / ${sub.title} / ${type.title}. Swap in the showroom name, photos, description and price when the real product is ready.`,
+    longDescription: `Placeholder listing under ${cat.title} / ${sub.title} / ${type.title}. Add the real entry to data/products-${cat.id}.json with the CRM image link.`,
+    priceValue: null,
     price: "Price on request",
     image,
     images: [image],
     alt: `${type.title} product ${n} placeholder`,
+    material: null,
     specifications: [["Category", cat.title],["Sub-category", sub.title],["Type", type.title],["Status","Placeholder — confirm in store"]],
     careInstructions: DEFAULT_CARE,
     displayOrder: 900 + n,
@@ -1393,8 +1493,8 @@ function placeholderProduct(cat, sub, type, n){
 
 const MIN_PRODUCTS_PER_TYPE = 3;
 
-function productsForType(cat, sub, type){
-  const real = productsOf(cat.id, sub.id, type.id);
+function productsForType(list, cat, sub, type){
+  const real = productsOf(list, cat.id, sub.id, type.id);
   const extras = [];
   while (real.length + extras.length < MIN_PRODUCTS_PER_TYPE){
     extras.push(placeholderProduct(cat, sub, type, real.length + extras.length + 1));
@@ -1402,9 +1502,7 @@ function productsForType(cat, sub, type){
   return real.concat(extras);
 }
 
-function productById(id){
-  const real = PRODUCTS.find(p => p.id === id);
-  if (real) return real;
+function placeholderById(id){
   const match = String(id).match(/^(.*)-product-(\d+)$/);
   if (!match) return null;
   for (const cat of CATEGORIES){
@@ -1414,6 +1512,11 @@ function productById(id){
     }
   }
   return null;
+}
+
+async function productById(id){
+  const all = await loadAllProducts();
+  return all.find(p => p.id === id) || placeholderById(id);
 }
 
 function crumbHTML(items){
@@ -1604,10 +1707,11 @@ function renderCategories(){
   $("#view-page").innerHTML = pageFrame("Categories", "Browse the home, room by room.", `<div class="cat-grid">${cards}</div>`, "categories");
 }
 
-function productCardHTML(p){
-  return `<article class="product-box">
+// Single card template: every product on every listing page goes through this.
+function renderProductCard(p){
+  return `<article class="product-box" data-id="${p.id}">
     <a href="#/product/${p.id}">
-      <div class="product-box-image"><img src="${p.image}" alt="${p.alt}"></div>
+      <div class="product-box-image"><img src="${p.image}" alt="${p.alt}" loading="lazy"></div>
     </a>
     <div class="product-box-body">
       <h3><a href="#/product/${p.id}">${p.title}</a></h3>
@@ -1647,8 +1751,51 @@ function renderCategory(catId, subId, typeId){
   </div>`;
 }
 
-// Level 2 → 3 → 4: a sub-category shows its types in the sidebar and the selected type's products.
-function renderSubcategory(catId, subId, typeId){
+const PRICE_RANGES = [
+  { id:"under-20k", label:"Under ₹20,000", min:0, max:19999 },
+  { id:"20k-40k", label:"₹20,000 – ₹40,000", min:20000, max:40000 },
+  { id:"above-40k", label:"Above ₹40,000", min:40001, max:Infinity }
+];
+const PAGE_SIZE = 24;
+
+function applyFilters(list, state){
+  return list.filter(p => {
+    if (state.price){
+      const range = PRICE_RANGES.find(r => r.id === state.price);
+      if (!range || p.priceValue === null || p.priceValue < range.min || p.priceValue > range.max) return false;
+    }
+    if (state.types.size && !state.types.has(p.type)) return false;
+    if (state.materials.size && !state.materials.has(p.material)) return false;
+    return true;
+  });
+}
+
+function filtersHTML(types, materials, state, showTypes){
+  const priceBtns = PRICE_RANGES.map(r => `
+    <button type="button" class="chip ${state.price === r.id ? "is-active" : ""}" data-filter="price" data-value="${r.id}" aria-pressed="${state.price === r.id}">${r.label}</button>`).join("");
+  const typeBoxes = showTypes && types.length > 1 ? `
+    <fieldset class="filter-group">
+      <legend>Type</legend>
+      ${types.map(t => `<label class="check"><input type="checkbox" data-filter="type" value="${t.id}" ${state.types.has(t.id) ? "checked" : ""}> ${t.title}</label>`).join("")}
+    </fieldset>` : "";
+  const materialBoxes = materials.length ? `
+    <fieldset class="filter-group">
+      <legend>Material</legend>
+      ${materials.map(m => `<label class="check"><input type="checkbox" data-filter="material" value="${m}" ${state.materials.has(m) ? "checked" : ""}> ${m}</label>`).join("")}
+    </fieldset>` : "";
+  return `
+    <fieldset class="filter-group">
+      <legend>Price</legend>
+      <div class="chips">${priceBtns}</div>
+    </fieldset>
+    ${typeBoxes}
+    ${materialBoxes}
+    <button type="button" class="filter-clear" id="filter-clear">Clear filters</button>`;
+}
+
+// Level 2 → 3 → 4: a sub-category lists its types in the sidebar and renders the product grid
+// from the category's JSON, filtered client-side.
+async function renderSubcategory(catId, subId, typeId){
   const cat = catById(catId);
   let sub = subById(catId, subId);
   if (!sub){
@@ -1658,42 +1805,108 @@ function renderSubcategory(catId, subId, typeId){
     typeId = subId;
   }
   const types = sub.types || [];
-  const type = typeById(sub, typeId) || types[0] || null;
-  const list = type ? productsForType(cat, sub, type) : [];
-  const menu = types.map(item => `
-    <a href="#/category/${cat.id}/${sub.id}/${item.id}" class="${type && item.id === type.id ? "is-active" : ""}">${item.title}</a>`).join("");
-  const cards = list.map(productCardHTML).join("") || `<p>No products in this group yet.</p>`;
+  const type = typeById(sub, typeId);
+  const showAll = !type;
+  const crumbs = [
+    {label:"Home", href:"#/"},
+    {label:cat.title, href:`#/category/${cat.id}`},
+    {label:sub.title, href:`#/category/${cat.id}/${sub.id}`},
+    ...(type ? [{label:type.title}] : [])
+  ];
+  const menu = [`<a href="#/category/${cat.id}/${sub.id}" class="${showAll ? "is-active" : ""}">All ${sub.title}</a>`]
+    .concat(types.map(item => `<a href="#/category/${cat.id}/${sub.id}/${item.id}" class="${type && item.id === type.id ? "is-active" : ""}">${item.title}</a>`))
+    .join("");
   setActiveNav("categories");
-  $("#view-page").innerHTML = `<div class="catalog-page">
+  const view = $("#view-page");
+  view.innerHTML = `<div class="catalog-page">
     <div class="container">
-      ${crumbHTML([
-        {label:"Home", href:"#/"},
-        {label:cat.title, href:`#/category/${cat.id}`},
-        {label:sub.title, href:`#/category/${cat.id}/${sub.id}`},
-        ...(type ? [{label:type.title}] : [])
-      ])}
+      ${crumbHTML(crumbs)}
       <div class="layout-2">
         <aside class="side">
           <h4>${sub.title.toUpperCase()} TYPES</h4>
-          <div class="side-list">${menu || "<p>Types coming soon.</p>"}</div>
+          <div class="side-list">${menu}</div>
         </aside>
-        <div>
+        <div class="listing">
           <div class="catalog-heading">
-            <div><h1>${type ? type.title : sub.title}</h1><p>${list.length} products</p></div>
+            <div><h1>${type ? type.title : sub.title}</h1><p id="result-count">Loading products…</p></div>
+            <button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="filter-panel">Filters</button>
           </div>
-          <div class="product-grid">${cards}</div>
+          <form class="filter-panel" id="filter-panel" aria-label="Product filters"></form>
+          <div class="product-grid" id="product-grid"></div>
+          <div class="load-more-wrap" id="load-more-wrap" hidden><button type="button" class="btn btn-navy" id="load-more">Load more</button></div>
         </div>
       </div>
     </div>
   </div>`;
+
+  let list;
+  try {
+    list = await loadProducts(catId);
+  } catch (err){
+    if (!view.querySelector("#product-grid")) return;
+    $("#result-count").textContent = "Products could not be loaded.";
+    $("#product-grid").innerHTML = `<p class="load-error">Product data must be served over http(s). Open the site from its hosted address rather than as a local file.</p>`;
+    return;
+  }
+  if (!view.querySelector("#product-grid")) return; // user navigated away while loading
+
+  const scopeTypes = type ? [type] : types;
+  const all = scopeTypes.flatMap(t => productsForType(list, cat, sub, t));
+  const materials = [...new Set(all.map(p => p.material).filter(Boolean))].sort();
+  const state = { price:null, types:new Set(), materials:new Set(), shown:PAGE_SIZE };
+
+  const panel = $("#filter-panel");
+  const grid = $("#product-grid");
+  const count = $("#result-count");
+  const toggle = $("#filter-toggle");
+  const moreWrap = $("#load-more-wrap");
+
+  function activeCount(){ return (state.price ? 1 : 0) + state.types.size + state.materials.size; }
+  function paint(){
+    const matches = applyFilters(all, state);
+    const visible = matches.slice(0, state.shown);
+    grid.innerHTML = visible.map(renderProductCard).join("") || `<p class="no-results">No products match these filters.</p>`;
+    count.textContent = `${matches.length} ${matches.length === 1 ? "product" : "products"} found`;
+    moreWrap.hidden = matches.length <= state.shown;
+    const n = activeCount();
+    toggle.textContent = n ? `Filters (${n})` : "Filters";
+    panel.innerHTML = filtersHTML(scopeTypes, materials, state, showAll);
+  }
+  panel.addEventListener("click", e => {
+    const chip = e.target.closest("[data-filter='price']");
+    if (chip){
+      state.price = state.price === chip.dataset.value ? null : chip.dataset.value;
+      state.shown = PAGE_SIZE; paint(); return;
+    }
+    if (e.target.closest("#filter-clear")){
+      state.price = null; state.types.clear(); state.materials.clear(); state.shown = PAGE_SIZE; paint();
+    }
+  });
+  panel.addEventListener("change", e => {
+    const box = e.target.closest("input[type='checkbox']");
+    if (!box) return;
+    const set = box.dataset.filter === "type" ? state.types : state.materials;
+    if (box.checked) set.add(box.value); else set.delete(box.value);
+    state.shown = PAGE_SIZE; paint();
+  });
+  toggle.addEventListener("click", () => {
+    const open = panel.classList.toggle("is-open");
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  $("#load-more").addEventListener("click", () => { state.shown += PAGE_SIZE; paint(); });
+  paint();
 }
 
 function renderProducts(catId, subId, typeId){
   renderCategory(catId, subId, typeId);
 }
 
-function renderProduct(id){
-  const p = productById(id);
+async function renderProduct(id){
+  setActiveNav("categories");
+  $("#view-page").innerHTML = `<div class="product-detail-page"><div class="container"><p class="crumb">Loading product…</p></div></div>`;
+  let p = null;
+  try { p = await productById(id); } catch (err){ p = null; }
+  if (location.hash !== `#/product/${id}`) return;
   if (!p){ location.hash = "#/categories"; return; }
   const cat = catById(p.category);
   const sub = subById(p.category, p.subcategory);

@@ -1,0 +1,284 @@
+[
+  {
+    "id": "linen-sofa",
+    "category": "furniture",
+    "subCategory": "sofas",
+    "type": "3-seater",
+    "name": "Linen Lounge Sofa",
+    "description": "Soft seating for everyday living.",
+    "longDescription": "A calm three-seater designed for family rooms. Balanced proportions, supportive cushions and a quiet fabric that suits Indian homes.",
+    "price": 28999,
+    "image": "assets/products/sofa-01.webp",
+    "images": [
+      "assets/products/sofa-01.webp"
+    ],
+    "alt": "Grey linen sofa with rust cushions",
+    "specs": {
+      "material": "Fabric",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 1
+  },
+  {
+    "id": "premium-teak-cot",
+    "category": "furniture",
+    "subCategory": "cots",
+    "type": "premium-teak-wood-cot",
+    "name": "Premium Teak Wood Cot",
+    "description": "Elegant design. Built to last.",
+    "longDescription": "Crafted from high-quality teak wood, this premium cot offers durable, elegant and superior comfort. Perfect for modern homes, it combines traditional craftsmanship with contemporary design.",
+    "price": 32999,
+    "image": "assets/products/cot-01.webp",
+    "images": [
+      "assets/products/cot-01.webp",
+      "assets/products/cot-detail-headboard.webp",
+      "assets/products/cot-detail-footboard.webp"
+    ],
+    "alt": "Premium teak wood cot with white bedding",
+    "specs": {
+      "material": "Teak Wood",
+      "size": "King size",
+      "finish": "Natural teak polish",
+      "storage": "Non-storage",
+      "assembly": "Professional installation",
+      "warranty": "Demo product — confirm in store"
+    },
+    "displayOrder": 2
+  },
+  {
+    "id": "classic-wood-cot",
+    "category": "furniture",
+    "subCategory": "cots",
+    "type": "wood-cot",
+    "name": "Classic Wooden Cot",
+    "description": "Simple lines for an easy bedroom.",
+    "longDescription": "Demo catalog product using the supplied cot reference image. Confirm material, size and availability in store.",
+    "price": 18999,
+    "image": "assets/products/cot-detail-headboard.webp",
+    "images": [
+      "assets/products/cot-detail-headboard.webp",
+      "assets/products/cot-01.webp"
+    ],
+    "alt": "Classic wooden cot demo",
+    "specs": {
+      "material": "Wood",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 3
+  },
+  {
+    "id": "modern-upholstered-cot",
+    "category": "furniture",
+    "subCategory": "cots",
+    "type": "premium-teak-wood-cot",
+    "name": "Modern Upholstered Cot",
+    "description": "A softer profile for modern rooms.",
+    "longDescription": "Demo catalog product. Final upholstery, dimensions and pricing should be confirmed through the showroom CRM.",
+    "price": 24999,
+    "image": "assets/products/bed-01.webp",
+    "images": [
+      "assets/products/bed-01.webp"
+    ],
+    "alt": "Modern upholstered cot demo",
+    "specs": {
+      "material": "Upholstered",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 4
+  },
+  {
+    "id": "storage-cot",
+    "category": "furniture",
+    "subCategory": "cots",
+    "type": "storage-cot",
+    "name": "Storage Cot",
+    "description": "Useful storage in a composed frame.",
+    "longDescription": "Demo catalog product. Storage configuration and exact dimensions are subject to showroom confirmation.",
+    "price": 28999,
+    "image": "assets/products/cot-detail-footboard.webp",
+    "images": [
+      "assets/products/cot-detail-footboard.webp",
+      "assets/products/cot-01.webp"
+    ],
+    "alt": "Storage cot demo",
+    "specs": {
+      "material": "Engineered Wood",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 5
+  },
+  {
+    "id": "metal-frame-cot",
+    "category": "furniture",
+    "subCategory": "cots",
+    "type": "metal-cot",
+    "name": "Metal Frame Cot",
+    "description": "A practical frame with clean lines.",
+    "longDescription": "Demo catalog product. Frame gauge, finish and dimensions should be confirmed in store.",
+    "price": 12999,
+    "image": "assets/products/cot-detail-headboard.webp",
+    "images": [
+      "assets/products/cot-detail-headboard.webp",
+      "assets/products/cot-01.webp"
+    ],
+    "alt": "Metal frame cot demo",
+    "specs": {
+      "material": "Metal",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 6
+  },
+  {
+    "id": "solid-wood-cot",
+    "category": "furniture",
+    "subCategory": "cots",
+    "type": "wood-cot",
+    "name": "Solid Wood Cot",
+    "description": "Warm timber and dependable support.",
+    "longDescription": "Demo catalog product using the supplied cot imagery. Confirm timber species, dimensions and availability in store.",
+    "price": 22999,
+    "image": "assets/products/cot-01.webp",
+    "images": [
+      "assets/products/cot-01.webp",
+      "assets/products/cot-detail-headboard.webp"
+    ],
+    "alt": "Solid wood cot demo",
+    "specs": {
+      "material": "Wood",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 7
+  },
+  {
+    "id": "panel-bed",
+    "category": "furniture",
+    "subCategory": "beds",
+    "type": "duroflex",
+    "name": "Panel Bed",
+    "description": "A clean, grounded bedroom centrepiece.",
+    "longDescription": "Low visual noise, sturdy rails and a headboard that reads well against both painted and wood-panelled walls.",
+    "price": 26999,
+    "image": "assets/products/bed-01.webp",
+    "images": [
+      "assets/products/bed-01.webp"
+    ],
+    "alt": "Wooden panel bed",
+    "specs": {
+      "material": "Wood",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 8
+  },
+  {
+    "id": "diwana-set",
+    "category": "furniture",
+    "subCategory": "diwan",
+    "type": "wooden-diwan",
+    "name": "Diwana Lounge Set",
+    "description": "Conversation seating with a light footprint.",
+    "longDescription": "A compact lounge arrangement for living rooms that need flexibility without looking temporary.",
+    "price": 21999,
+    "image": "assets/products/diwana-01.webp",
+    "images": [
+      "assets/products/diwana-01.webp",
+      "assets/products/diwana-detail.webp"
+    ],
+    "alt": "Diwana lounge set",
+    "specs": {
+      "material": "Wood",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 9
+  },
+  {
+    "id": "dining-set",
+    "category": "furniture",
+    "subCategory": "dining-tables",
+    "type": "6-seater-dining",
+    "name": "Family Dining Table",
+    "description": "Everyday meals, unhurried gatherings.",
+    "longDescription": "A solid dining table with a quiet grain and room for family seating. Pairs with simple chairs or a bench.",
+    "price": 29999,
+    "image": "assets/products/dining-01.webp",
+    "images": [
+      "assets/products/dining-01.webp"
+    ],
+    "alt": "Wooden dining table and chairs",
+    "specs": {
+      "material": "Wood",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 9
+  },
+  {
+    "id": "dressing-table",
+    "category": "furniture",
+    "subCategory": "dressing-tables",
+    "type": "storage-dressing",
+    "name": "Dressing Table",
+    "description": "Storage and mirror in one calm piece.",
+    "longDescription": "A dressing table with a balanced mirror, soft drawers and a finish that sits comfortably in a bedroom corner.",
+    "price": 14999,
+    "image": "assets/products/dressing-01.webp",
+    "images": [
+      "assets/products/dressing-01.webp"
+    ],
+    "alt": "Wooden dressing table with mirror",
+    "specs": {
+      "material": "Engineered Wood",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 10
+  },
+  {
+    "id": "office-table",
+    "category": "furniture",
+    "subCategory": "office-tables",
+    "type": "executive-desk",
+    "name": "Home Office Table",
+    "description": "Focused work without a bulky desk.",
+    "longDescription": "A practical work table with a clear surface and a silhouette that belongs in a home, not only an office.",
+    "price": 16999,
+    "image": "assets/products/office-01.webp",
+    "images": [
+      "assets/products/office-01.webp"
+    ],
+    "alt": "Wooden office table with chair",
+    "specs": {
+      "material": "Engineered Wood",
+      "finish": "Warm natural wood finish",
+      "assembly": "Professional installation included"
+    },
+    "displayOrder": 11
+  },
+  {
+    "id": "cot-crm-test-001",
+    "category": "furniture",
+    "subCategory": "cots",
+    "type": "premium-teak-wood-cot",
+    "name": "Teak Cot — CRM Test Listing",
+    "description": "Added via JSON with a hosted image URL.",
+    "longDescription": "Test product added by editing data/products-furniture.json only. The image is loaded from an external hosted URL exactly as CRM-uploaded images will be.",
+    "price": 41999,
+    "image": "https://picsum.photos/seed/sme-teak-cot/900/900",
+    "images": [
+      "https://picsum.photos/seed/sme-teak-cot/900/900"
+    ],
+    "alt": "CRM test cot listing",
+    "specs": {
+      "material": "Teak Wood",
+      "size": "King"
+    },
+    "displayOrder": 50
+  }
+]
