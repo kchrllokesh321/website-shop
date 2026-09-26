@@ -10,6 +10,7 @@
     "products  → one object per product. Add an object to add a product, delete it to remove it.",
     "Image fields accept any hosted URL: upload in the CRM, copy the link, paste it here."
   ],
+  "assetBase": "",
   "business": {
     "name": "SRI MARUTHI ENTERPRISES",
     "shortName": "SME",

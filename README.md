@@ -76,6 +76,19 @@ There is no server, so the forms hand off to WhatsApp: pressing the button opens
 - Contact form (`#/contact`): name, phone, chosen branch, message.
 - Book an Appointment (`#/appointment`, every "Book an Appointment" button): full name, phone, category of interest (the category list comes from `catalog.categories` plus `pages.appointment.otherCategory`), customization yes/no with details, preferred date and time, notes. Optional fields left blank are not included in the message.
 
+### Hosting in a CRM / page builder (one HTML box, uploaded images)
+
+Some hosts give you a single HTML source box per page plus an "Upload" for images, and cannot serve `data/content.json` as a separate file. For those:
+
+1. Upload every file from `assets/` (keep the same file names). Note the web address of one uploaded file, for example `https://cdn.example.com/site123/hero-living.png`. The part before the file name is your `assetBase`.
+   - If the host keeps sub-folders, upload the folders as they are and `assetBase` is the address of the `assets` folder itself.
+   - If the host flattens everything into one folder, upload the files and also change each `assets/hero/...`, `assets/products/...` path in `content.json` to just the file name after `assetBase` (or ask for the paths to be flattened for you).
+2. Set `"assetBase"` at the top of `content.json` to that prefix. Optionally set `business.logo` to the uploaded logo address.
+3. Open `index.html`, find `<script type="application/json" id="site-content">` near the top of the script section, and paste the entire `content.json` between that tag and its `</script>`.
+4. Paste the whole `index.html` into the host's HTML source box for the home page and publish.
+
+When the inline block is filled the site never downloads `data/content.json`, so future edits are made inside that block in the host's editor. Locally, leave the block empty and keep editing `data/content.json` as before.
+
 ### Rules
 
 - Keep the file valid JSON: every item in a list separated by a comma, no comma after the last one, text in double quotes. A JSON checker (search "JSON validator") will point to any mistake.

@@ -1314,7 +1314,17 @@ body.home-mode .wa-float{display:none}
   <div class="viewer-thumbs" id="viewer-thumbs"></div>
 </div>
 
+<!--
+  HOSTING WITHOUT A SEPARATE FILE (CRM / page builders):
+  paste the whole of data/content.json between the two lines below. When this block
+  has content it is used instead of downloading data/content.json.
+  Add "assetBase": "https://your-cdn/..." to the JSON to point every "assets/..." path at uploaded files.
+-->
+<script type="application/json" id="site-content">
+</script>
 <script>
+// Where the content file lives when the inline block above is empty.
+const CONTENT_URL = "data/content.json";
 const CONTENT = {
   whatsappNumber: "919154444114",
   whatsapp: "https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products",
@@ -1426,10 +1436,37 @@ function applySizes(){
   }
 }
 
+// Rewrites "assets/..." paths to assetBase + path so images can live on a CDN or CRM upload folder.
+function resolveAssets(node, base){
+  if (typeof node === "string") return node.startsWith("assets/") ? base + node.slice("assets/".length) : node;
+  if (Array.isArray(node)) return node.map(n => resolveAssets(n, base));
+  if (node && typeof node === "object"){
+    for (const k of Object.keys(node)) node[k] = resolveAssets(node[k], base);
+  }
+  return node;
+}
+
 async function loadSite(){
-  const res = await fetch("data/content.json", { cache: "no-store" });
-  if (!res.ok) throw new Error(`data/content.json: ${res.status}`);
-  SITE = await res.json();
+  const inline = document.getElementById("site-content");
+  if (inline && inline.textContent.trim()){
+    SITE = JSON.parse(inline.textContent);
+  } else {
+    const res = await fetch(CONTENT_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error(`${CONTENT_URL}: ${res.status}`);
+    SITE = await res.json();
+  }
+  if (SITE.assetBase){
+    const base = String(SITE.assetBase).replace(/\/?$/, "/");
+    resolveAssets(SITE, base);
+    document.querySelectorAll("img.logo, link[rel='icon'], .hero-media img").forEach(el => {
+      const attr = el.tagName === "LINK" ? "href" : "src";
+      const v = el.getAttribute(attr) || "";
+      if (v.startsWith("assets/")) el.setAttribute(attr, base + v.slice("assets/".length));
+    });
+  }
+  if (SITE.business && SITE.business.logo){
+    document.querySelectorAll("img.logo, link[rel='icon']").forEach(el => el.setAttribute(el.tagName === "LINK" ? "href" : "src", SITE.business.logo));
+  }
   applyBusiness(SITE.business);
   applyCatalog(SITE.catalog || {});
   RAW_PRODUCTS = Array.isArray(SITE.products) ? SITE.products : [];
