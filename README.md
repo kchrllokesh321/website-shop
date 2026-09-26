@@ -15,7 +15,7 @@ You never edit `index.html`. Every text, number, image link, size, category, fil
 | Want to change | Section in `data/content.json` |
 | --- | --- |
 | WhatsApp number (used by every WhatsApp button, once) | `business.whatsappNumber` |
-| Pre-filled WhatsApp messages (each button has its own) | `business.whatsappMessage` (Chat on WhatsApp + floating button), `business.appointmentMessage` (Book an Appointment), `business.contactMessage` (Contact page button), `business.productMessage` (product Consult button; `{product}` becomes the product name) |
+| Pre-filled WhatsApp messages (each button has its own) | `business.whatsappMessage` (Chat on WhatsApp + floating button), `business.appointmentMessage` (first line of the appointment form message), `business.contactMessage` (Contact page button), `business.enquireMessage` and `business.consultMessage` (product Enquire / Consult buttons; `{product}` becomes "Product Name (Type, Variant)", and `{name}`, `{type}`, `{variant}` are also available) |
 | Phone (tel: link), email (mailto:, leave `""` to hide), opening hours + note | `business.phone`, `business.phoneDisplay`, `business.email`, `business.hours`, `business.hoursNote` |
 | Business name, caption, tagline, copyright, social links | `business` |
 | Footer branch line, branch list (footer popover + Contact page + form dropdown), contact note | `branches` |
@@ -64,9 +64,11 @@ Upload the photo in the CRM asset area, copy its link (`https://...`), and paste
 
 ### Categories, sub-categories, types, variants
 
-Under `catalog.categories`, each category has `subCategories`, and each sub-category has `types`. Add or delete objects the same way as products. Each needs an `id` (lowercase, hyphens), a `title`, and optionally `description` and `image`.
+The catalog is five levels deep, and every level except the last is a grid of cards the shopper clicks through:
 
-A type can have one more level, `variants`, for cases like Cots → Premium Teak Wood Cot → Queen Size / King Size, or Sofa → L Shape → Fabric / Wooden. Only add `variants` to the types that need them; other types keep listing products directly.
+1. Category (Furniture) → 2. Sub-category (Cots) → 3. Type (Premium Teak Wood Cot) → 4. Variant (Modern) → 5. Products (the real listings, with filters).
+
+Under `catalog.categories`, each category has `subCategories`, each sub-category has `types`, and each type can have `variants`. Add or delete objects the same way as products. Each needs an `id` (lowercase, hyphens), a `title`, and optionally `description` and `image` (a missing image falls back to the parent's image).
 
 ```json
 {
@@ -80,7 +82,9 @@ A type can have one more level, `variants`, for cases like Cots → Premium Teak
 }
 ```
 
-On the site the variants appear indented under the type in the left menu, as a "Variant" filter on the type page, and each has its own page (`#/category/furniture/sofas/l-shape/fabric`). Give each product in that type a `"variant": "fabric"` (or `"wooden"`) so it lands on the right page.
+Rule of thumb used for variants: when the type is a material (Teak Wood, Metal) the variants are styles (Classic, Modern, Carved); when the type is a shape or model (L Shape, LED TV) the variants are materials or sizes (Fabric, Wooden; 32 inch, 43 inch). If a type genuinely comes one way, leave `variants` out and its card opens the product list directly.
+
+Filters, prices and the Enquire / Consult buttons appear only on level 5. The card text at levels 2–4 under the heading comes from `pages.categories.subLead`, `typeLead`, `variantLead`, or the item's own `description`.
 
 ### Sizes
 

@@ -876,9 +876,6 @@ textarea{min-height:110px;resize:vertical}
 }
 .side button:hover,.side a:hover{background:rgba(244,81,30,.08);color:var(--orange)}
 .side button.is-active,.side a.is-active{background:rgba(244,81,30,.1);color:var(--orange)}
-.side a.is-open{color:var(--navy);font-weight:700}
-.variant-list{margin:2px 0 6px 10px;padding-left:8px;border-left:2px solid rgba(244,81,30,.25)}
-.variant-list a{padding:8px 10px;font-size:12.5px}
 
 .product-detail-page{
   min-height:100%;
@@ -1380,15 +1377,38 @@ function applyBusiness(biz){
     CONTENT.whatsapp = waLink(biz.whatsappNumber, biz.whatsappMessage || "Hi, I'm interested in your products and would like to know more.");
     CONTENT.appointmentIntro = biz.appointmentMessage || "Hi, I'd like to book an appointment.";
     CONTENT.contact = waLink(biz.whatsappNumber, biz.contactMessage || "Hi, I have a question.");
-    CONTENT.productMessage = biz.productMessage || "Hi, I'm interested in {product}. Could you share more details?";
+    CONTENT.enquireMessage = biz.enquireMessage || "Hi, I'm interested in {product}. Could you share more details and pricing?";
+    CONTENT.consultMessage = biz.consultMessage || "Hi, I'd like to consult with someone about {product} before deciding.";
   }
   if (biz.social) Object.assign(CONTENT.social, biz.social);
 }
 
-// Product "Consult" buttons name the product so the enquiry is specific.
-function productWaLink(p){
-  const template = CONTENT.productMessage || "Hi, I'm interested in {product}. Could you share more details?";
-  return waLink(CONTENT.whatsappNumber, template.replace("{product}", p.title));
+// "[Product Name] ([Type], [Variant])" from the product's own JSON fields.
+function productLabel(p){
+  const sub = subById(p.category, p.subcategory);
+  const type = typeById(sub, p.type);
+  const variant = variantById(type, p.variant);
+  const qualifiers = [type && type.title, variant && variant.title].filter(Boolean).join(", ");
+  return qualifiers ? `${p.title} (${qualifiers})` : p.title;
+}
+function fillTemplate(template, p){
+  const sub = subById(p.category, p.subcategory);
+  const type = typeById(sub, p.type);
+  const variant = variantById(type, p.variant);
+  return template
+    .replace(/\{product\}/g, productLabel(p))
+    .replace(/\{name\}/g, p.title)
+    .replace(/\{type\}/g, type ? type.title : "")
+    .replace(/\{variant\}/g, variant ? variant.title : "");
+}
+// Every Enquire / Consult button on every product goes through these two.
+function buildEnquireLink(p){
+  const template = CONTENT.enquireMessage || "Hi, I'm interested in {product}. Could you share more details and pricing?";
+  return waLink(CONTENT.whatsappNumber, fillTemplate(template, p));
+}
+function buildConsultLink(p){
+  const template = CONTENT.consultMessage || "Hi, I'd like to consult with someone about {product} before deciding.";
+  return waLink(CONTENT.whatsappNumber, fillTemplate(template, p));
 }
 
 function setText(sel, value){
@@ -1825,37 +1845,90 @@ function renderProductCard(p){
       <p>${p.shortDescription}</p>
       <p class="product-price">${p.price}</p>
       <div class="product-box-actions">
-        <a class="btn btn-orange" href="#/appointment">Enquire</a>
-        <a class="btn btn-navy" href="${productWaLink(p)}" target="_blank" rel="noopener">Consult</a>
+        <a class="btn btn-orange" href="${buildEnquireLink(p)}" target="_blank" rel="noopener">Enquire</a>
+        <a class="btn btn-navy" href="${buildConsultLink(p)}" target="_blank" rel="noopener">Consult</a>
       </div>
     </div>
   </article>`;
 }
 
-// Level 1 → 2: a category shows its sub-categories as a card grid.
+// Levels 2, 3 and 4 are click-through card grids; only level 5 lists products.
+function catalogLeads(){
+  const pg = (SITE.pages || {}).categories || {};
+  return {
+    sub: pg.subLead || "Choose a sub-category.",
+    type: pg.typeLead || "Choose a type.",
+    variant: pg.variantLead || "Choose a variant."
+  };
+}
+function tileGridHTML(items, hrefFor, fallbackImage){
+  return items.map(item => `
+    <a class="tile" href="${hrefFor(item)}">
+      <div class="tile-img"><img src="${item.image || fallbackImage}" alt="${item.title}"></div>
+      <div class="tile-body"><h3>${item.title}</h3>${item.description ? `<p>${item.description}</p>` : ""}</div>
+    </a>`).join("");
+}
+function levelPageHTML(crumbs, title, lead, tiles, emptyText){
+  return `<div class="catalog-page">
+    <div class="container">
+      ${crumbHTML(crumbs)}
+      <div class="catalog-heading">
+        <div><h1>${title}</h1>${lead ? `<p>${lead}</p>` : ""}</div>
+      </div>
+      <div class="sub-grid">${tiles || `<p>${emptyText}</p>`}</div>
+    </div>
+  </div>`;
+}
+function catalogHref(cat, sub, type, variant){
+  return ["#/category", cat && cat.id, sub && sub.id, type && type.id, variant && variant.id].filter(Boolean).join("/");
+}
+
 function renderCategory(catId, subId, typeId, variantId){
   const cat = catById(catId);
   if (!cat){ location.hash = "#/categories"; return; }
-  if (subId){
-    renderSubcategory(catId, subId, typeId, variantId);
+  const leads = catalogLeads();
+  setActiveNav("categories");
+  const view = $("#view-page");
+
+  // Level 2: sub-categories
+  if (!subId){
+    const tiles = tileGridHTML(subsOf(catId), s => catalogHref(cat, s), cat.icon);
+    view.innerHTML = levelPageHTML([{label:"Home", href:"#/"},{label:cat.title}], cat.title, cat.description || leads.sub, tiles, "Sub-categories coming soon.");
     return;
   }
-  const subs = subsOf(catId);
-  const tiles = subs.map(s => `
-    <a class="tile" href="#/category/${cat.id}/${s.id}">
-      <div class="tile-img"><img src="${s.image || cat.icon}" alt="${s.title}"></div>
-      <div class="tile-body"><h3>${s.title}</h3><p>${s.description || `${(s.types || []).length} types`}</p></div>
-    </a>`).join("");
-  setActiveNav("categories");
-  $("#view-page").innerHTML = `<div class="catalog-page">
-    <div class="container">
-      ${crumbHTML([{label:"Home", href:"#/"},{label:cat.title}])}
-      <div class="catalog-heading">
-        <div><h1>${cat.title}</h1><p>Choose a sub-category to see its types and products.</p></div>
-      </div>
-      <div class="sub-grid">${tiles || "<p>Sub-categories coming soon.</p>"}</div>
-    </div>
-  </div>`;
+  let sub = subById(catId, subId);
+  if (!sub){
+    // Old links pointed straight at a type under the category.
+    sub = findSubByTypeId(catId, subId);
+    location.hash = sub ? catalogHref(cat, sub, { id: subId }) : catalogHref(cat);
+    return;
+  }
+
+  // Level 3: types
+  if (!typeId){
+    const tiles = tileGridHTML(sub.types || [], t => catalogHref(cat, sub, t), sub.image || cat.icon);
+    view.innerHTML = levelPageHTML(
+      [{label:"Home", href:"#/"},{label:cat.title, href:catalogHref(cat)},{label:sub.title}],
+      sub.title, sub.description || leads.type, tiles, "Types coming soon.");
+    return;
+  }
+  const type = typeById(sub, typeId);
+  if (!type){ location.hash = catalogHref(cat, sub); return; }
+  const variants = type.variants || [];
+
+  // Level 4: variants (skipped for types that come one way)
+  if (variants.length && !variantId){
+    const tiles = tileGridHTML(variants, v => catalogHref(cat, sub, type, v), type.image || sub.image || cat.icon);
+    view.innerHTML = levelPageHTML(
+      [{label:"Home", href:"#/"},{label:cat.title, href:catalogHref(cat)},{label:sub.title, href:catalogHref(cat, sub)},{label:type.title}],
+      type.title, type.description || leads.variant, tiles, "Variants coming soon.");
+    return;
+  }
+  const variant = variantId ? variantById(type, variantId) : null;
+  if (variantId && !variant){ location.hash = catalogHref(cat, sub, type); return; }
+
+  // Level 5: products
+  renderProductListing(cat, sub, type, variant);
 }
 
 function pageSize(){ return Number(SETTINGS.productsPerPage) || 24; }
@@ -1866,8 +1939,6 @@ function applyFilters(list, state){
       const range = FILTERS.priceRanges.find(r => r.id === state.price);
       if (!range || p.priceValue === null || p.priceValue < range.min || p.priceValue > range.max) return false;
     }
-    if (state.types.size && !state.types.has(p.type)) return false;
-    if (state.variants.size && !state.variants.has(p.variant)) return false;
     for (const [key, set] of Object.entries(state.attrs)){
       if (set.size && !set.has(p.attrs[key])) return false;
     }
@@ -1883,7 +1954,7 @@ function attributeOptions(products){
     .filter(attr => attr.values.length);
 }
 
-function filtersHTML(types, attributes, state, showTypes, variants = [], showVariants = false){
+function filtersHTML(attributes, state){
   const priceBtns = FILTERS.priceRanges.map(r => `
     <button type="button" class="chip ${state.price === r.id ? "is-active" : ""}" data-filter="price" data-value="${r.id}" aria-pressed="${state.price === r.id}">${r.label}</button>`).join("");
   const priceGroup = priceBtns ? `
@@ -1891,75 +1962,46 @@ function filtersHTML(types, attributes, state, showTypes, variants = [], showVar
       <legend>Price</legend>
       <div class="chips">${priceBtns}</div>
     </fieldset>` : "";
-  const typeBoxes = showTypes && types.length > 1 ? `
-    <fieldset class="filter-group">
-      <legend>Type</legend>
-      ${types.map(t => `<label class="check"><input type="checkbox" data-filter="type" value="${t.id}" ${state.types.has(t.id) ? "checked" : ""}> ${t.title}</label>`).join("")}
-    </fieldset>` : "";
-  const variantBoxes = showVariants && variants.length > 1 ? `
-    <fieldset class="filter-group">
-      <legend>Variant</legend>
-      ${variants.map(v => `<label class="check"><input type="checkbox" data-filter="variant" value="${v.id}" ${state.variants.has(v.id) ? "checked" : ""}> ${v.title}</label>`).join("")}
-    </fieldset>` : "";
   const attrBoxes = attributes.map(attr => `
     <fieldset class="filter-group">
       <legend>${attr.label}</legend>
       ${attr.values.map(v => `<label class="check"><input type="checkbox" data-filter="attr" data-key="${attr.key}" value="${v}" ${state.attrs[attr.key] && state.attrs[attr.key].has(v) ? "checked" : ""}> ${v}</label>`).join("")}
     </fieldset>`).join("");
-  return `${priceGroup}${typeBoxes}${variantBoxes}${attrBoxes}
+  return `${priceGroup}${attrBoxes}
     <button type="button" class="filter-clear" id="filter-clear">Clear filters</button>`;
 }
 
-// Level 2 → 3 → 4 (→ 5): a sub-category lists its types in the sidebar; a type that has variants
-// nests them under itself. The product grid is filtered client-side from the category's JSON.
-async function renderSubcategory(catId, subId, typeId, variantId){
-  const cat = catById(catId);
-  let sub = subById(catId, subId);
-  if (!sub){
-    // Old links pointed straight at a type under the category.
-    sub = findSubByTypeId(catId, subId);
-    if (!sub){ location.hash = `#/category/${catId}`; return; }
-    typeId = subId;
-  }
-  const types = sub.types || [];
-  const type = typeById(sub, typeId);
-  if (typeId && !type){ location.hash = `#/category/${cat.id}/${sub.id}`; return; }
-  const variants = type ? (type.variants || []) : [];
-  const variant = variantById(type, variantId);
-  if (variantId && !variant){ location.hash = `#/category/${cat.id}/${sub.id}/${type.id}`; return; }
-  const showAll = !type;
-  const typeHref = type ? `#/category/${cat.id}/${sub.id}/${type.id}` : "";
+// Level 5: the real products for one Type (or one Variant), filterable client-side. The side
+// menu lists the siblings at the same level so shoppers can switch without going back up.
+async function renderProductListing(cat, sub, type, variant){
+  const variants = type.variants || [];
+  const leaf = variant || type;
+  const title = variant ? `${variant.title} ${type.title}` : type.title;
   const crumbs = [
     {label:"Home", href:"#/"},
-    {label:cat.title, href:`#/category/${cat.id}`},
-    {label:sub.title, href:`#/category/${cat.id}/${sub.id}`},
-    ...(type ? [{label:type.title, href: variant ? typeHref : ""}] : []),
+    {label:cat.title, href:catalogHref(cat)},
+    {label:sub.title, href:catalogHref(cat, sub)},
+    {label:type.title, href: variant ? catalogHref(cat, sub, type) : ""},
     ...(variant ? [{label:variant.title}] : [])
   ];
-  const leaf = variant || type || sub;
-  const menu = [`<a href="#/category/${cat.id}/${sub.id}" class="${showAll ? "is-active" : ""}">All ${sub.title}</a>`]
-    .concat(types.map(item => {
-      const active = type && item.id === type.id;
-      const link = `<a href="#/category/${cat.id}/${sub.id}/${item.id}" class="${active && !variant ? "is-active" : ""}${active && variant ? " is-open" : ""}">${item.title}</a>`;
-      if (!active || !(item.variants || []).length) return link;
-      const nested = [`<a href="${typeHref}" class="variant-link ${!variant ? "is-active" : ""}">All ${item.title}</a>`]
-        .concat(item.variants.map(v => `<a href="${typeHref}/${v.id}" class="variant-link ${variant && v.id === variant.id ? "is-active" : ""}">${v.title}</a>`));
-      return link + `<div class="variant-list">${nested.join("")}</div>`;
-    }))
-    .join("");
-  setActiveNav("categories");
+  const sideTitle = variant ? `${type.title} variants` : `${sub.title} types`;
+  const siblings = variant
+    ? variants.map(v => ({ title: v.title, href: catalogHref(cat, sub, type, v), active: v.id === variant.id }))
+    : (sub.types || []).map(t => ({ title: t.title, href: catalogHref(cat, sub, t), active: t.id === type.id }));
+  const menu = siblings.map(item => `<a href="${item.href}" class="${item.active ? "is-active" : ""}">${item.title}</a>`).join("");
+
   const view = $("#view-page");
   view.innerHTML = `<div class="catalog-page">
     <div class="container">
       ${crumbHTML(crumbs)}
       <div class="layout-2">
         <aside class="side">
-          <h4>${sub.title.toUpperCase()} TYPES</h4>
+          <h4>${sideTitle.toUpperCase()}</h4>
           <div class="side-list">${menu}</div>
         </aside>
         <div class="listing">
           <div class="catalog-heading">
-            <div><h1>${variant ? `${variant.title} ${type.title}` : leaf.title}</h1>${leaf.description ? `<p class="catalog-lead">${leaf.description}</p>` : ""}<p id="result-count">Loading products…</p></div>
+            <div><h1>${title}</h1>${leaf.description ? `<p class="catalog-lead">${leaf.description}</p>` : ""}<p id="result-count">Loading products…</p></div>
             <button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="filter-panel">Filters</button>
           </div>
           <form class="filter-panel" id="filter-panel" aria-label="Product filters"></form>
@@ -1970,7 +2012,7 @@ async function renderSubcategory(catId, subId, typeId, variantId){
     </div>
   </div>`;
 
-  // The mobile sidebar is a scroll box; keep the active type (and its variants) in view.
+  // The mobile side menu is a scroll box; keep the active entry in view.
   const sideList = view.querySelector(".side-list");
   const activeLink = sideList && sideList.querySelector("a.is-active");
   if (sideList && activeLink && sideList.scrollHeight > sideList.clientHeight){
@@ -1979,7 +2021,7 @@ async function renderSubcategory(catId, subId, typeId, variantId){
 
   let list;
   try {
-    list = await loadProducts(catId);
+    list = await loadProducts(cat.id);
   } catch (err){
     if (!view.querySelector("#product-grid")) return;
     $("#result-count").textContent = "Products could not be loaded.";
@@ -1988,12 +2030,9 @@ async function renderSubcategory(catId, subId, typeId, variantId){
   }
   if (!view.querySelector("#product-grid")) return; // user navigated away while loading
 
-  const scopeTypes = type ? [type] : types;
-  const all = variant
-    ? productsForVariant(list, cat, sub, type, variant)
-    : scopeTypes.flatMap(t => productsForType(list, cat, sub, t));
+  const all = variant ? productsForVariant(list, cat, sub, type, variant) : productsForType(list, cat, sub, type);
   const attributes = attributeOptions(all);
-  const state = { price:null, types:new Set(), variants:new Set(), attrs:{}, shown:pageSize() };
+  const state = { price:null, attrs:{}, shown:pageSize() };
 
   const panel = $("#filter-panel");
   const grid = $("#product-grid");
@@ -2001,7 +2040,7 @@ async function renderSubcategory(catId, subId, typeId, variantId){
   const toggle = $("#filter-toggle");
   const moreWrap = $("#load-more-wrap");
 
-  function activeCount(){ return (state.price ? 1 : 0) + state.types.size + state.variants.size + Object.values(state.attrs).reduce((n, set) => n + set.size, 0); }
+  function activeCount(){ return (state.price ? 1 : 0) + Object.values(state.attrs).reduce((n, set) => n + set.size, 0); }
   function paint(){
     const matches = applyFilters(all, state);
     const visible = matches.slice(0, state.shown);
@@ -2010,7 +2049,7 @@ async function renderSubcategory(catId, subId, typeId, variantId){
     moreWrap.hidden = matches.length <= state.shown;
     const n = activeCount();
     toggle.textContent = n ? `Filters (${n})` : "Filters";
-    panel.innerHTML = filtersHTML(scopeTypes, attributes, state, showAll, variants, !!type && !variant);
+    panel.innerHTML = filtersHTML(attributes, state);
   }
   panel.addEventListener("click", e => {
     const chip = e.target.closest("[data-filter='price']");
@@ -2019,17 +2058,13 @@ async function renderSubcategory(catId, subId, typeId, variantId){
       state.shown = pageSize(); paint(); return;
     }
     if (e.target.closest("#filter-clear")){
-      state.price = null; state.types.clear(); state.variants.clear(); state.attrs = {}; state.shown = pageSize(); paint();
+      state.price = null; state.attrs = {}; state.shown = pageSize(); paint();
     }
   });
   panel.addEventListener("change", e => {
     const box = e.target.closest("input[type='checkbox']");
-    if (!box) return;
-    let set = state.types;
-    if (box.dataset.filter === "variant") set = state.variants;
-    if (box.dataset.filter === "attr"){
-      set = state.attrs[box.dataset.key] || (state.attrs[box.dataset.key] = new Set());
-    }
+    if (!box || box.dataset.filter !== "attr") return;
+    const set = state.attrs[box.dataset.key] || (state.attrs[box.dataset.key] = new Set());
     if (box.checked) set.add(box.value); else set.delete(box.value);
     state.shown = pageSize(); paint();
   });
@@ -2091,8 +2126,8 @@ async function renderProduct(id){
         <p class="detail-desc">${p.longDescription}</p>
         <div class="spec-list detail-specs">${specs}</div>
         <div class="hero-actions">
-          <a class="btn btn-orange" href="${p.ctaLink}">${p.cta}</a>
-          <a class="btn btn-navy" href="${productWaLink(p)}" target="_blank" rel="noopener">Consult on WhatsApp</a>
+          <a class="btn btn-orange" href="${buildEnquireLink(p)}" target="_blank" rel="noopener">Enquire on WhatsApp</a>
+          <a class="btn btn-navy" href="${buildConsultLink(p)}" target="_blank" rel="noopener">Consult on WhatsApp</a>
         </div>
       </div>
     </article>
