@@ -15,9 +15,10 @@ You never edit `index.html`. Every text, number, image link, size, category, fil
 | Want to change | Section in `data/content.json` |
 | --- | --- |
 | WhatsApp number (used by every WhatsApp button, once) | `business.whatsappNumber` |
-| Pre-filled WhatsApp messages | `business.whatsappMessage`, `business.appointmentMessage` |
+| Pre-filled WhatsApp messages (each button has its own) | `business.whatsappMessage` (Chat on WhatsApp + floating button), `business.appointmentMessage` (Book an Appointment), `business.contactMessage` (Contact page button), `business.productMessage` (product Consult button; `{product}` becomes the product name) |
+| Phone (tel: link), email (mailto:, leave `""` to hide), opening hours + note | `business.phone`, `business.phoneDisplay`, `business.email`, `business.hours`, `business.hoursNote` |
 | Business name, caption, tagline, copyright, social links | `business` |
-| Footer branch line, branch list (popover + contact form), contact note | `branches` |
+| Footer branch line, branch list (footer popover + Contact page + form dropdown), contact note | `branches` |
 | Hero title, description, subline, button labels, badge labels, hero image | `homepage.hero` (badge icons stay in code; only the words change) |
 | "Shop by Category" heading | `homepage.shopHeading` |
 | About, Manufacturing, Contact, Appointment, Categories page text and images | `pages` |

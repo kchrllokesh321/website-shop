@@ -680,6 +680,19 @@ body.home-mode .view-home.is-active{
 .form-card,.info-card{
   background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;
 }
+.contact-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:22px}
+.contact-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
+.contact-card h3{font-size:14px;color:var(--navy)}
+.contact-card p{margin-top:8px;color:var(--muted);font-size:14px}
+.contact-card small{display:block;margin-top:4px;font-size:11px;color:var(--muted)}
+.contact-card .btn{margin-top:12px;font-size:12px;padding:9px 14px}
+.contact-link{color:var(--navy);font-weight:700}
+.contact-link:hover{color:var(--orange)}
+.contact-branches{margin-top:14px}
+.contact-branches li{border-top-color:var(--border);padding-top:12px}
+.contact-branches p{color:var(--navy);font-size:14px}
+.contact-branches small{color:var(--muted);font-size:12px}
+.contact-branches a{color:var(--orange)}
 label{display:block;font-size:12px;font-weight:700;margin:10px 0 6px}
 input,textarea,select{
   width:100%;
@@ -1052,6 +1065,9 @@ body.home-mode .wa-float{display:none}
   }
   .branch-list li{flex-wrap:wrap}
   .branch-list a{white-space:normal}
+  .contact-branches li{flex-wrap:nowrap}
+  .contact-branches li > div{flex:1;min-width:0}
+  .contact-branches a{white-space:nowrap}
   .side{max-height:none}
   .side .side-list{max-height:220px;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .filter-toggle{display:inline-block}
@@ -1170,7 +1186,7 @@ body.home-mode .wa-float{display:none}
           <p class="hero-subline">Trusted by families across Rajampet &amp; Railway Koduru.</p>
           <div class="hero-actions">
             <a class="btn btn-orange" data-wa="appointment" href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment →</a>
-            <a class="btn btn-ghost" id="whatsapp-hero" href="https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products" target="_blank" rel="noopener">Chat on WhatsApp →</a>
+            <a class="btn btn-ghost" id="whatsapp-hero" href="https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products%20and%20would%20like%20to%20know%20more." target="_blank" rel="noopener">Chat on WhatsApp →</a>
           </div>
           <div class="hero-badges">
             <span>
@@ -1245,7 +1261,7 @@ body.home-mode .wa-float{display:none}
   </footer>
 </div>
 
-<a class="wa-float" id="whatsapp-float" href="https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+<a class="wa-float" id="whatsapp-float" href="https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products%20and%20would%20like%20to%20know%20more." target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.2 21.8l4.9-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.9a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.5-6c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.7 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.4Z"/></svg>
 </a>
 
@@ -1305,10 +1321,18 @@ function applyBusiness(biz){
   if (!biz) return;
   if (biz.whatsappNumber){
     CONTENT.whatsappNumber = biz.whatsappNumber;
-    CONTENT.whatsapp = waLink(biz.whatsappNumber, biz.whatsappMessage || "Hi, I'm interested in your products");
+    CONTENT.whatsapp = waLink(biz.whatsappNumber, biz.whatsappMessage || "Hi, I'm interested in your products and would like to know more.");
     CONTENT.appointment = waLink(biz.whatsappNumber, biz.appointmentMessage || "Hi, I'd like to book an appointment.");
+    CONTENT.contact = waLink(biz.whatsappNumber, biz.contactMessage || "Hi, I have a question.");
+    CONTENT.productMessage = biz.productMessage || "Hi, I'm interested in {product}. Could you share more details?";
   }
   if (biz.social) Object.assign(CONTENT.social, biz.social);
+}
+
+// Product "Consult" buttons name the product so the enquiry is specific.
+function productWaLink(p){
+  const template = CONTENT.productMessage || "Hi, I'm interested in {product}. Could you share more details?";
+  return waLink(CONTENT.whatsappNumber, template.replace("{product}", p.title));
 }
 
 function setText(sel, value){
@@ -1619,14 +1643,17 @@ function bindCarousel(){
 function mapsUrl(query){
   return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
 }
+function branchItemsHTML(directionsLabel){
+  const places = (SITE.branches && SITE.branches.list) || [];
+  return places.map(b => `<li>
+    <div><p>${b.name}</p><small>${b.address || ""}</small></div>
+    <a href="${mapsUrl(b.mapQuery || b.query || b.address || b.name)}" target="_blank" rel="noopener">${directionsLabel || "Get Directions"}</a>
+  </li>`).join("");
+}
 function renderBranches(){
   const list = $("#branch-list");
   if (!list) return;
-  const places = (SITE.branches && SITE.branches.list) || [];
-  list.innerHTML = places.map(b => `<li>
-    <div><p>${b.name}</p><small>${b.address || ""}</small></div>
-    <a href="${mapsUrl(b.mapQuery || b.query || b.address || b.name)}" target="_blank" rel="noopener">Get Directions</a>
-  </li>`).join("");
+  list.innerHTML = branchItemsHTML();
 }
 function setBranchesOpen(open){
   const pop = $("#branch-popover");
@@ -1697,7 +1724,7 @@ function renderProductCard(p){
       <p class="product-price">${p.price}</p>
       <div class="product-box-actions">
         <a class="btn btn-orange" href="#/appointment">Enquire</a>
-        <a class="btn btn-navy" href="${CONTENT.whatsapp}" target="_blank" rel="noopener">Consult</a>
+        <a class="btn btn-navy" href="${productWaLink(p)}" target="_blank" rel="noopener">Consult</a>
       </div>
     </div>
   </article>`;
@@ -1932,7 +1959,7 @@ async function renderProduct(id){
         <div class="spec-list detail-specs">${specs}</div>
         <div class="hero-actions">
           <a class="btn btn-orange" href="${p.ctaLink}">${p.cta}</a>
-          <a class="btn btn-navy" href="${CONTENT.whatsapp}" target="_blank" rel="noopener">Consult on WhatsApp</a>
+          <a class="btn btn-navy" href="${productWaLink(p)}" target="_blank" rel="noopener">Consult on WhatsApp</a>
         </div>
       </div>
     </article>
@@ -1987,13 +2014,12 @@ function renderManufacturing(){
   `, "manufacturing");
 }
 
-function formPage(kind){
+function formPage(kind, opts = {}){
   const pages = SITE.pages || {};
   const pg = pages[kind] || {};
   const br = SITE.branches || {};
   const options = (br.list || []).map(b => `<option>${b.name}</option>`).join("");
-  return `
-    <div class="form-grid">
+  const form = `
       <form class="form-card" id="lead-form">
         <h3>${pg.formTitle || (kind === "appointment" ? "Book an appointment" : "Send a message")}</h3>
         <label for="name">Name</label>
@@ -2006,7 +2032,11 @@ function formPage(kind){
         <textarea id="note" name="longDescription" required></textarea>
         <button class="btn btn-orange" type="submit" style="margin-top:14px">${pg.submit || "Send"}</button>
         <p class="form-msg" id="form-msg">${pages.formThanks || "Thank you. We will reach you shortly."}</p>
-      </form>
+      </form>`;
+  if (opts.compact) return form;
+  return `
+    <div class="form-grid">
+      ${form}
       <aside class="info-card">
         <h3>${pages.visitTitle || "Visit us"}</h3>
         ${br.summary ? `<p>${br.summary}</p>` : ""}
@@ -2044,7 +2074,40 @@ function bindForm(kind){
 
 function renderContact(){
   const pg = (SITE.pages || {}).contact || {};
-  $("#view-page").innerHTML = pageFrame(pg.title || "Contact", pg.lead || "", formPage("contact"), "contact");
+  const biz = SITE.business || {};
+  const br = SITE.branches || {};
+  const telHref = biz.phone ? `tel:${String(biz.phone).replace(/[^\d+]/g, "")}` : "";
+  const cards = [
+    `<div class="contact-card">
+      <h3>${pg.whatsappTitle || "WhatsApp us"}</h3>
+      <p>${biz.phoneDisplay || ""}</p>
+      <a class="btn btn-orange" href="${CONTENT.contact}" target="_blank" rel="noopener">${pg.whatsappButton || "Message on WhatsApp"}</a>
+    </div>`,
+    telHref ? `<div class="contact-card">
+      <h3>${pg.callTitle || "Call us"}</h3>
+      <p><a class="contact-link" href="${telHref}">${biz.phoneDisplay || biz.phone}</a></p>
+    </div>` : "",
+    biz.email ? `<div class="contact-card">
+      <h3>${pg.emailTitle || "Email us"}</h3>
+      <p><a class="contact-link" href="mailto:${biz.email}">${biz.email}</a></p>
+    </div>` : "",
+    biz.hours ? `<div class="contact-card">
+      <h3>${pg.hoursTitle || "Opening hours"}</h3>
+      <p>${biz.hours}</p>
+      ${biz.hoursNote ? `<small>${biz.hoursNote}</small>` : ""}
+    </div>` : ""
+  ].join("");
+  const inner = `
+    <div class="contact-cards">${cards}</div>
+    <div class="form-grid contact-grid">
+      <section class="info-card branches-card">
+        <h3>${pg.branchesTitle || "Our branches"}</h3>
+        ${br.summary ? `<p>${br.summary}${br.note ? ` · ${br.note}` : ""}</p>` : ""}
+        <ul class="branch-list contact-branches">${branchItemsHTML(pg.directions)}</ul>
+      </section>
+      ${formPage("contact", { compact: true })}
+    </div>`;
+  $("#view-page").innerHTML = pageFrame(pg.title || "Contact", pg.lead || "", inner, "contact");
   bindForm("contact");
 }
 function renderAppointment(){

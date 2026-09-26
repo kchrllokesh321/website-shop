@@ -16,8 +16,15 @@
     "caption": "Since 2020.",
     "tagline": "Quality Homes, Happier Families.",
     "whatsappNumber": "919154444114",
-    "whatsappMessage": "Hi, I'm interested in your products",
+    "phone": "+919154444114",
+    "phoneDisplay": "+91 91544 44114",
+    "email": "",
+    "hours": "Mon–Sat, 10 AM – 8 PM",
+    "hoursNote": "Placeholder — confirm opening hours",
+    "whatsappMessage": "Hi, I'm interested in your products and would like to know more.",
     "appointmentMessage": "Hi, I'd like to book an appointment.",
+    "contactMessage": "Hi, I have a question.",
+    "productMessage": "Hi, I'm interested in {product}. Could you share more details?",
     "social": {
       "instagram": "https://instagram.com",
       "x": "https://x.com",
@@ -32,7 +39,7 @@
     "note": "3 branches across 2 locations.",
     "list": [
       {
-        "name": "Rajampet — Main",
+        "name": "Rajampet — Main (placeholder name)",
         "address": "Main Road, Rajampet, Andhra Pradesh",
         "mapQuery": "Rajampet, Andhra Pradesh"
       },
@@ -109,12 +116,19 @@
     },
     "contact": {
       "title": "We’re here to help.",
-      "lead": "Visit a branch or send us a message. It opens in WhatsApp so you can send it straight to us.",
+      "lead": "Call, message on WhatsApp, or visit one of our three branches.",
       "formTitle": "Send a message",
       "messageLabel": "Message",
       "submit": "Send on WhatsApp",
       "image": "assets/sections/showroom.webp",
-      "whatsappIntro": "Enquiry from the website"
+      "whatsappIntro": "Enquiry from the website",
+      "whatsappTitle": "WhatsApp us",
+      "whatsappButton": "Message on WhatsApp",
+      "callTitle": "Call us",
+      "emailTitle": "Email us",
+      "hoursTitle": "Opening hours",
+      "branchesTitle": "Our branches",
+      "directions": "Get Directions"
     },
     "appointment": {
       "title": "Book an appointment.",
