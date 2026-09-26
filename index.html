@@ -2016,11 +2016,27 @@ function formPage(kind){
     </div>`;
 }
 
-function bindForm(){
+// Forms hand off to WhatsApp: the details are composed into one message and opened in a chat
+// with the business number, since a static site has no server to receive submissions.
+function bindForm(kind){
   const form = $("#lead-form");
   if (!form) return;
   form.addEventListener("submit", e => {
     e.preventDefault();
+    const pages = SITE.pages || {};
+    const pg = pages[kind] || {};
+    const data = new FormData(form);
+    const lines = [
+      pg.whatsappIntro || (kind === "appointment" ? "Appointment request from the website" : "Enquiry from the website"),
+      `Name: ${data.get("title") || "-"}`,
+      `Phone: ${data.get("phone") || "-"}`,
+      `Branch: ${data.get("branch") || "-"}`,
+      `${pg.messageLabel || "Message"}: ${data.get("longDescription") || "-"}`
+    ];
+    const url = waLink(CONTENT.whatsappNumber, lines.join("\n"));
+    const link = document.createElement("a");
+    link.href = url; link.target = "_blank"; link.rel = "noopener";
+    document.body.appendChild(link); link.click(); link.remove();
     $("#form-msg").style.display = "block";
     form.reset();
   });
@@ -2029,12 +2045,12 @@ function bindForm(){
 function renderContact(){
   const pg = (SITE.pages || {}).contact || {};
   $("#view-page").innerHTML = pageFrame(pg.title || "Contact", pg.lead || "", formPage("contact"), "contact");
-  bindForm();
+  bindForm("contact");
 }
 function renderAppointment(){
   const pg = (SITE.pages || {}).appointment || {};
   $("#view-page").innerHTML = pageFrame(pg.title || "Book an appointment", pg.lead || "", formPage("appointment"), "appointment");
-  bindForm();
+  bindForm("appointment");
 }
 
 function showHome(on){

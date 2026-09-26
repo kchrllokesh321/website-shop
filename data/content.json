@@ -109,21 +109,23 @@
     },
     "contact": {
       "title": "We’re here to help.",
-      "lead": "Visit a branch or leave a message. Internal notes stay in the same tab.",
+      "lead": "Visit a branch or send us a message. It opens in WhatsApp so you can send it straight to us.",
       "formTitle": "Send a message",
       "messageLabel": "Message",
-      "submit": "Send message",
-      "image": "assets/sections/showroom.webp"
+      "submit": "Send on WhatsApp",
+      "image": "assets/sections/showroom.webp",
+      "whatsappIntro": "Enquiry from the website"
     },
     "appointment": {
       "title": "Book an appointment.",
-      "lead": "Plan a room with someone who has walked the floor.",
+      "lead": "Plan a room with someone who has walked the floor. Your request opens in WhatsApp.",
       "formTitle": "Book an appointment",
       "messageLabel": "What would you like to plan?",
-      "submit": "Book appointment",
-      "image": "assets/sections/appointment.webp"
+      "submit": "Request on WhatsApp",
+      "image": "assets/sections/appointment.webp",
+      "whatsappIntro": "Appointment request from the website"
     },
-    "formThanks": "Thank you. We will reach you shortly.",
+    "formThanks": "Opening WhatsApp with your message. Press send there and we will reply shortly.",
     "visitTitle": "Visit us"
   },
   "sizes": {

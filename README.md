@@ -21,6 +21,7 @@ You never edit `index.html`. Every text, number, image link, size, category, fil
 | Hero title, description, subline, button labels, badge labels, hero image | `homepage.hero` (badge icons stay in code; only the words change) |
 | "Shop by Category" heading | `homepage.shopHeading` |
 | About, Manufacturing, Contact, Appointment, Categories page text and images | `pages` |
+| Contact/Appointment form: button label, first line of the WhatsApp message, thank-you text | `pages.contact`, `pages.appointment` (`submit`, `whatsappIntro`), `pages.formThanks` |
 | Sizes in pixels: hero text, category cards, product cards, header/footer height | `sizes` |
 | Categories → sub-categories → types (names, descriptions, images) | `catalog.categories` |
 | Price filter buttons and which spec fields become filters | `catalog.filters` |
@@ -65,6 +66,10 @@ Under `catalog.categories`, each category has `subCategories`, and each sub-cate
 ### Sizes
 
 `sizes` values are pixels. For example `categoryCardPx: 210` sets the homepage category card square; `heroTitleMaxPx: 54` caps the hero heading size; `productCardMinPx: 200` sets how wide product cards are before the grid adds a column.
+
+### Contact and appointment forms
+
+There is no server, so the forms hand off to WhatsApp: pressing the button opens a chat with `business.whatsappNumber` and the name, phone, chosen branch, and message already typed in. The customer presses send in WhatsApp and you receive it there.
 
 ### Rules
 
