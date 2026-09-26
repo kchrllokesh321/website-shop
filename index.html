@@ -1147,7 +1147,7 @@ body.home-mode .wa-float{display:none}
     <a href="#/about" data-nav="about">About</a>
     <a href="#/manufacturing" data-nav="manufacturing">Manufacturing</a>
     <a href="#/contact" data-nav="contact">Contact</a>
-    <a href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment</a>
+    <a data-wa="appointment" href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment</a>
   </nav>
 
   <main id="app">
@@ -1161,7 +1161,7 @@ body.home-mode .wa-float{display:none}
           <p class="hero-description">From furniture to appliances — all in one place.</p>
           <p class="hero-subline">Trusted by families across Rajampet &amp; Railway Koduru.</p>
           <div class="hero-actions">
-            <a class="btn btn-orange" href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment →</a>
+            <a class="btn btn-orange" data-wa="appointment" href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment →</a>
             <a class="btn btn-ghost" id="whatsapp-hero" href="https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products" target="_blank" rel="noopener">Chat on WhatsApp →</a>
           </div>
           <div class="hero-badges">
@@ -1261,124 +1261,49 @@ const CONTENT = {
   }
 };
 
-const CATEGORIES = [
-  { id:"furniture", title:"Furniture", description:"Sofas, Cots, Dining, Storage & More", icon:"assets/categories/furniture-3d.png", visualAsset:"assets/categories/visuals/furniture-visual.png", alt:"3D furniture armchair", displayOrder:1 },
-  { id:"electronics", title:"Electronics", description:"TVs, Refrigerators, Washing Machines & More", icon:"assets/categories/electronics-3d.png", visualAsset:"assets/categories/visuals/electronics-visual.png", alt:"3D television and refrigerator", displayOrder:2 },
-  { id:"small-appliances", title:"Small Appliances", description:"For a Smarter Everyday", icon:"assets/categories/small-appliances-3d.png", visualAsset:"assets/categories/visuals/small-appliances-visual.png", alt:"3D small kitchen appliances", displayOrder:3 },
-  { id:"gift-items", title:"Gift Items", description:"Thoughtful Gifts for Every Occasion", icon:"assets/categories/gift-items-3d.png", visualAsset:"assets/categories/visuals/gift-items-visual.png", alt:"3D gift and decor objects", displayOrder:4 },
-  { id:"baby-items", title:"Baby Items", description:"Safe, Smart & Comfortable", icon:"assets/categories/baby-items-3d.png", visualAsset:"assets/categories/visuals/baby-items-visual.png", alt:"3D crib and teddy bear", displayOrder:5 }
-];
+// All catalog content (categories, sub-categories, types, filters, contact settings) is loaded
+// from data/catalog.json. Edit that file — not this script — to change the catalog.
+let CATEGORIES = [];
+let SUBCATEGORIES = {};
+let FILTERS = { priceRanges: [], attributes: [] };
+let SETTINGS = { placeholderProductsPerType: 3, productsPerPage: 24 };
+let PRODUCT_FILES = {};
 
-const SUBCATEGORIES = {
-  furniture: [
-    { id:"cots", title:"Cots", image:"assets/products/cot-01.webp", types:[
-      { id:"premium-teak-wood-cot", title:"Premium Teak Wood Cot", image:"assets/products/cot-01.webp" },
-      { id:"wood-cot", title:"Wood Cot", image:"assets/products/cot-detail-headboard.webp" },
-      { id:"storage-cot", title:"Storage Cot", image:"assets/products/cot-detail-footboard.webp" },
-      { id:"metal-cot", title:"Metal Cot", image:"assets/products/cot-detail-headboard.webp" }
-    ]},
-    { id:"sofas", title:"Sofa", image:"assets/products/sofa-01.webp", types:[
-      { id:"3-seater", title:"3 Seater Sofa", image:"assets/products/sofa-01.webp" },
-      { id:"3-1-1", title:"3+1+1 Sofa Sets", image:"assets/products/sofa-01.webp" },
-      { id:"l-shape", title:"L Shape Sofa", image:"assets/products/sofa-01.webp" },
-      { id:"u-shape", title:"U Shape Sofa", image:"assets/products/sofa-01.webp" },
-      { id:"sofa-cum-beds", title:"Sofa Cum Beds", image:"assets/products/sofa-01.webp" },
-      { id:"recliners", title:"Recliners", image:"assets/products/sofa-01.webp" }
-    ]},
-    { id:"beds", title:"Beds & Mattresses", image:"assets/products/bed-01.webp", types:[
-      { id:"duroflex", title:"Duroflex", image:"assets/products/bed-01.webp" },
-      { id:"neelkamal", title:"Neelkamal", image:"assets/products/bed-01.webp" },
-      { id:"relaxwell", title:"Relaxwell", image:"assets/products/bed-01.webp" },
-      { id:"cenflex", title:"Cenflex", image:"assets/products/bed-01.webp" },
-      { id:"ultraflex", title:"Ultraflex", image:"assets/products/bed-01.webp" },
-      { id:"sleepyhead", title:"Sleepyhead", image:"assets/products/bed-01.webp" },
-      { id:"customized", title:"Customized", image:"assets/products/bed-01.webp" }
-    ]},
-    { id:"office-chairs", title:"Office Chair", image:"assets/products/office-01.webp", types:[
-      { id:"executive-chair", title:"Executive Chair", image:"assets/products/office-01.webp" },
-      { id:"mesh-chair", title:"Mesh Chair", image:"assets/products/office-01.webp" },
-      { id:"visitor-chair", title:"Visitor Chair", image:"assets/products/office-01.webp" }
-    ]},
-    { id:"diwan", title:"Diwan", image:"assets/products/diwana-01.webp", types:[
-      { id:"wooden-diwan", title:"Wooden Diwan", image:"assets/products/diwana-01.webp" },
-      { id:"storage-diwan", title:"Storage Diwan", image:"assets/products/diwana-detail.webp" },
-      { id:"cushioned-diwan", title:"Cushioned Diwan", image:"assets/products/diwana-01.webp" }
-    ]},
-    { id:"dining-tables", title:"Dining Tables", image:"assets/products/dining-01.webp", types:[
-      { id:"4-seater-dining", title:"4 Seater Dining", image:"assets/products/dining-01.webp" },
-      { id:"6-seater-dining", title:"6 Seater Dining", image:"assets/products/dining-01.webp" },
-      { id:"glass-top-dining", title:"Glass Top Dining", image:"assets/products/dining-01.webp" }
-    ]},
-    { id:"dressing-tables", title:"Dressing Tables", image:"assets/products/dressing-01.webp", types:[
-      { id:"standing-dressing", title:"Standing Dressing Table", image:"assets/products/dressing-01.webp" },
-      { id:"wall-dressing", title:"Wall Mounted Dressing Table", image:"assets/products/dressing-01.webp" },
-      { id:"storage-dressing", title:"Dressing Table with Storage", image:"assets/products/dressing-01.webp" }
-    ]},
-    { id:"office-tables", title:"Office Tables", image:"assets/products/office-01.webp", types:[
-      { id:"executive-desk", title:"Executive Desk", image:"assets/products/office-01.webp" },
-      { id:"computer-table", title:"Computer Table", image:"assets/products/office-01.webp" },
-      { id:"study-table", title:"Study Table", image:"assets/products/office-01.webp" }
-    ]}
-  ],
-  electronics: [
-    { id:"tv", title:"Televisions", image:"assets/products/tv-01.webp", types:[
-      { id:"led-tv", title:"LED TV", image:"assets/products/tv-01.webp" },
-      { id:"smart-tv", title:"Smart TV", image:"assets/products/tv-01.webp" },
-      { id:"qled-tv", title:"QLED TV", image:"assets/products/tv-01.webp" }
-    ]},
-    { id:"refrigerator", title:"Refrigerators", image:"assets/categories/electronics-3d.png", types:[
-      { id:"single-door", title:"Single Door", image:"assets/categories/electronics-3d.png" },
-      { id:"double-door", title:"Double Door", image:"assets/categories/electronics-3d.png" },
-      { id:"side-by-side", title:"Side by Side", image:"assets/categories/electronics-3d.png" }
-    ]},
-    { id:"washing-machine", title:"Washing Machines", image:"assets/categories/electronics-3d.png", types:[
-      { id:"top-load", title:"Top Load", image:"assets/categories/electronics-3d.png" },
-      { id:"front-load", title:"Front Load", image:"assets/categories/electronics-3d.png" },
-      { id:"semi-automatic", title:"Semi Automatic", image:"assets/categories/electronics-3d.png" }
-    ]},
-    { id:"air-conditioner", title:"Air Conditioners", image:"assets/categories/electronics-3d.png", types:[
-      { id:"split-ac", title:"Split AC", image:"assets/categories/electronics-3d.png" },
-      { id:"window-ac", title:"Window AC", image:"assets/categories/electronics-3d.png" }
-    ]}
-  ],
-  "small-appliances": [
-    { id:"kitchen", title:"Kitchen Appliances", image:"assets/products/kitchen-01.webp", types:[
-      { id:"mixer-grinder", title:"Mixer Grinder", image:"assets/products/kitchen-01.webp" },
-      { id:"induction-cooktop", title:"Induction Cooktop", image:"assets/products/kitchen-01.webp" },
-      { id:"electric-kettle", title:"Electric Kettle", image:"assets/products/kitchen-01.webp" }
-    ]},
-    { id:"home-care", title:"Home Care", image:"assets/categories/small-appliances-3d.png", types:[
-      { id:"iron-box", title:"Iron Box", image:"assets/categories/small-appliances-3d.png" },
-      { id:"vacuum-cleaner", title:"Vacuum Cleaner", image:"assets/categories/small-appliances-3d.png" },
-      { id:"water-heater", title:"Water Heater", image:"assets/categories/small-appliances-3d.png" }
-    ]}
-  ],
-  "gift-items": [
-    { id:"home-decor", title:"Home Decor", image:"assets/categories/gift-items-3d.png", types:[
-      { id:"wall-clocks", title:"Wall Clocks", image:"assets/categories/gift-items-3d.png" },
-      { id:"photo-frames", title:"Photo Frames", image:"assets/categories/gift-items-3d.png" },
-      { id:"showpieces", title:"Showpieces", image:"assets/categories/gift-items-3d.png" }
-    ]},
-    { id:"festive", title:"Festive Gifts", image:"assets/categories/gift-items-3d.png", types:[
-      { id:"diyas-lamps", title:"Diyas & Lamps", image:"assets/categories/gift-items-3d.png" },
-      { id:"gift-hampers", title:"Gift Hampers", image:"assets/categories/gift-items-3d.png" }
-    ]}
-  ],
-  "baby-items": [
-    { id:"nursery", title:"Nursery", image:"assets/categories/baby-items-3d.png", types:[
-      { id:"baby-cots", title:"Baby Cots", image:"assets/categories/baby-items-3d.png" },
-      { id:"cradles", title:"Cradles", image:"assets/categories/baby-items-3d.png" }
-    ]},
-    { id:"baby-gear", title:"Baby Gear", image:"assets/categories/baby-items-3d.png", types:[
-      { id:"strollers", title:"Strollers", image:"assets/categories/baby-items-3d.png" },
-      { id:"walkers", title:"Walkers", image:"assets/categories/baby-items-3d.png" },
-      { id:"high-chairs", title:"High Chairs", image:"assets/categories/baby-items-3d.png" }
-    ]}
-  ]
-};
+function waLink(number, message){
+  return `https://wa.me/${String(number).replace(/\D/g, "")}?text=${encodeURIComponent(message || "")}`;
+}
 
-// Image fields (`image`, `images[]`) on sub-categories, types and products accept any URL.
-// Placeholder local paths below can be replaced with CRM-hosted "https://..." links without code changes.
+function applyCatalog(data){
+  const cats = Array.isArray(data.categories) ? data.categories : [];
+  CATEGORIES = cats.map(c => ({
+    id: c.id, title: c.title, description: c.description || "",
+    icon: c.icon || c.image || "", visualAsset: c.visualAsset || c.icon || c.image || "",
+    alt: c.alt || c.title, displayOrder: Number(c.displayOrder) || 99
+  }));
+  SUBCATEGORIES = Object.fromEntries(cats.map(c => [c.id, (c.subCategories || c.subcategories || []).map(sc => ({
+    id: sc.id, title: sc.title, description: sc.description || "", image: sc.image || "",
+    types: (sc.types || []).map(t => ({ id: t.id, title: t.title, description: t.description || "", image: t.image || sc.image || "" }))
+  }))]));
+  PRODUCT_FILES = Object.fromEntries(cats.map(c => [c.id, c.productsFile || `data/products-${c.id}.json`]));
+  const f = data.filters || {};
+  FILTERS = {
+    priceRanges: (f.priceRanges || []).map(r => ({ id: r.id, label: r.label, min: r.min === null || r.min === undefined ? 0 : Number(r.min), max: r.max === null || r.max === undefined ? Infinity : Number(r.max) })),
+    attributes: (f.attributes || []).map(a => ({ key: String(a.key), label: a.label || labelize(a.key) }))
+  };
+  SETTINGS = Object.assign({ placeholderProductsPerType: 3, productsPerPage: 24 }, data.settings || {});
+  if (SETTINGS.whatsappNumber){
+    CONTENT.whatsappNumber = SETTINGS.whatsappNumber;
+    CONTENT.whatsapp = waLink(SETTINGS.whatsappNumber, SETTINGS.whatsappMessage || "Hi, I'm interested in your products");
+    CONTENT.appointment = waLink(SETTINGS.whatsappNumber, SETTINGS.appointmentMessage || "Hi, I'd like to book an appointment.");
+  }
+}
+
+async function loadCatalog(){
+  const res = await fetch("data/catalog.json", { cache: "no-cache" });
+  if (!res.ok) throw new Error(`data/catalog.json: ${res.status}`);
+  applyCatalog(await res.json());
+}
+
 const DEFAULT_SPECS = [
   ["Material","Solid wood and engineered support"],
   ["Finish","Warm natural wood finish"],
@@ -1387,7 +1312,6 @@ const DEFAULT_SPECS = [
 const DEFAULT_CARE = "Dust with a soft, dry cloth. Keep away from direct heat and standing moisture. Use coasters and felt pads, and arrange periodic hardware checks.";
 // Product data lives in data/products-<category>.json (one file per category) and is
 // fetched on demand. Add a product by adding one JSON entry; `image` may be any hosted URL.
-const PRODUCT_FILES = Object.fromEntries(CATEGORIES.map(c => [c.id, `data/products-${c.id}.json`]));
 const productCache = {};
 
 const $ = (sel, root=document) => root.querySelector(sel);
@@ -1430,6 +1354,7 @@ function normalizeProduct(raw){
     images,
     alt: raw.alt || raw.name || "",
     material: specs.material || null,
+    attrs: Object.fromEntries(Object.entries(specs).map(([k, v]) => [String(k).toLowerCase().replace(/\s+/g, "_"), String(v)])),
     specifications: Object.entries(specs).map(([k, v]) => [labelize(k), String(v)]),
     careInstructions: raw.care || DEFAULT_CARE,
     displayOrder: Number(raw.displayOrder) || 500,
@@ -1482,6 +1407,7 @@ function placeholderProduct(cat, sub, type, n){
     images: [image],
     alt: `${type.title} product ${n} placeholder`,
     material: null,
+    attrs: {},
     specifications: [["Category", cat.title],["Sub-category", sub.title],["Type", type.title],["Status","Placeholder — confirm in store"]],
     careInstructions: DEFAULT_CARE,
     displayOrder: 900 + n,
@@ -1491,12 +1417,11 @@ function placeholderProduct(cat, sub, type, n){
   };
 }
 
-const MIN_PRODUCTS_PER_TYPE = 3;
-
 function productsForType(list, cat, sub, type){
   const real = productsOf(list, cat.id, sub.id, type.id);
   const extras = [];
-  while (real.length + extras.length < MIN_PRODUCTS_PER_TYPE){
+  const minimum = Number(SETTINGS.placeholderProductsPerType) || 0;
+  while (real.length + extras.length < minimum){
     extras.push(placeholderProduct(cat, sub, type, real.length + extras.length + 1));
   }
   return real.concat(extras);
@@ -1737,7 +1662,7 @@ function renderCategory(catId, subId, typeId){
   const tiles = subs.map(s => `
     <a class="tile" href="#/category/${cat.id}/${s.id}">
       <div class="tile-img"><img src="${s.image || cat.icon}" alt="${s.title}"></div>
-      <div class="tile-body"><h3>${s.title}</h3><p>${(s.types || []).length} types</p></div>
+      <div class="tile-body"><h3>${s.title}</h3><p>${s.description || `${(s.types || []).length} types`}</p></div>
     </a>`).join("");
   setActiveNav("categories");
   $("#view-page").innerHTML = `<div class="catalog-page">
@@ -1751,45 +1676,49 @@ function renderCategory(catId, subId, typeId){
   </div>`;
 }
 
-const PRICE_RANGES = [
-  { id:"under-20k", label:"Under ₹20,000", min:0, max:19999 },
-  { id:"20k-40k", label:"₹20,000 – ₹40,000", min:20000, max:40000 },
-  { id:"above-40k", label:"Above ₹40,000", min:40001, max:Infinity }
-];
-const PAGE_SIZE = 24;
+function pageSize(){ return Number(SETTINGS.productsPerPage) || 24; }
 
 function applyFilters(list, state){
   return list.filter(p => {
     if (state.price){
-      const range = PRICE_RANGES.find(r => r.id === state.price);
+      const range = FILTERS.priceRanges.find(r => r.id === state.price);
       if (!range || p.priceValue === null || p.priceValue < range.min || p.priceValue > range.max) return false;
     }
     if (state.types.size && !state.types.has(p.type)) return false;
-    if (state.materials.size && !state.materials.has(p.material)) return false;
+    for (const [key, set] of Object.entries(state.attrs)){
+      if (set.size && !set.has(p.attrs[key])) return false;
+    }
     return true;
   });
 }
 
-function filtersHTML(types, materials, state, showTypes){
-  const priceBtns = PRICE_RANGES.map(r => `
+// Attribute filters come from catalog.json → filters.attributes, and only show when the
+// products on screen actually carry that spec.
+function attributeOptions(products){
+  return FILTERS.attributes
+    .map(attr => ({ ...attr, values: [...new Set(products.map(p => p.attrs[attr.key]).filter(Boolean))].sort() }))
+    .filter(attr => attr.values.length);
+}
+
+function filtersHTML(types, attributes, state, showTypes){
+  const priceBtns = FILTERS.priceRanges.map(r => `
     <button type="button" class="chip ${state.price === r.id ? "is-active" : ""}" data-filter="price" data-value="${r.id}" aria-pressed="${state.price === r.id}">${r.label}</button>`).join("");
+  const priceGroup = priceBtns ? `
+    <fieldset class="filter-group">
+      <legend>Price</legend>
+      <div class="chips">${priceBtns}</div>
+    </fieldset>` : "";
   const typeBoxes = showTypes && types.length > 1 ? `
     <fieldset class="filter-group">
       <legend>Type</legend>
       ${types.map(t => `<label class="check"><input type="checkbox" data-filter="type" value="${t.id}" ${state.types.has(t.id) ? "checked" : ""}> ${t.title}</label>`).join("")}
     </fieldset>` : "";
-  const materialBoxes = materials.length ? `
+  const attrBoxes = attributes.map(attr => `
     <fieldset class="filter-group">
-      <legend>Material</legend>
-      ${materials.map(m => `<label class="check"><input type="checkbox" data-filter="material" value="${m}" ${state.materials.has(m) ? "checked" : ""}> ${m}</label>`).join("")}
-    </fieldset>` : "";
-  return `
-    <fieldset class="filter-group">
-      <legend>Price</legend>
-      <div class="chips">${priceBtns}</div>
-    </fieldset>
-    ${typeBoxes}
-    ${materialBoxes}
+      <legend>${attr.label}</legend>
+      ${attr.values.map(v => `<label class="check"><input type="checkbox" data-filter="attr" data-key="${attr.key}" value="${v}" ${state.attrs[attr.key] && state.attrs[attr.key].has(v) ? "checked" : ""}> ${v}</label>`).join("")}
+    </fieldset>`).join("");
+  return `${priceGroup}${typeBoxes}${attrBoxes}
     <button type="button" class="filter-clear" id="filter-clear">Clear filters</button>`;
 }
 
@@ -1828,7 +1757,7 @@ async function renderSubcategory(catId, subId, typeId){
         </aside>
         <div class="listing">
           <div class="catalog-heading">
-            <div><h1>${type ? type.title : sub.title}</h1><p id="result-count">Loading products…</p></div>
+            <div><h1>${type ? type.title : sub.title}</h1>${(type ? type.description : sub.description) ? `<p class="catalog-lead">${type ? type.description : sub.description}</p>` : ""}<p id="result-count">Loading products…</p></div>
             <button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="filter-panel">Filters</button>
           </div>
           <form class="filter-panel" id="filter-panel" aria-label="Product filters"></form>
@@ -1852,8 +1781,8 @@ async function renderSubcategory(catId, subId, typeId){
 
   const scopeTypes = type ? [type] : types;
   const all = scopeTypes.flatMap(t => productsForType(list, cat, sub, t));
-  const materials = [...new Set(all.map(p => p.material).filter(Boolean))].sort();
-  const state = { price:null, types:new Set(), materials:new Set(), shown:PAGE_SIZE };
+  const attributes = attributeOptions(all);
+  const state = { price:null, types:new Set(), attrs:{}, shown:pageSize() };
 
   const panel = $("#filter-panel");
   const grid = $("#product-grid");
@@ -1861,7 +1790,7 @@ async function renderSubcategory(catId, subId, typeId){
   const toggle = $("#filter-toggle");
   const moreWrap = $("#load-more-wrap");
 
-  function activeCount(){ return (state.price ? 1 : 0) + state.types.size + state.materials.size; }
+  function activeCount(){ return (state.price ? 1 : 0) + state.types.size + Object.values(state.attrs).reduce((n, set) => n + set.size, 0); }
   function paint(){
     const matches = applyFilters(all, state);
     const visible = matches.slice(0, state.shown);
@@ -1870,30 +1799,33 @@ async function renderSubcategory(catId, subId, typeId){
     moreWrap.hidden = matches.length <= state.shown;
     const n = activeCount();
     toggle.textContent = n ? `Filters (${n})` : "Filters";
-    panel.innerHTML = filtersHTML(scopeTypes, materials, state, showAll);
+    panel.innerHTML = filtersHTML(scopeTypes, attributes, state, showAll);
   }
   panel.addEventListener("click", e => {
     const chip = e.target.closest("[data-filter='price']");
     if (chip){
       state.price = state.price === chip.dataset.value ? null : chip.dataset.value;
-      state.shown = PAGE_SIZE; paint(); return;
+      state.shown = pageSize(); paint(); return;
     }
     if (e.target.closest("#filter-clear")){
-      state.price = null; state.types.clear(); state.materials.clear(); state.shown = PAGE_SIZE; paint();
+      state.price = null; state.types.clear(); state.attrs = {}; state.shown = pageSize(); paint();
     }
   });
   panel.addEventListener("change", e => {
     const box = e.target.closest("input[type='checkbox']");
     if (!box) return;
-    const set = box.dataset.filter === "type" ? state.types : state.materials;
+    let set = state.types;
+    if (box.dataset.filter === "attr"){
+      set = state.attrs[box.dataset.key] || (state.attrs[box.dataset.key] = new Set());
+    }
     if (box.checked) set.add(box.value); else set.delete(box.value);
-    state.shown = PAGE_SIZE; paint();
+    state.shown = pageSize(); paint();
   });
   toggle.addEventListener("click", () => {
     const open = panel.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", open ? "true" : "false");
   });
-  $("#load-more").addEventListener("click", () => { state.shown += PAGE_SIZE; paint(); });
+  $("#load-more").addEventListener("click", () => { state.shown += pageSize(); paint(); });
   paint();
 }
 
@@ -2130,6 +2062,7 @@ function init(){
   $("#whatsapp-hero").href = CONTENT.whatsapp;
   const waFloat = $("#whatsapp-float");
   if (waFloat) waFloat.href = CONTENT.whatsapp;
+  $$("[data-wa='appointment']").forEach(a => { a.href = CONTENT.appointment; });
   $(".menu-toggle").addEventListener("click", () => {
     const nav = $("#mobile-nav");
     const open = !nav.classList.contains("is-open");
@@ -2148,7 +2081,14 @@ function init(){
   window.addEventListener("hashchange", route);
   route();
 }
-init();
+loadCatalog()
+  .then(init)
+  .catch(err => {
+    console.error("Catalog failed to load", err);
+    const track = $("#carousel-track");
+    if (track) track.innerHTML = `<p class="load-error">Catalog data could not be loaded. Serve the site over http(s) and check data/catalog.json.</p>`;
+    init();
+  });
 </script>
 </body>
 </html>
