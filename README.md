@@ -25,7 +25,7 @@ You never edit `index.html`. Every text, number, image link, size, category, fil
 | Contact form: button label, first line of the WhatsApp message, thank-you text | `pages.contact` (`submit`, `whatsappIntro`), `pages.formThanks` |
 | Book an Appointment page: heading, lead, field labels, placeholders, error text, time-of-day options, "Other" category label, side panel points | `pages.appointment` (`labels`, `placeholders`, `errors`, `timeOptions`, `otherCategory`, `aside`); the first line of the message is `business.appointmentMessage` |
 | Sizes in pixels: hero text, category cards, product cards, header/footer height | `sizes` |
-| Categories → sub-categories → types (names, descriptions, images) | `catalog.categories` |
+| Categories → sub-categories → types → optional variants (names, descriptions, images) | `catalog.categories` |
 | Price filter buttons and which spec fields become filters | `catalog.filters` |
 | Placeholder cards per type, products per page | `catalog.placeholderProductsPerType`, `catalog.productsPerPage` |
 | Products | `products` |
@@ -44,6 +44,7 @@ Upload the photo in the CRM asset area, copy its link (`https://...`), and paste
   "category": "furniture",
   "subCategory": "cots",
   "type": "premium-teak-wood-cot",
+  "variant": "king-size",
   "name": "Premium Teak Wood Cot",
   "description": "Elegant design. Built to last.",
   "longDescription": "Optional longer text shown on the product page.",
@@ -58,12 +59,28 @@ Upload the photo in the CRM asset area, copy its link (`https://...`), and paste
 - **Remove a product:** delete its object from the list.
 - **Change price:** edit `price` (a number, no ₹ or commas). Remove the line or set `null` for "Price on request".
 - **Change description:** edit `description` (card) and `longDescription` (product page).
-- `category`, `subCategory`, and `type` must match ids under `catalog.categories`.
+- `category`, `subCategory`, and `type` must match ids under `catalog.categories`. `variant` is optional and only used when that type has `variants`; a product without one still shows on the type page.
 - Any `specs` key listed in `catalog.filters.attributes` becomes a checkbox filter automatically; every key shows in the product's spec list.
 
-### Categories, sub-categories, types
+### Categories, sub-categories, types, variants
 
 Under `catalog.categories`, each category has `subCategories`, and each sub-category has `types`. Add or delete objects the same way as products. Each needs an `id` (lowercase, hyphens), a `title`, and optionally `description` and `image`.
+
+A type can have one more level, `variants`, for cases like Cots → Premium Teak Wood Cot → Queen Size / King Size, or Sofa → L Shape → Fabric / Wooden. Only add `variants` to the types that need them; other types keep listing products directly.
+
+```json
+{
+  "id": "l-shape",
+  "title": "L Shape Sofa",
+  "image": "https://your-crm-host/images/l-shape.jpg",
+  "variants": [
+    { "id": "fabric", "title": "Fabric", "description": "Upholstered in fabric.", "image": "https://your-crm-host/images/l-fabric.jpg" },
+    { "id": "wooden", "title": "Wooden", "description": "Solid wood frame.", "image": "https://your-crm-host/images/l-wooden.jpg" }
+  ]
+}
+```
+
+On the site the variants appear indented under the type in the left menu, as a "Variant" filter on the type page, and each has its own page (`#/category/furniture/sofas/l-shape/fabric`). Give each product in that type a `"variant": "fabric"` (or `"wooden"`) so it lands on the right page.
 
 ### Sizes
 

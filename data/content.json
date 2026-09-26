@@ -243,7 +243,21 @@
                 "id": "premium-teak-wood-cot",
                 "title": "Premium Teak Wood Cot",
                 "description": "",
-                "image": "assets/products/cot-01.webp"
+                "image": "assets/products/cot-01.webp",
+                "variants": [
+                  {
+                    "id": "queen-size",
+                    "title": "Queen Size",
+                    "description": "Teak cots for 5 × 6.5 ft mattresses.",
+                    "image": "assets/products/cot-01.webp"
+                  },
+                  {
+                    "id": "king-size",
+                    "title": "King Size",
+                    "description": "Teak cots for 6 × 6.5 ft mattresses.",
+                    "image": "assets/products/cot-detail-headboard.webp"
+                  }
+                ]
               },
               {
                 "id": "wood-cot",
@@ -287,7 +301,21 @@
                 "id": "l-shape",
                 "title": "L Shape Sofa",
                 "description": "",
-                "image": "assets/products/sofa-01.webp"
+                "image": "assets/products/sofa-01.webp",
+                "variants": [
+                  {
+                    "id": "fabric",
+                    "title": "Fabric",
+                    "description": "L-shape sofas upholstered in fabric.",
+                    "image": "assets/products/sofa-01.webp"
+                  },
+                  {
+                    "id": "wooden",
+                    "title": "Wooden",
+                    "description": "L-shape sofas with a solid wood frame and cushions.",
+                    "image": "assets/products/sofa-01.webp"
+                  }
+                ]
               },
               {
                 "id": "u-shape",
@@ -806,6 +834,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "premium-teak-wood-cot",
+      "variant": "king-size",
       "name": "Premium Teak Wood Cot",
       "description": "Elegant design. Built to last.",
       "longDescription": "Crafted from high-quality teak wood, this premium cot offers durable, elegant and superior comfort. Perfect for modern homes, it combines traditional craftsmanship with contemporary design.",
@@ -854,6 +883,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "premium-teak-wood-cot",
+      "variant": "queen-size",
       "name": "Modern Upholstered Cot",
       "description": "A softer profile for modern rooms.",
       "longDescription": "Demo catalog product. Final upholstery, dimensions and pricing should be confirmed through the showroom CRM.",
@@ -1047,6 +1077,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "premium-teak-wood-cot",
+      "variant": "king-size",
       "name": "Teak Cot — CRM Test Listing",
       "description": "Added via JSON with a hosted image URL.",
       "longDescription": "Test product added by editing data/products-furniture.json only. The image is loaded from an external hosted URL exactly as CRM-uploaded images will be.",

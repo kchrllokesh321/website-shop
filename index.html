@@ -876,6 +876,9 @@ textarea{min-height:110px;resize:vertical}
 }
 .side button:hover,.side a:hover{background:rgba(244,81,30,.08);color:var(--orange)}
 .side button.is-active,.side a.is-active{background:rgba(244,81,30,.1);color:var(--orange)}
+.side a.is-open{color:var(--navy);font-weight:700}
+.variant-list{margin:2px 0 6px 10px;padding-left:8px;border-left:2px solid rgba(244,81,30,.25)}
+.variant-list a{padding:8px 10px;font-size:12.5px}
 
 .product-detail-page{
   min-height:100%;
@@ -1357,7 +1360,10 @@ function applyCatalog(data){
   }));
   SUBCATEGORIES = Object.fromEntries(cats.map(c => [c.id, (c.subCategories || c.subcategories || []).map(sc => ({
     id: sc.id, title: sc.title, description: sc.description || "", image: sc.image || "",
-    types: (sc.types || []).map(t => ({ id: t.id, title: t.title, description: t.description || "", image: t.image || sc.image || "" }))
+    types: (sc.types || []).map(t => ({
+      id: t.id, title: t.title, description: t.description || "", image: t.image || sc.image || "",
+      variants: (t.variants || []).map(v => ({ id: v.id, title: v.title, description: v.description || "", image: v.image || t.image || sc.image || "" }))
+    }))
   }))]));
   const f = data.filters || {};
   FILTERS = {
@@ -1489,6 +1495,7 @@ function catById(id){ return CATEGORIES.find(c => c.id === id); }
 function subsOf(catId){ return SUBCATEGORIES[catId] || []; }
 function subById(catId, subId){ return subsOf(catId).find(s => s.id === subId) || null; }
 function typeById(sub, typeId){ return sub ? (sub.types || []).find(t => t.id === typeId) || null : null; }
+function variantById(type, variantId){ return type ? (type.variants || []).find(v => v.id === variantId) || null : null; }
 
 // Legacy links used the type id directly under the category; map them to their sub-category.
 function findSubByTypeId(catId, typeId){
@@ -1513,6 +1520,7 @@ function normalizeProduct(raw){
     category: raw.category,
     subcategory: raw.subCategory || raw.subcategory,
     type: raw.type,
+    variant: raw.variant || null,
     title: raw.name || raw.title || raw.id,
     shortDescription: raw.description || raw.shortDescription || "",
     longDescription: raw.longDescription || raw.description || "",
@@ -1547,26 +1555,29 @@ function productsOf(list, catId, subId, typeId){
     .sort((a,b) => a.displayOrder - b.displayOrder);
 }
 
-function placeholderId(sub, type, n){ return `${sub.id}-${type.id}-product-${n}`; }
+function placeholderId(sub, type, n, variant){ return `${sub.id}-${type.id}${variant ? `-${variant.id}` : ""}-product-${n}`; }
 
-function placeholderProduct(cat, sub, type, n){
-  const image = type.image || sub.image || cat.icon;
+function placeholderProduct(cat, sub, type, n, variant){
+  const image = (variant && variant.image) || type.image || sub.image || cat.icon;
+  const leaf = variant ? `${variant.title} ${type.title}` : type.title;
+  const path = [cat.title, sub.title, type.title].concat(variant ? [variant.title] : []).join(" / ");
   return {
-    id: placeholderId(sub, type, n),
+    id: placeholderId(sub, type, n, variant),
     category: cat.id,
     subcategory: sub.id,
     type: type.id,
-    title: `${type.title} — Product ${n}`,
+    variant: variant ? variant.id : null,
+    title: `${leaf} — Product ${n}`,
     shortDescription: "Placeholder product. Replace with the showroom listing.",
-    longDescription: `Placeholder listing under ${cat.title} / ${sub.title} / ${type.title}. Add the real entry to the products list in data/content.json with the CRM image link.`,
+    longDescription: `Placeholder listing under ${path}. Add the real entry to the products list in data/content.json with the CRM image link.`,
     priceValue: null,
     price: "Price on request",
     image,
     images: [image],
-    alt: `${type.title} product ${n} placeholder`,
+    alt: `${leaf} product ${n} placeholder`,
     material: null,
     attrs: {},
-    specifications: [["Category", cat.title],["Sub-category", sub.title],["Type", type.title],["Status","Placeholder — confirm in store"]],
+    specifications: [["Category", cat.title],["Sub-category", sub.title],["Type", type.title]].concat(variant ? [["Variant", variant.title]] : []).concat([["Status","Placeholder — confirm in store"]]),
     careInstructions: DEFAULT_CARE,
     displayOrder: 900 + n,
     cta: "Enquire Now",
@@ -1575,14 +1586,25 @@ function placeholderProduct(cat, sub, type, n){
   };
 }
 
-function productsForType(list, cat, sub, type){
-  const real = productsOf(list, cat.id, sub.id, type.id);
+function padWithPlaceholders(real, cat, sub, type, variant){
   const extras = [];
   const minimum = Number(SETTINGS.placeholderProductsPerType) || 0;
   while (real.length + extras.length < minimum){
-    extras.push(placeholderProduct(cat, sub, type, real.length + extras.length + 1));
+    extras.push(placeholderProduct(cat, sub, type, real.length + extras.length + 1, variant));
   }
   return real.concat(extras);
+}
+function productsForVariant(list, cat, sub, type, variant){
+  const real = productsOf(list, cat.id, sub.id, type.id).filter(p => p.variant === variant.id);
+  return padWithPlaceholders(real, cat, sub, type, variant);
+}
+// A type with variants lists every variant's products (plus any product not yet assigned a variant).
+function productsForType(list, cat, sub, type){
+  const variants = type.variants || [];
+  const real = productsOf(list, cat.id, sub.id, type.id);
+  if (!variants.length) return padWithPlaceholders(real, cat, sub, type);
+  const unassigned = real.filter(p => !variants.some(v => v.id === p.variant));
+  return variants.flatMap(v => productsForVariant(list, cat, sub, type, v)).concat(unassigned);
 }
 
 function placeholderById(id){
@@ -1590,8 +1612,11 @@ function placeholderById(id){
   if (!match) return null;
   for (const cat of CATEGORIES){
     for (const sub of subsOf(cat.id)){
-      const type = (sub.types || []).find(t => `${sub.id}-${t.id}` === match[1]);
-      if (type) return placeholderProduct(cat, sub, type, Number(match[2]));
+      for (const type of sub.types || []){
+        if (`${sub.id}-${type.id}` === match[1]) return placeholderProduct(cat, sub, type, Number(match[2]));
+        const variant = (type.variants || []).find(v => `${sub.id}-${type.id}-${v.id}` === match[1]);
+        if (variant) return placeholderProduct(cat, sub, type, Number(match[2]), variant);
+      }
     }
   }
   return null;
@@ -1808,11 +1833,11 @@ function renderProductCard(p){
 }
 
 // Level 1 → 2: a category shows its sub-categories as a card grid.
-function renderCategory(catId, subId, typeId){
+function renderCategory(catId, subId, typeId, variantId){
   const cat = catById(catId);
   if (!cat){ location.hash = "#/categories"; return; }
   if (subId){
-    renderSubcategory(catId, subId, typeId);
+    renderSubcategory(catId, subId, typeId, variantId);
     return;
   }
   const subs = subsOf(catId);
@@ -1842,6 +1867,7 @@ function applyFilters(list, state){
       if (!range || p.priceValue === null || p.priceValue < range.min || p.priceValue > range.max) return false;
     }
     if (state.types.size && !state.types.has(p.type)) return false;
+    if (state.variants.size && !state.variants.has(p.variant)) return false;
     for (const [key, set] of Object.entries(state.attrs)){
       if (set.size && !set.has(p.attrs[key])) return false;
     }
@@ -1857,7 +1883,7 @@ function attributeOptions(products){
     .filter(attr => attr.values.length);
 }
 
-function filtersHTML(types, attributes, state, showTypes){
+function filtersHTML(types, attributes, state, showTypes, variants = [], showVariants = false){
   const priceBtns = FILTERS.priceRanges.map(r => `
     <button type="button" class="chip ${state.price === r.id ? "is-active" : ""}" data-filter="price" data-value="${r.id}" aria-pressed="${state.price === r.id}">${r.label}</button>`).join("");
   const priceGroup = priceBtns ? `
@@ -1870,18 +1896,23 @@ function filtersHTML(types, attributes, state, showTypes){
       <legend>Type</legend>
       ${types.map(t => `<label class="check"><input type="checkbox" data-filter="type" value="${t.id}" ${state.types.has(t.id) ? "checked" : ""}> ${t.title}</label>`).join("")}
     </fieldset>` : "";
+  const variantBoxes = showVariants && variants.length > 1 ? `
+    <fieldset class="filter-group">
+      <legend>Variant</legend>
+      ${variants.map(v => `<label class="check"><input type="checkbox" data-filter="variant" value="${v.id}" ${state.variants.has(v.id) ? "checked" : ""}> ${v.title}</label>`).join("")}
+    </fieldset>` : "";
   const attrBoxes = attributes.map(attr => `
     <fieldset class="filter-group">
       <legend>${attr.label}</legend>
       ${attr.values.map(v => `<label class="check"><input type="checkbox" data-filter="attr" data-key="${attr.key}" value="${v}" ${state.attrs[attr.key] && state.attrs[attr.key].has(v) ? "checked" : ""}> ${v}</label>`).join("")}
     </fieldset>`).join("");
-  return `${priceGroup}${typeBoxes}${attrBoxes}
+  return `${priceGroup}${typeBoxes}${variantBoxes}${attrBoxes}
     <button type="button" class="filter-clear" id="filter-clear">Clear filters</button>`;
 }
 
-// Level 2 → 3 → 4: a sub-category lists its types in the sidebar and renders the product grid
-// from the category's JSON, filtered client-side.
-async function renderSubcategory(catId, subId, typeId){
+// Level 2 → 3 → 4 (→ 5): a sub-category lists its types in the sidebar; a type that has variants
+// nests them under itself. The product grid is filtered client-side from the category's JSON.
+async function renderSubcategory(catId, subId, typeId, variantId){
   const cat = catById(catId);
   let sub = subById(catId, subId);
   if (!sub){
@@ -1892,15 +1923,29 @@ async function renderSubcategory(catId, subId, typeId){
   }
   const types = sub.types || [];
   const type = typeById(sub, typeId);
+  if (typeId && !type){ location.hash = `#/category/${cat.id}/${sub.id}`; return; }
+  const variants = type ? (type.variants || []) : [];
+  const variant = variantById(type, variantId);
+  if (variantId && !variant){ location.hash = `#/category/${cat.id}/${sub.id}/${type.id}`; return; }
   const showAll = !type;
+  const typeHref = type ? `#/category/${cat.id}/${sub.id}/${type.id}` : "";
   const crumbs = [
     {label:"Home", href:"#/"},
     {label:cat.title, href:`#/category/${cat.id}`},
     {label:sub.title, href:`#/category/${cat.id}/${sub.id}`},
-    ...(type ? [{label:type.title}] : [])
+    ...(type ? [{label:type.title, href: variant ? typeHref : ""}] : []),
+    ...(variant ? [{label:variant.title}] : [])
   ];
+  const leaf = variant || type || sub;
   const menu = [`<a href="#/category/${cat.id}/${sub.id}" class="${showAll ? "is-active" : ""}">All ${sub.title}</a>`]
-    .concat(types.map(item => `<a href="#/category/${cat.id}/${sub.id}/${item.id}" class="${type && item.id === type.id ? "is-active" : ""}">${item.title}</a>`))
+    .concat(types.map(item => {
+      const active = type && item.id === type.id;
+      const link = `<a href="#/category/${cat.id}/${sub.id}/${item.id}" class="${active && !variant ? "is-active" : ""}${active && variant ? " is-open" : ""}">${item.title}</a>`;
+      if (!active || !(item.variants || []).length) return link;
+      const nested = [`<a href="${typeHref}" class="variant-link ${!variant ? "is-active" : ""}">All ${item.title}</a>`]
+        .concat(item.variants.map(v => `<a href="${typeHref}/${v.id}" class="variant-link ${variant && v.id === variant.id ? "is-active" : ""}">${v.title}</a>`));
+      return link + `<div class="variant-list">${nested.join("")}</div>`;
+    }))
     .join("");
   setActiveNav("categories");
   const view = $("#view-page");
@@ -1914,7 +1959,7 @@ async function renderSubcategory(catId, subId, typeId){
         </aside>
         <div class="listing">
           <div class="catalog-heading">
-            <div><h1>${type ? type.title : sub.title}</h1>${(type ? type.description : sub.description) ? `<p class="catalog-lead">${type ? type.description : sub.description}</p>` : ""}<p id="result-count">Loading products…</p></div>
+            <div><h1>${variant ? `${variant.title} ${type.title}` : leaf.title}</h1>${leaf.description ? `<p class="catalog-lead">${leaf.description}</p>` : ""}<p id="result-count">Loading products…</p></div>
             <button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="filter-panel">Filters</button>
           </div>
           <form class="filter-panel" id="filter-panel" aria-label="Product filters"></form>
@@ -1924,6 +1969,13 @@ async function renderSubcategory(catId, subId, typeId){
       </div>
     </div>
   </div>`;
+
+  // The mobile sidebar is a scroll box; keep the active type (and its variants) in view.
+  const sideList = view.querySelector(".side-list");
+  const activeLink = sideList && sideList.querySelector("a.is-active");
+  if (sideList && activeLink && sideList.scrollHeight > sideList.clientHeight){
+    sideList.scrollTop = Math.max(0, activeLink.offsetTop - sideList.offsetTop - 44);
+  }
 
   let list;
   try {
@@ -1937,9 +1989,11 @@ async function renderSubcategory(catId, subId, typeId){
   if (!view.querySelector("#product-grid")) return; // user navigated away while loading
 
   const scopeTypes = type ? [type] : types;
-  const all = scopeTypes.flatMap(t => productsForType(list, cat, sub, t));
+  const all = variant
+    ? productsForVariant(list, cat, sub, type, variant)
+    : scopeTypes.flatMap(t => productsForType(list, cat, sub, t));
   const attributes = attributeOptions(all);
-  const state = { price:null, types:new Set(), attrs:{}, shown:pageSize() };
+  const state = { price:null, types:new Set(), variants:new Set(), attrs:{}, shown:pageSize() };
 
   const panel = $("#filter-panel");
   const grid = $("#product-grid");
@@ -1947,7 +2001,7 @@ async function renderSubcategory(catId, subId, typeId){
   const toggle = $("#filter-toggle");
   const moreWrap = $("#load-more-wrap");
 
-  function activeCount(){ return (state.price ? 1 : 0) + state.types.size + Object.values(state.attrs).reduce((n, set) => n + set.size, 0); }
+  function activeCount(){ return (state.price ? 1 : 0) + state.types.size + state.variants.size + Object.values(state.attrs).reduce((n, set) => n + set.size, 0); }
   function paint(){
     const matches = applyFilters(all, state);
     const visible = matches.slice(0, state.shown);
@@ -1956,7 +2010,7 @@ async function renderSubcategory(catId, subId, typeId){
     moreWrap.hidden = matches.length <= state.shown;
     const n = activeCount();
     toggle.textContent = n ? `Filters (${n})` : "Filters";
-    panel.innerHTML = filtersHTML(scopeTypes, attributes, state, showAll);
+    panel.innerHTML = filtersHTML(scopeTypes, attributes, state, showAll, variants, !!type && !variant);
   }
   panel.addEventListener("click", e => {
     const chip = e.target.closest("[data-filter='price']");
@@ -1965,13 +2019,14 @@ async function renderSubcategory(catId, subId, typeId){
       state.shown = pageSize(); paint(); return;
     }
     if (e.target.closest("#filter-clear")){
-      state.price = null; state.types.clear(); state.attrs = {}; state.shown = pageSize(); paint();
+      state.price = null; state.types.clear(); state.variants.clear(); state.attrs = {}; state.shown = pageSize(); paint();
     }
   });
   panel.addEventListener("change", e => {
     const box = e.target.closest("input[type='checkbox']");
     if (!box) return;
     let set = state.types;
+    if (box.dataset.filter === "variant") set = state.variants;
     if (box.dataset.filter === "attr"){
       set = state.attrs[box.dataset.key] || (state.attrs[box.dataset.key] = new Set());
     }
@@ -2000,14 +2055,15 @@ async function renderProduct(id){
   const cat = catById(p.category);
   const sub = subById(p.category, p.subcategory);
   const type = typeById(sub, p.type);
-  const backHref = sub
-    ? `#/category/${p.category}/${sub.id}${type ? `/${type.id}` : ""}`
-    : `#/category/${p.category}`;
+  const variant = variantById(type, p.variant);
+  const typeHref = sub && type ? `#/category/${p.category}/${sub.id}/${type.id}` : "";
+  const backHref = variant ? `${typeHref}/${variant.id}` : (typeHref || (sub ? `#/category/${p.category}/${sub.id}` : `#/category/${p.category}`));
   const crumbs = [
     {label:"Home", href:"#/"},
     ...(cat ? [{label:cat.title, href:`#/category/${cat.id}`}] : []),
     ...(sub ? [{label:sub.title, href:`#/category/${p.category}/${sub.id}`}] : []),
-    ...(type ? [{label:type.title, href:backHref}] : []),
+    ...(type ? [{label:type.title, href:typeHref}] : []),
+    ...(variant ? [{label:variant.title, href:backHref}] : []),
     {label:p.title}
   ];
   const images = p.images && p.images.length ? p.images : [p.image];
@@ -2354,7 +2410,7 @@ function route(){
   if (!parts.length){ showHome(true); return; }
   showHome(false);
   if (top === "categories") return renderCategories();
-  if (top === "category") return renderCategory(parts[1], parts[2], parts[3]);
+  if (top === "category") return renderCategory(parts[1], parts[2], parts[3], parts[4]);
   if (top === "product") return renderProduct(parts[1]);
   if (top === "about") return renderAbout();
   if (top === "manufacturing") return renderManufacturing();
