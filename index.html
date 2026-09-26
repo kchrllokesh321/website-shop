@@ -675,6 +675,8 @@ body.home-mode .view-home.is-active{
 label{display:block;font-size:12px;font-weight:700;margin:10px 0 6px}
 input,textarea,select{
   width:100%;
+  max-width:100%;
+  box-sizing:border-box;
   border:1px solid var(--border);
   border-radius:8px;
   padding:10px 12px;
@@ -691,7 +693,8 @@ textarea{min-height:110px;resize:vertical}
   grid-template-columns:repeat(3,1fr);
   gap:16px;
 }
-.product-grid{grid-template-columns:repeat(2,1fr)}
+.cat-grid{grid-template-columns:repeat(4,1fr)}
+.product-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
 .tile,.product-box{
   background:#fff;
   border:1px solid var(--border);
@@ -701,21 +704,29 @@ textarea{min-height:110px;resize:vertical}
   transition:transform .2s,box-shadow .2s;
 }
 .tile:hover,.product-box:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(4,25,55,.08)}
-.tile-img{aspect-ratio:1/1;width:100%;background:#f3f5f8;overflow:hidden}
-.product-box-image{aspect-ratio:1/1;height:auto;width:100%;background:#f3f5f8;overflow:hidden}
-.tile-img img,.product-box-image img,.gallery-thumb img{
+.tile-img{aspect-ratio:1/1;width:100%;background:var(--navy-mid);overflow:hidden;line-height:0}
+.product-box-image{aspect-ratio:1/1;height:auto;width:100%;background:#f3f5f8;overflow:hidden;line-height:0}
+.tile-img img,.product-box-image img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+.gallery-thumb img{
   width:100%;
   height:100%;
   object-fit:contain;
   object-position:center;
 }
 .tile-body{padding:14px 16px 16px}
-.product-box-body{padding:10px 12px 11px}
+.product-box-body{padding:10px 12px 12px}
 .tile-body h3,.product-box-body h3{font-size:16px;color:var(--navy)}
+.product-box-body h3{font-size:14px;line-height:1.3}
 .tile-body p,.product-box-body p{margin-top:4px;color:var(--muted);font-size:12px}
-.product-box{display:flex;flex-direction:column;min-height:174px}
+.product-box{display:flex;flex-direction:column}
 .product-box-body{display:flex;flex:1;flex-direction:column}
-.product-price{margin-top:12px!important;color:var(--navy)!important;font-size:15px!important;font-weight:800}
+.product-price{margin-top:8px!important;color:var(--navy)!important;font-size:14px!important;font-weight:800}
 .product-action{
   margin-top:auto;
   padding-top:12px;
@@ -723,9 +734,8 @@ textarea{min-height:110px;resize:vertical}
   font-size:11px;
   font-weight:800;
 }
-.product-box-actions{display:flex;gap:8px;margin-top:12px}
-.product-box-actions .btn{flex:1;padding:8px 10px;font-size:12px}
-.navy-tile .tile-img img{object-fit:contain;transform:none}
+.product-box-actions{display:flex;gap:6px;margin-top:10px}
+.product-box-actions .btn{flex:1;padding:7px 8px;font-size:11px;border-radius:8px}
 .sub-grid{grid-template-columns:repeat(4,1fr)}
 .sub-grid .tile-body{padding:11px 13px 13px}
 
@@ -735,6 +745,8 @@ textarea{min-height:110px;resize:vertical}
   gap:24px;
 }
 .side{
+  max-width:100%;
+  min-width:0;
   background:#fff;
   border:1px solid var(--border);
   border-radius:14px;
@@ -813,6 +825,25 @@ textarea{min-height:110px;resize:vertical}
 .spec-item strong{display:block;color:var(--navy);font-size:12px}
 .spec-item span{font-size:13px;color:var(--muted)}
 
+/* Floating WhatsApp (inner pages) */
+.wa-float{
+  position:fixed;
+  right:16px;
+  bottom:calc(var(--footer-h) + 16px);
+  width:52px;height:52px;
+  border-radius:50%;
+  background:#25d366;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  box-shadow:0 10px 24px rgba(0,0,0,.22);
+  z-index:45;
+  transition:transform .2s;
+}
+.wa-float:hover{transform:translateY(-2px)}
+.wa-float svg{width:28px;height:28px}
+body.home-mode .wa-float{display:none}
+
 /* Viewer */
 .viewer{
   position:fixed;inset:0;
@@ -853,6 +884,9 @@ textarea{min-height:110px;resize:vertical}
 .mobile-nav{
   display:none;
   position:fixed;inset:var(--header-h) 0 0 0;
+  max-width:100vw;
+  overflow-y:auto;
+  overflow-x:hidden;
   background:rgba(3,14,30,.96);
   z-index:50;
   padding:24px;
@@ -894,7 +928,7 @@ textarea{min-height:110px;resize:vertical}
   .category-card{flex-basis:210px;width:210px;height:210px}
   .split,.mfg-grid,.form-grid,.detail,.layout-2,.catalog-top{grid-template-columns:1fr}
   .catalog-top img{height:180px}
-  .cat-grid,.product-grid,.sub-grid{grid-template-columns:repeat(2,1fr)}
+  .cat-grid,.sub-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:850px){
   .nav-links{display:none}
@@ -952,7 +986,16 @@ textarea{min-height:110px;resize:vertical}
     bottom:auto;
     transform:translate(-50%,-50%);
     width:min(360px,calc(100vw - 24px));
+    max-width:calc(100vw - 24px);
+    max-height:calc(100vh - 32px);
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    box-sizing:border-box;
   }
+  .branch-list li{flex-wrap:wrap}
+  .branch-list a{white-space:normal}
+  .side{max-height:none}
+  .side .side-list{max-height:220px;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .category-card{flex-basis:210px;width:210px;height:210px}
   .hero{min-height:0}
   .hero-copy{padding:20px 0 16px;justify-content:flex-start}
@@ -976,7 +1019,12 @@ textarea{min-height:110px;resize:vertical}
 @media (max-width:600px){
   .container{width:min(var(--container),calc(100% - 24px))}
   .brand-title{font-size:12px}
-  .cat-grid,.product-grid,.points,.mfg-cards{grid-template-columns:1fr}
+  .cat-grid,.points,.mfg-cards{grid-template-columns:1fr}
+  .product-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .product-box-body{padding:8px 9px 10px}
+  .product-box-body h3{font-size:13px}
+  .product-box-body p{font-size:11px}
+  .product-box-actions{flex-direction:column;gap:6px}
   .sub-grid{grid-template-columns:repeat(2,1fr);gap:10px}
   .sub-grid .tile-body h3{font-size:14px}
   .category-card{flex-basis:210px;width:210px;height:210px}
@@ -1044,7 +1092,7 @@ textarea{min-height:110px;resize:vertical}
     <a href="#/about" data-nav="about">About</a>
     <a href="#/manufacturing" data-nav="manufacturing">Manufacturing</a>
     <a href="#/contact" data-nav="contact">Contact</a>
-    <a href="#/appointment" data-nav="appointment">Book an Appointment</a>
+    <a href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment</a>
   </nav>
 
   <main id="app">
@@ -1058,8 +1106,8 @@ textarea{min-height:110px;resize:vertical}
           <p class="hero-description">From furniture to appliances — all in one place.</p>
           <p class="hero-subline">Trusted by families across Rajampet &amp; Railway Koduru.</p>
           <div class="hero-actions">
-            <a class="btn btn-orange" href="#/appointment">Book an Appointment →</a>
-            <a class="btn btn-ghost" id="whatsapp-hero" href="https://wa.me/?text=Hi%20Sri%20Maruthi%20Enterprises" target="_blank" rel="noopener">Chat on WhatsApp →</a>
+            <a class="btn btn-orange" href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment →</a>
+            <a class="btn btn-ghost" id="whatsapp-hero" href="https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products" target="_blank" rel="noopener">Chat on WhatsApp →</a>
           </div>
           <div class="hero-badges">
             <span>
@@ -1134,6 +1182,10 @@ textarea{min-height:110px;resize:vertical}
   </footer>
 </div>
 
+<a class="wa-float" id="whatsapp-float" href="https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.2 21.8l4.9-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.9a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.5-6c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.7 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.4Z"/></svg>
+</a>
+
 <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Fullscreen image">
   <button class="viewer-close" id="viewer-close" type="button" aria-label="Close">×</button>
   <button class="viewer-arrow viewer-prev" id="viewer-prev" type="button" aria-label="Previous image">‹</button>
@@ -1144,7 +1196,9 @@ textarea{min-height:110px;resize:vertical}
 
 <script>
 const CONTENT = {
-  whatsapp: "https://wa.me/?text=Hi%20Sri%20Maruthi%20Enterprises",
+  whatsappNumber: "919154444114",
+  whatsapp: "https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products",
+  appointment: "https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment.",
   social: {
     instagram: "https://instagram.com",
     x: "https://x.com",
@@ -1268,6 +1322,8 @@ const SUBCATEGORIES = {
   ]
 };
 
+// Image fields (`image`, `images[]`) on sub-categories, types and products accept any URL.
+// Placeholder local paths below can be replaced with CRM-hosted "https://..." links without code changes.
 const DEFAULT_SPECS = [
   ["Material","Solid wood and engineered support"],
   ["Finish","Warm natural wood finish"],
@@ -1619,7 +1675,7 @@ function renderSubcategory(catId, subId, typeId){
       <div class="layout-2">
         <aside class="side">
           <h4>${sub.title.toUpperCase()} TYPES</h4>
-          ${menu || "<p>Types coming soon.</p>"}
+          <div class="side-list">${menu || "<p>Types coming soon.</p>"}</div>
         </aside>
         <div>
           <div class="catalog-heading">
@@ -1712,7 +1768,7 @@ function renderAbout(){
     <div class="split">
       <div class="prose">
         <p>Sri Maruthi Enterprises helps families furnish rooms that feel settled — not staged. From cots and sofas to appliances that earn their place on the counter, the work is to choose well and explain clearly.</p>
-        <p>Three branches keep the showroom close: Rajampet, Railway Koduru and Bypass.</p>
+        <p>Three branches across two locations keep the showroom close: Rajampet (2) · Railway Koduru (1).</p>
         <div class="points">
           <div class="point"><span>—</span>In-house furniture craft</div>
           <div class="point"><span>—</span>Electronics you can see working</div>
@@ -1751,9 +1807,9 @@ function formPage(kind){
         <input id="phone" name="phone" required autocomplete="tel">
         <label for="branch">Preferred branch</label>
         <select id="branch" name="branch">
-          <option>Rajampet</option>
+          <option>Rajampet — Main</option>
+          <option>Rajampet — Bypass</option>
           <option>Railway Koduru</option>
-          <option>Bypass</option>
         </select>
         <label for="note">${isAppt ? "What would you like to plan?" : "Message"}</label>
         <textarea id="note" name="longDescription" required></textarea>
@@ -1762,8 +1818,8 @@ function formPage(kind){
       </form>
       <aside class="info-card">
         <h3>Visit us</h3>
-        <p>Rajampet · Railway Koduru · Bypass</p>
-        <p>3 branches in your region.</p>
+        <p>Rajampet (2) · Railway Koduru (1)</p>
+        <p>3 branches across 2 locations.</p>
         <img src="${isAppt ? "assets/sections/appointment.webp" : "assets/sections/showroom.webp"}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">
       </aside>
     </div>`;
@@ -1859,6 +1915,8 @@ function init(){
   bindCarousel();
   bindBranches();
   $("#whatsapp-hero").href = CONTENT.whatsapp;
+  const waFloat = $("#whatsapp-float");
+  if (waFloat) waFloat.href = CONTENT.whatsapp;
   $(".menu-toggle").addEventListener("click", () => {
     const nav = $("#mobile-nav");
     const open = !nav.classList.contains("is-open");
