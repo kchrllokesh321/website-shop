@@ -24,6 +24,13 @@
   --border:#e4e9ef;
   --header-h:72px;
   --footer-h:76px;
+  --hero-title-max:54px;
+  --hero-text-max:16px;
+  --card-size:210px;
+  --card-title:14px;
+  --card-text:10px;
+  --product-min:200px;
+  --product-title:14px;
   --band-max:1280px;
   --band-inset:clamp(32px,6vw,112px);
   --nav-gap:clamp(22px,2.2vw,32px);
@@ -270,7 +277,7 @@ body.home-mode .view-home.is-active{
 .hero h1{
   margin-top:0;
   color:#fff;
-  font-size:clamp(28px,calc(5.6vh - 4px),54px);
+  font-size:clamp(28px,calc(5.6vh - 4px),var(--hero-title-max));
   line-height:1.05;
   letter-spacing:-.03em;
   font-weight:800;
@@ -280,7 +287,7 @@ body.home-mode .view-home.is-active{
   margin-top:12px;
   max-width:560px;
   color:rgba(255,255,255,.86);
-  font-size:clamp(13px,1.95vh,16px);
+  font-size:clamp(13px,1.95vh,var(--hero-text-max));
   line-height:1.45;
 }
 .hero-subline{
@@ -291,6 +298,7 @@ body.home-mode .view-home.is-active{
   line-height:1.45;
 }
 .hero-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.badge-text{font-weight:inherit}
 .hero-badges{
   margin-top:14px;
   display:flex;
@@ -375,9 +383,9 @@ body.home-mode .view-home.is-active{
 }
 .category-card{
   /* 5 equal squares across the shared grid: width derives from container and gap */
-  flex:0 0 210px;
-  width:210px;
-  height:210px;
+  flex:0 0 var(--card-size);
+  width:var(--card-size);
+  height:var(--card-size);
   display:flex;
   flex-direction:column;
   background:var(--navy-mid);
@@ -443,7 +451,7 @@ body.home-mode .view-home.is-active{
 }
 .category-card h3{
   flex:0 0 auto;
-  font-size:14px;
+  font-size:var(--card-title);
   font-weight:800;
   line-height:1.2;
   padding:0 30px 0 2px;
@@ -453,7 +461,7 @@ body.home-mode .view-home.is-active{
   margin-top:3px;
   padding:0 30px 0 2px;
   color:rgba(255,255,255,.58);
-  font-size:10px;
+  font-size:var(--card-text);
   line-height:1.3;
   min-height:0;
 }
@@ -694,7 +702,7 @@ textarea{min-height:110px;resize:vertical}
   gap:16px;
 }
 .cat-grid{grid-template-columns:repeat(4,1fr)}
-.product-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.product-grid{grid-template-columns:repeat(auto-fill,minmax(var(--product-min),1fr));gap:14px}
 .tile,.product-box{
   background:#fff;
   border:1px solid var(--border);
@@ -722,7 +730,7 @@ textarea{min-height:110px;resize:vertical}
 .tile-body{padding:14px 16px 16px}
 .product-box-body{padding:10px 12px 12px}
 .tile-body h3,.product-box-body h3{font-size:16px;color:var(--navy)}
-.product-box-body h3{font-size:14px;line-height:1.3}
+.product-box-body h3{font-size:var(--product-title);line-height:1.3}
 .tile-body p,.product-box-body p{margin-top:4px;color:var(--muted);font-size:12px}
 .product-box{display:flex;flex-direction:column}
 .product-box-body{display:flex;flex:1;flex-direction:column}
@@ -975,7 +983,7 @@ body.home-mode .wa-float{display:none}
   .hero{min-height:0}
 }
 @media (max-width:1100px){
-  .category-card{flex-basis:210px;width:210px;height:210px}
+  .category-card{flex-basis:var(--card-size);width:var(--card-size);height:var(--card-size)}
   .split,.mfg-grid,.form-grid,.detail,.layout-2,.catalog-top{grid-template-columns:1fr}
   .catalog-top img{height:180px}
   .cat-grid,.sub-grid{grid-template-columns:repeat(2,1fr)}
@@ -1051,7 +1059,7 @@ body.home-mode .wa-float{display:none}
   .filter-panel.is-open{display:flex}
   .filter-clear{margin-left:0;align-self:flex-start}
   .catalog-heading{flex-direction:row;align-items:flex-start;justify-content:space-between}
-  .category-card{flex-basis:210px;width:210px;height:210px}
+  .category-card{flex-basis:var(--card-size);width:var(--card-size);height:var(--card-size)}
   .hero{min-height:0}
   .hero-copy{padding:20px 0 16px;justify-content:flex-start}
   .hero-description{margin-top:10px}
@@ -1082,7 +1090,7 @@ body.home-mode .wa-float{display:none}
   .product-box-actions{flex-direction:column;gap:6px}
   .sub-grid{grid-template-columns:repeat(2,1fr);gap:10px}
   .sub-grid .tile-body h3{font-size:14px}
-  .category-card{flex-basis:210px;width:210px;height:210px}
+  .category-card{flex-basis:var(--card-size);width:var(--card-size);height:var(--card-size)}
   .hero-description br{display:none}
   .hero-description{font-size:14px}
   .hero h1{font-size:28px}
@@ -1100,7 +1108,7 @@ body.home-mode .wa-float{display:none}
 }
 @media (max-height:760px) and (min-width:851px){
   :root{--header-h:72px;--footer-h:76px}
-  .hero h1{font-size:clamp(26px,calc(5.4vh - 4px),40px)}
+  .hero h1{font-size:clamp(26px,calc(5.4vh - 4px),min(40px,var(--hero-title-max)))}
   .shop{padding:6px 0 10px}
 }
 /* Web and iPad: category row uses the same side edges as the full-bleed hero. */
@@ -1110,7 +1118,7 @@ body.home-mode .wa-float{display:none}
     flex:1 1 0;
     width:auto;
     min-width:0;
-    height:210px;
+    height:var(--card-size);
   }
 }
 </style>
@@ -1167,15 +1175,15 @@ body.home-mode .wa-float{display:none}
           <div class="hero-badges">
             <span>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5 5.5 6v5.2c0 4.2 2.7 7.2 6.5 8.8 3.8-1.6 6.5-4.6 6.5-8.8V6L12 3.5Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.8 12.1 11 14.2l4.3-4.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Trusted Quality
+              <b class="badge-text" data-badge="0">Trusted Quality</b>
             </span>
             <span>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13.5v2.2a2 2 0 0 0 2 2h1.2v-6H7a2 2 0 0 0-2 1.8Z" stroke="currentColor" stroke-width="1.6"/><path d="M19 13.5v2.2a2 2 0 0 1-2 2h-1.2v-6H17a2 2 0 0 1 2 1.8Z" stroke="currentColor" stroke-width="1.6"/><path d="M5 13.2V12a7 7 0 0 1 14 0v1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              Reliable Support
+              <b class="badge-text" data-badge="1">Reliable Support</b>
             </span>
             <span>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 8h10.2v7.2H3.5V8Z" stroke="currentColor" stroke-width="1.6"/><path d="M13.7 11h3.4l2.4 2.6v1.6h-5.8V11Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.2" cy="16.8" r="1.35" stroke="currentColor" stroke-width="1.6"/><circle cx="16.6" cy="16.8" r="1.35" stroke="currentColor" stroke-width="1.6"/></svg>
-              Delivery &amp; Support
+              <b class="badge-text" data-badge="2">Delivery &amp; Support</b>
             </span>
           </div>
         </div>
@@ -1261,13 +1269,14 @@ const CONTENT = {
   }
 };
 
-// All catalog content (categories, sub-categories, types, filters, contact settings) is loaded
-// from data/catalog.json. Edit that file — not this script — to change the catalog.
+// Every piece of site content (text, sizes, contact details, categories, products) is loaded
+// from data/content.json. Edit that one file — not this script — to change the site.
+let SITE = {};
 let CATEGORIES = [];
 let SUBCATEGORIES = {};
 let FILTERS = { priceRanges: [], attributes: [] };
 let SETTINGS = { placeholderProductsPerType: 3, productsPerPage: 24 };
-let PRODUCT_FILES = {};
+let RAW_PRODUCTS = [];
 
 function waLink(number, message){
   return `https://wa.me/${String(number).replace(/\D/g, "")}?text=${encodeURIComponent(message || "")}`;
@@ -1284,25 +1293,86 @@ function applyCatalog(data){
     id: sc.id, title: sc.title, description: sc.description || "", image: sc.image || "",
     types: (sc.types || []).map(t => ({ id: t.id, title: t.title, description: t.description || "", image: t.image || sc.image || "" }))
   }))]));
-  PRODUCT_FILES = Object.fromEntries(cats.map(c => [c.id, c.productsFile || `data/products-${c.id}.json`]));
   const f = data.filters || {};
   FILTERS = {
     priceRanges: (f.priceRanges || []).map(r => ({ id: r.id, label: r.label, min: r.min === null || r.min === undefined ? 0 : Number(r.min), max: r.max === null || r.max === undefined ? Infinity : Number(r.max) })),
     attributes: (f.attributes || []).map(a => ({ key: String(a.key), label: a.label || labelize(a.key) }))
   };
-  SETTINGS = Object.assign({ placeholderProductsPerType: 3, productsPerPage: 24 }, data.settings || {});
-  if (SETTINGS.whatsappNumber){
-    CONTENT.whatsappNumber = SETTINGS.whatsappNumber;
-    CONTENT.whatsapp = waLink(SETTINGS.whatsappNumber, SETTINGS.whatsappMessage || "Hi, I'm interested in your products");
-    CONTENT.appointment = waLink(SETTINGS.whatsappNumber, SETTINGS.appointmentMessage || "Hi, I'd like to book an appointment.");
+  SETTINGS = { placeholderProductsPerType: data.placeholderProductsPerType ?? 3, productsPerPage: data.productsPerPage ?? 24 };
+}
+
+function applyBusiness(biz){
+  if (!biz) return;
+  if (biz.whatsappNumber){
+    CONTENT.whatsappNumber = biz.whatsappNumber;
+    CONTENT.whatsapp = waLink(biz.whatsappNumber, biz.whatsappMessage || "Hi, I'm interested in your products");
+    CONTENT.appointment = waLink(biz.whatsappNumber, biz.appointmentMessage || "Hi, I'd like to book an appointment.");
+  }
+  if (biz.social) Object.assign(CONTENT.social, biz.social);
+}
+
+function setText(sel, value){
+  if (value === undefined || value === null) return;
+  $$(sel).forEach(el => { el.textContent = value; });
+}
+
+// Writes homepage, header and footer text from content.json. SVG icons stay in the markup.
+function applyText(){
+  const biz = SITE.business || {};
+  const hero = (SITE.homepage || {}).hero || {};
+  const br = SITE.branches || {};
+  setText(".brand-title", biz.name);
+  setText(".brand-caption", biz.caption);
+  setText(".footer-full", biz.name);
+  setText(".footer-sme", biz.shortName);
+  setText(".hero h1", hero.title);
+  setText(".hero-description", hero.description);
+  setText(".hero-subline", hero.subline);
+  setText(".hero-actions [data-wa='appointment']", hero.appointmentButton);
+  setText("#whatsapp-hero", hero.whatsappButton);
+  (hero.badges || []).forEach((label, i) => setText(`.badge-text[data-badge='${i}']`, label));
+  if (hero.image){ const img = $(".hero-media img"); if (img && img.getAttribute("src") !== hero.image) img.src = hero.image; }
+  setText(".shop-head h2", (SITE.homepage || {}).shopHeading);
+  setText("#branches-toggle strong", br.summary);
+  const dash = `<i class="footer-dash">–</i> `;
+  const brandLine = $(".footer-brand > span"); if (brandLine && biz.tagline) brandLine.innerHTML = dash + biz.tagline;
+  const branchLine = $("#branches-toggle span"); if (branchLine && br.tagline) branchLine.innerHTML = dash + br.tagline;
+  const copyLine = $(".footer-social-zone > span"); if (copyLine && biz.copyright) copyLine.innerHTML = dash + biz.copyright;
+  setText(".footer-mobile-line", [biz.tagline, biz.copyrightShort].filter(Boolean).join(" · "));
+  const social = CONTENT.social || {};
+  $$(".footer-social a").forEach(a => {
+    const key = (a.getAttribute("aria-label") || "").toLowerCase();
+    if (key === "instagram" && social.instagram) a.href = social.instagram;
+    if (key === "x" && social.x) a.href = social.x;
+    if (key === "youtube" && social.youtube) a.href = social.youtube;
+  });
+}
+
+function applySizes(){
+  const sz = SITE.sizes || {};
+  const map = {
+    heroTitleMaxPx: "--hero-title-max", heroTextMaxPx: "--hero-text-max",
+    categoryCardPx: "--card-size", categoryCardTitlePx: "--card-title", categoryCardTextPx: "--card-text",
+    productCardMinPx: "--product-min", productCardTitlePx: "--product-title",
+    headerHeightPx: "--header-h", footerHeightPx: "--footer-h"
+  };
+  for (const [key, cssVar] of Object.entries(map)){
+    const v = Number(sz[key]);
+    if (v > 0) document.documentElement.style.setProperty(cssVar, `${v}px`);
   }
 }
 
-async function loadCatalog(){
-  const res = await fetch("data/catalog.json", { cache: "no-cache" });
-  if (!res.ok) throw new Error(`data/catalog.json: ${res.status}`);
-  applyCatalog(await res.json());
+async function loadSite(){
+  const res = await fetch("data/content.json", { cache: "no-cache" });
+  if (!res.ok) throw new Error(`data/content.json: ${res.status}`);
+  SITE = await res.json();
+  applyBusiness(SITE.business);
+  applyCatalog(SITE.catalog || {});
+  RAW_PRODUCTS = Array.isArray(SITE.products) ? SITE.products : [];
+  applySizes();
+  applyText();
 }
+
 
 const DEFAULT_SPECS = [
   ["Material","Solid wood and engineered support"],
@@ -1310,9 +1380,6 @@ const DEFAULT_SPECS = [
   ["Assembly","Professional installation included"]
 ];
 const DEFAULT_CARE = "Dust with a soft, dry cloth. Keep away from direct heat and standing moisture. Use coasters and felt pads, and arrange periodic hardware checks.";
-// Product data lives in data/products-<category>.json (one file per category) and is
-// fetched on demand. Add a product by adding one JSON entry; `image` may be any hosted URL.
-const productCache = {};
 
 const $ = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
@@ -1364,23 +1431,13 @@ function normalizeProduct(raw){
   };
 }
 
+const productCache = {};
 async function loadProducts(catId){
-  if (productCache[catId]) return productCache[catId];
-  const file = PRODUCT_FILES[catId];
-  if (!file) return [];
-  productCache[catId] = fetch(file, { cache: "no-cache" })
-    .then(res => { if (!res.ok) throw new Error(`${file}: ${res.status}`); return res.json(); })
-    .then(list => (Array.isArray(list) ? list : []).map(normalizeProduct))
-    .catch(err => {
-      console.error("Product data failed to load", err);
-      delete productCache[catId];
-      throw err;
-    });
+  if (!productCache[catId]) productCache[catId] = RAW_PRODUCTS.filter(p => p.category === catId).map(normalizeProduct);
   return productCache[catId];
 }
 async function loadAllProducts(){
-  const lists = await Promise.all(CATEGORIES.map(c => loadProducts(c.id).catch(() => [])));
-  return lists.flat();
+  return RAW_PRODUCTS.map(normalizeProduct);
 }
 
 function productsOf(list, catId, subId, typeId){
@@ -1400,7 +1457,7 @@ function placeholderProduct(cat, sub, type, n){
     type: type.id,
     title: `${type.title} — Product ${n}`,
     shortDescription: "Placeholder product. Replace with the showroom listing.",
-    longDescription: `Placeholder listing under ${cat.title} / ${sub.title} / ${type.title}. Add the real entry to data/products-${cat.id}.json with the CRM image link.`,
+    longDescription: `Placeholder listing under ${cat.title} / ${sub.title} / ${type.title}. Add the real entry to the products list in data/content.json with the CRM image link.`,
     priceValue: null,
     price: "Price on request",
     image,
@@ -1559,21 +1616,16 @@ function bindCarousel(){
   window.addEventListener("resize", applyCarousel);
 }
 
-/* PLACEHOLDER branch addresses — replace with confirmed locations. */
-const BRANCH_PLACES = [
-  { name: "Rajampet — Main", address: "Main Road, Rajampet, Andhra Pradesh", query: "Rajampet, Andhra Pradesh" },
-  { name: "Rajampet — Bypass", address: "Bypass Road, Rajampet, Andhra Pradesh", query: "Rajampet Bypass, Andhra Pradesh" },
-  { name: "Railway Koduru", address: "Railway Koduru, Andhra Pradesh", query: "Railway Kodur, Andhra Pradesh" }
-];
 function mapsUrl(query){
   return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
 }
 function renderBranches(){
   const list = $("#branch-list");
   if (!list) return;
-  list.innerHTML = BRANCH_PLACES.map(b => `<li>
-    <div><p>${b.name}</p><small>${b.address}</small></div>
-    <a href="${mapsUrl(b.query)}" target="_blank" rel="noopener">Get Directions</a>
+  const places = (SITE.branches && SITE.branches.list) || [];
+  list.innerHTML = places.map(b => `<li>
+    <div><p>${b.name}</p><small>${b.address || ""}</small></div>
+    <a href="${mapsUrl(b.mapQuery || b.query || b.address || b.name)}" target="_blank" rel="noopener">Get Directions</a>
   </li>`).join("");
 }
 function setBranchesOpen(open){
@@ -1629,7 +1681,8 @@ function renderCategories(){
       <div class="tile-img"><img src="${c.icon}" alt="${c.alt}"></div>
       <div class="tile-body"><h3>${c.title}</h3><p>${c.description}</p></div>
     </a>`).join("");
-  $("#view-page").innerHTML = pageFrame("Categories", "Browse the home, room by room.", `<div class="cat-grid">${cards}</div>`, "categories");
+  const pg = (SITE.pages || {}).categories || {};
+  $("#view-page").innerHTML = pageFrame(pg.title || "Categories", pg.lead || "", `<div class="cat-grid">${cards}</div>`, "categories");
 }
 
 // Single card template: every product on every listing page goes through this.
@@ -1692,7 +1745,7 @@ function applyFilters(list, state){
   });
 }
 
-// Attribute filters come from catalog.json → filters.attributes, and only show when the
+// Attribute filters come from content.json → catalog.filters.attributes, and only show when the
 // products on screen actually carry that spec.
 function attributeOptions(products){
   return FILTERS.attributes
@@ -1774,7 +1827,7 @@ async function renderSubcategory(catId, subId, typeId){
   } catch (err){
     if (!view.querySelector("#product-grid")) return;
     $("#result-count").textContent = "Products could not be loaded.";
-    $("#product-grid").innerHTML = `<p class="load-error">Product data must be served over http(s). Open the site from its hosted address rather than as a local file.</p>`;
+    $("#product-grid").innerHTML = `<p class="load-error">Site content must be served over http(s). Open the site from its hosted address rather than as a local file.</p>`;
     return;
   }
   if (!view.querySelector("#product-grid")) return; // user navigated away while loading
@@ -1909,63 +1962,56 @@ async function renderProduct(id){
 }
 
 function renderAbout(){
-  $("#view-page").innerHTML = pageFrame("Building homes with trust.", "A regional showroom business for furniture, electronics and everyday home goods.", `
+  const pg = (SITE.pages || {}).about || {};
+  const paragraphs = (pg.paragraphs || []).map(t => `<p>${t}</p>`).join("");
+  const points = (pg.points || []).map(t => `<div class="point"><span>—</span>${t}</div>`).join("");
+  $("#view-page").innerHTML = pageFrame(pg.title || "About", pg.lead || "", `
     <div class="split">
       <div class="prose">
-        <p>Sri Maruthi Enterprises helps families furnish rooms that feel settled — not staged. From cots and sofas to appliances that earn their place on the counter, the work is to choose well and explain clearly.</p>
-        <p>Three branches across two locations keep the showroom close: Rajampet (2) · Railway Koduru (1).</p>
-        <div class="points">
-          <div class="point"><span>—</span>In-house furniture craft</div>
-          <div class="point"><span>—</span>Electronics you can see working</div>
-          <div class="point"><span>—</span>Guidance, not a hard sell</div>
-          <div class="point"><span>—</span>Appointment-led planning</div>
-        </div>
+        ${paragraphs}
+        ${points ? `<div class="points">${points}</div>` : ""}
       </div>
-      <img src="assets/sections/about.webp" alt="Sri Maruthi Enterprises showroom building">
+      ${pg.image ? `<img src="${pg.image}" alt="${pg.imageAlt || ""}">` : ""}
     </div>
   `, "about");
 }
 
 function renderManufacturing(){
-  $("#view-page").innerHTML = pageFrame("Craftsmanship you can trust.", "Furniture made with measured joins, honest timber and a finish that lasts.", `
+  const pg = (SITE.pages || {}).manufacturing || {};
+  const steps = (pg.steps || []).map((st, i) => `<div class="mfg-card"><strong>${String(i + 1).padStart(2, "0")}</strong><h3>${st.title}</h3><p>${st.text || ""}</p></div>`).join("");
+  $("#view-page").innerHTML = pageFrame(pg.title || "Manufacturing", pg.lead || "", `
     <div class="mfg-grid">
-      <img src="assets/sections/manufacturing.webp" alt="Hands working timber in the workshop" style="width:100%;height:100%;min-height:280px;object-fit:cover;border-radius:18px">
-      <div class="mfg-cards">
-        <div class="mfg-card"><strong>01</strong><h3>Select</h3><p>Timber and materials chosen for the room they will live in.</p></div>
-        <div class="mfg-card"><strong>02</strong><h3>Make</h3><p>Workshop cutting, joining and finishing under a single eye.</p></div>
-        <div class="mfg-card"><strong>03</strong><h3>Check</h3><p>Edges, hardware and sit-test before anything reaches the floor.</p></div>
-        <div class="mfg-card"><strong>04</strong><h3>Place</h3><p>Delivered and set so the piece belongs in the home.</p></div>
-      </div>
+      ${pg.image ? `<img src="${pg.image}" alt="${pg.imageAlt || ""}" style="width:100%;height:100%;min-height:280px;object-fit:cover;border-radius:18px">` : ""}
+      <div class="mfg-cards">${steps}</div>
     </div>
   `, "manufacturing");
 }
 
 function formPage(kind){
-  const isAppt = kind === "appointment";
+  const pages = SITE.pages || {};
+  const pg = pages[kind] || {};
+  const br = SITE.branches || {};
+  const options = (br.list || []).map(b => `<option>${b.name}</option>`).join("");
   return `
     <div class="form-grid">
       <form class="form-card" id="lead-form">
-        <h3>${isAppt ? "Book an appointment" : "Send a message"}</h3>
+        <h3>${pg.formTitle || (kind === "appointment" ? "Book an appointment" : "Send a message")}</h3>
         <label for="name">Name</label>
         <input id="name" name="title" required autocomplete="name">
         <label for="phone">Phone</label>
         <input id="phone" name="phone" required autocomplete="tel">
         <label for="branch">Preferred branch</label>
-        <select id="branch" name="branch">
-          <option>Rajampet — Main</option>
-          <option>Rajampet — Bypass</option>
-          <option>Railway Koduru</option>
-        </select>
-        <label for="note">${isAppt ? "What would you like to plan?" : "Message"}</label>
+        <select id="branch" name="branch">${options}</select>
+        <label for="note">${pg.messageLabel || "Message"}</label>
         <textarea id="note" name="longDescription" required></textarea>
-        <button class="btn btn-orange" type="submit" style="margin-top:14px">${isAppt ? "Book appointment" : "Send message"}</button>
-        <p class="form-msg" id="form-msg">Thank you. We will reach you shortly.</p>
+        <button class="btn btn-orange" type="submit" style="margin-top:14px">${pg.submit || "Send"}</button>
+        <p class="form-msg" id="form-msg">${pages.formThanks || "Thank you. We will reach you shortly."}</p>
       </form>
       <aside class="info-card">
-        <h3>Visit us</h3>
-        <p>Rajampet (2) · Railway Koduru (1)</p>
-        <p>3 branches across 2 locations.</p>
-        <img src="${isAppt ? "assets/sections/appointment.webp" : "assets/sections/showroom.webp"}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">
+        <h3>${pages.visitTitle || "Visit us"}</h3>
+        ${br.summary ? `<p>${br.summary}</p>` : ""}
+        ${br.note ? `<p>${br.note}</p>` : ""}
+        ${pg.image ? `<img src="${pg.image}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">` : ""}
       </aside>
     </div>`;
 }
@@ -1981,11 +2027,13 @@ function bindForm(){
 }
 
 function renderContact(){
-  $("#view-page").innerHTML = pageFrame("We’re here to help.", "Visit a branch or leave a message. Internal notes stay in the same tab.", formPage("contact"), "contact");
+  const pg = (SITE.pages || {}).contact || {};
+  $("#view-page").innerHTML = pageFrame(pg.title || "Contact", pg.lead || "", formPage("contact"), "contact");
   bindForm();
 }
 function renderAppointment(){
-  $("#view-page").innerHTML = pageFrame("Book an appointment.", "Plan a room with someone who has walked the floor.", formPage("appointment"), "appointment");
+  const pg = (SITE.pages || {}).appointment || {};
+  $("#view-page").innerHTML = pageFrame(pg.title || "Book an appointment", pg.lead || "", formPage("appointment"), "appointment");
   bindForm();
 }
 
@@ -2081,12 +2129,12 @@ function init(){
   window.addEventListener("hashchange", route);
   route();
 }
-loadCatalog()
+loadSite()
   .then(init)
   .catch(err => {
-    console.error("Catalog failed to load", err);
+    console.error("Site content failed to load", err);
     const track = $("#carousel-track");
-    if (track) track.innerHTML = `<p class="load-error">Catalog data could not be loaded. Serve the site over http(s) and check data/catalog.json.</p>`;
+    if (track) track.innerHTML = `<p class="load-error">Site content could not be loaded. Serve the site over http(s) and check data/content.json.</p>`;
     init();
   });
 </script>

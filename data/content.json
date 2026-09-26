@@ -1,0 +1,1056 @@
+{
+  "_help": [
+    "ONE FILE FOR ALL SITE CONTENT. Edit values, save, publish. Do not edit index.html.",
+    "business  → name, WhatsApp number (one place), pre-filled messages, social links, copyright.",
+    "branches  → the footer branch line, the branch list in the popover, contact page text.",
+    "homepage  → hero text, button labels, badge labels (icons stay in code), section heading.",
+    "pages     → About, Manufacturing, Contact, Appointment, Categories page text and images.",
+    "sizes     → pixel sizes for hero text, category cards, product cards, header/footer height.",
+    "catalog   → categories → subCategories → types, filters, placeholder settings.",
+    "products  → one object per product. Add an object to add a product, delete it to remove it.",
+    "Image fields accept any hosted URL: upload in the CRM, copy the link, paste it here."
+  ],
+  "business": {
+    "name": "SRI MARUTHI ENTERPRISES",
+    "shortName": "SME",
+    "caption": "Since 2020.",
+    "tagline": "Quality Homes, Happier Families.",
+    "whatsappNumber": "919154444114",
+    "whatsappMessage": "Hi, I'm interested in your products",
+    "appointmentMessage": "Hi, I'd like to book an appointment.",
+    "social": {
+      "instagram": "https://instagram.com",
+      "x": "https://x.com",
+      "youtube": "https://youtube.com"
+    },
+    "copyright": "© 2026 Sri Maruthi Enterprises. All rights reserved.",
+    "copyrightShort": "© 2026"
+  },
+  "branches": {
+    "summary": "Rajampet (2) · Railway Koduru (1)",
+    "tagline": "Every Branch, Handpicked for Quality",
+    "note": "3 branches across 2 locations.",
+    "list": [
+      {
+        "name": "Rajampet — Main",
+        "address": "Main Road, Rajampet, Andhra Pradesh",
+        "mapQuery": "Rajampet, Andhra Pradesh"
+      },
+      {
+        "name": "Rajampet — Bypass",
+        "address": "Bypass Road, Rajampet, Andhra Pradesh",
+        "mapQuery": "Rajampet Bypass, Andhra Pradesh"
+      },
+      {
+        "name": "Railway Koduru",
+        "address": "Railway Koduru, Andhra Pradesh",
+        "mapQuery": "Railway Kodur, Andhra Pradesh"
+      }
+    ]
+  },
+  "homepage": {
+    "hero": {
+      "title": "Thoughtful Spaces for Every Home.",
+      "description": "From furniture to appliances — all in one place.",
+      "subline": "Trusted by families across Rajampet & Railway Koduru.",
+      "appointmentButton": "Book an Appointment →",
+      "whatsappButton": "Chat on WhatsApp →",
+      "badges": [
+        "Trusted Quality",
+        "Reliable Support",
+        "Delivery & Support"
+      ],
+      "image": "assets/hero/hero-living.png"
+    },
+    "shopHeading": "Shop by Category"
+  },
+  "pages": {
+    "categories": {
+      "title": "Categories",
+      "lead": "Browse the home, room by room."
+    },
+    "about": {
+      "title": "Building homes with trust.",
+      "lead": "A regional showroom business for furniture, electronics and everyday home goods.",
+      "paragraphs": [
+        "Sri Maruthi Enterprises helps families furnish rooms that feel settled — not staged. From cots and sofas to appliances that earn their place on the counter, the work is to choose well and explain clearly.",
+        "Three branches across two locations keep the showroom close: Rajampet (2) · Railway Koduru (1)."
+      ],
+      "points": [
+        "In-house furniture craft",
+        "Electronics you can see working",
+        "Guidance, not a hard sell",
+        "Appointment-led planning"
+      ],
+      "image": "assets/sections/about.webp"
+    },
+    "manufacturing": {
+      "title": "Craftsmanship you can trust.",
+      "lead": "Furniture made with measured joins, honest timber and a finish that lasts.",
+      "image": "assets/sections/manufacturing.webp",
+      "steps": [
+        {
+          "title": "Select",
+          "text": "Timber and materials chosen for the room they will live in."
+        },
+        {
+          "title": "Make",
+          "text": "Workshop cutting, joining and finishing under a single eye."
+        },
+        {
+          "title": "Check",
+          "text": "Edges, hardware and sit-test before anything reaches the floor."
+        },
+        {
+          "title": "Place",
+          "text": "Delivered and set so the piece belongs in the home."
+        }
+      ]
+    },
+    "contact": {
+      "title": "We’re here to help.",
+      "lead": "Visit a branch or leave a message. Internal notes stay in the same tab.",
+      "formTitle": "Send a message",
+      "messageLabel": "Message",
+      "submit": "Send message",
+      "image": "assets/sections/showroom.webp"
+    },
+    "appointment": {
+      "title": "Book an appointment.",
+      "lead": "Plan a room with someone who has walked the floor.",
+      "formTitle": "Book an appointment",
+      "messageLabel": "What would you like to plan?",
+      "submit": "Book appointment",
+      "image": "assets/sections/appointment.webp"
+    },
+    "formThanks": "Thank you. We will reach you shortly.",
+    "visitTitle": "Visit us"
+  },
+  "sizes": {
+    "heroTitleMaxPx": 54,
+    "heroTextMaxPx": 16,
+    "categoryCardPx": 210,
+    "categoryCardTitlePx": 14,
+    "categoryCardTextPx": 10,
+    "productCardMinPx": 200,
+    "productCardTitlePx": 14,
+    "headerHeightPx": 72,
+    "footerHeightPx": 76
+  },
+  "catalog": {
+    "placeholderProductsPerType": 3,
+    "productsPerPage": 24,
+    "filters": {
+      "priceRanges": [
+        {
+          "id": "under-20k",
+          "label": "Under ₹20,000",
+          "min": 0,
+          "max": 19999
+        },
+        {
+          "id": "20k-40k",
+          "label": "₹20,000 – ₹40,000",
+          "min": 20000,
+          "max": 40000
+        },
+        {
+          "id": "above-40k",
+          "label": "Above ₹40,000",
+          "min": 40001,
+          "max": null
+        }
+      ],
+      "attributes": [
+        {
+          "key": "material",
+          "label": "Material"
+        },
+        {
+          "key": "size",
+          "label": "Size"
+        }
+      ]
+    },
+    "categories": [
+      {
+        "id": "furniture",
+        "title": "Furniture",
+        "description": "Sofas, Cots, Dining, Storage & More",
+        "icon": "assets/categories/furniture-3d.png",
+        "visualAsset": "assets/categories/visuals/furniture-visual.png",
+        "alt": "3D furniture armchair",
+        "displayOrder": 1,
+        "subCategories": [
+          {
+            "id": "cots",
+            "title": "Cots",
+            "description": "",
+            "image": "assets/products/cot-01.webp",
+            "types": [
+              {
+                "id": "premium-teak-wood-cot",
+                "title": "Premium Teak Wood Cot",
+                "description": "",
+                "image": "assets/products/cot-01.webp"
+              },
+              {
+                "id": "wood-cot",
+                "title": "Wood Cot",
+                "description": "",
+                "image": "assets/products/cot-detail-headboard.webp"
+              },
+              {
+                "id": "storage-cot",
+                "title": "Storage Cot",
+                "description": "",
+                "image": "assets/products/cot-detail-footboard.webp"
+              },
+              {
+                "id": "metal-cot",
+                "title": "Metal Cot",
+                "description": "",
+                "image": "assets/products/cot-detail-headboard.webp"
+              }
+            ]
+          },
+          {
+            "id": "sofas",
+            "title": "Sofa",
+            "description": "",
+            "image": "assets/products/sofa-01.webp",
+            "types": [
+              {
+                "id": "3-seater",
+                "title": "3 Seater Sofa",
+                "description": "",
+                "image": "assets/products/sofa-01.webp"
+              },
+              {
+                "id": "3-1-1",
+                "title": "3+1+1 Sofa Sets",
+                "description": "",
+                "image": "assets/products/sofa-01.webp"
+              },
+              {
+                "id": "l-shape",
+                "title": "L Shape Sofa",
+                "description": "",
+                "image": "assets/products/sofa-01.webp"
+              },
+              {
+                "id": "u-shape",
+                "title": "U Shape Sofa",
+                "description": "",
+                "image": "assets/products/sofa-01.webp"
+              },
+              {
+                "id": "sofa-cum-beds",
+                "title": "Sofa Cum Beds",
+                "description": "",
+                "image": "assets/products/sofa-01.webp"
+              },
+              {
+                "id": "recliners",
+                "title": "Recliners",
+                "description": "",
+                "image": "assets/products/sofa-01.webp"
+              }
+            ]
+          },
+          {
+            "id": "beds",
+            "title": "Beds & Mattresses",
+            "description": "",
+            "image": "assets/products/bed-01.webp",
+            "types": [
+              {
+                "id": "duroflex",
+                "title": "Duroflex",
+                "description": "",
+                "image": "assets/products/bed-01.webp"
+              },
+              {
+                "id": "neelkamal",
+                "title": "Neelkamal",
+                "description": "",
+                "image": "assets/products/bed-01.webp"
+              },
+              {
+                "id": "relaxwell",
+                "title": "Relaxwell",
+                "description": "",
+                "image": "assets/products/bed-01.webp"
+              },
+              {
+                "id": "cenflex",
+                "title": "Cenflex",
+                "description": "",
+                "image": "assets/products/bed-01.webp"
+              },
+              {
+                "id": "ultraflex",
+                "title": "Ultraflex",
+                "description": "",
+                "image": "assets/products/bed-01.webp"
+              },
+              {
+                "id": "sleepyhead",
+                "title": "Sleepyhead",
+                "description": "",
+                "image": "assets/products/bed-01.webp"
+              },
+              {
+                "id": "customized",
+                "title": "Customized",
+                "description": "",
+                "image": "assets/products/bed-01.webp"
+              }
+            ]
+          },
+          {
+            "id": "office-chairs",
+            "title": "Office Chair",
+            "description": "",
+            "image": "assets/products/office-01.webp",
+            "types": [
+              {
+                "id": "executive-chair",
+                "title": "Executive Chair",
+                "description": "",
+                "image": "assets/products/office-01.webp"
+              },
+              {
+                "id": "mesh-chair",
+                "title": "Mesh Chair",
+                "description": "",
+                "image": "assets/products/office-01.webp"
+              },
+              {
+                "id": "visitor-chair",
+                "title": "Visitor Chair",
+                "description": "",
+                "image": "assets/products/office-01.webp"
+              }
+            ]
+          },
+          {
+            "id": "diwan",
+            "title": "Diwan",
+            "description": "",
+            "image": "assets/products/diwana-01.webp",
+            "types": [
+              {
+                "id": "wooden-diwan",
+                "title": "Wooden Diwan",
+                "description": "",
+                "image": "assets/products/diwana-01.webp"
+              },
+              {
+                "id": "storage-diwan",
+                "title": "Storage Diwan",
+                "description": "",
+                "image": "assets/products/diwana-detail.webp"
+              },
+              {
+                "id": "cushioned-diwan",
+                "title": "Cushioned Diwan",
+                "description": "",
+                "image": "assets/products/diwana-01.webp"
+              }
+            ]
+          },
+          {
+            "id": "dining-tables",
+            "title": "Dining Tables",
+            "description": "",
+            "image": "assets/products/dining-01.webp",
+            "types": [
+              {
+                "id": "4-seater-dining",
+                "title": "4 Seater Dining",
+                "description": "",
+                "image": "assets/products/dining-01.webp"
+              },
+              {
+                "id": "6-seater-dining",
+                "title": "6 Seater Dining",
+                "description": "",
+                "image": "assets/products/dining-01.webp"
+              },
+              {
+                "id": "glass-top-dining",
+                "title": "Glass Top Dining",
+                "description": "",
+                "image": "assets/products/dining-01.webp"
+              }
+            ]
+          },
+          {
+            "id": "dressing-tables",
+            "title": "Dressing Tables",
+            "description": "",
+            "image": "assets/products/dressing-01.webp",
+            "types": [
+              {
+                "id": "standing-dressing",
+                "title": "Standing Dressing Table",
+                "description": "",
+                "image": "assets/products/dressing-01.webp"
+              },
+              {
+                "id": "wall-dressing",
+                "title": "Wall Mounted Dressing Table",
+                "description": "",
+                "image": "assets/products/dressing-01.webp"
+              },
+              {
+                "id": "storage-dressing",
+                "title": "Dressing Table with Storage",
+                "description": "",
+                "image": "assets/products/dressing-01.webp"
+              }
+            ]
+          },
+          {
+            "id": "office-tables",
+            "title": "Office Tables",
+            "description": "",
+            "image": "assets/products/office-01.webp",
+            "types": [
+              {
+                "id": "executive-desk",
+                "title": "Executive Desk",
+                "description": "",
+                "image": "assets/products/office-01.webp"
+              },
+              {
+                "id": "computer-table",
+                "title": "Computer Table",
+                "description": "",
+                "image": "assets/products/office-01.webp"
+              },
+              {
+                "id": "study-table",
+                "title": "Study Table",
+                "description": "",
+                "image": "assets/products/office-01.webp"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "electronics",
+        "title": "Electronics",
+        "description": "TVs, Refrigerators, Washing Machines & More",
+        "icon": "assets/categories/electronics-3d.png",
+        "visualAsset": "assets/categories/visuals/electronics-visual.png",
+        "alt": "3D television and refrigerator",
+        "displayOrder": 2,
+        "subCategories": [
+          {
+            "id": "tv",
+            "title": "Televisions",
+            "description": "",
+            "image": "assets/products/tv-01.webp",
+            "types": [
+              {
+                "id": "led-tv",
+                "title": "LED TV",
+                "description": "",
+                "image": "assets/products/tv-01.webp"
+              },
+              {
+                "id": "smart-tv",
+                "title": "Smart TV",
+                "description": "",
+                "image": "assets/products/tv-01.webp"
+              },
+              {
+                "id": "qled-tv",
+                "title": "QLED TV",
+                "description": "",
+                "image": "assets/products/tv-01.webp"
+              }
+            ]
+          },
+          {
+            "id": "refrigerator",
+            "title": "Refrigerators",
+            "description": "",
+            "image": "assets/categories/electronics-3d.png",
+            "types": [
+              {
+                "id": "single-door",
+                "title": "Single Door",
+                "description": "",
+                "image": "assets/categories/electronics-3d.png"
+              },
+              {
+                "id": "double-door",
+                "title": "Double Door",
+                "description": "",
+                "image": "assets/categories/electronics-3d.png"
+              },
+              {
+                "id": "side-by-side",
+                "title": "Side by Side",
+                "description": "",
+                "image": "assets/categories/electronics-3d.png"
+              }
+            ]
+          },
+          {
+            "id": "washing-machine",
+            "title": "Washing Machines",
+            "description": "",
+            "image": "assets/categories/electronics-3d.png",
+            "types": [
+              {
+                "id": "top-load",
+                "title": "Top Load",
+                "description": "",
+                "image": "assets/categories/electronics-3d.png"
+              },
+              {
+                "id": "front-load",
+                "title": "Front Load",
+                "description": "",
+                "image": "assets/categories/electronics-3d.png"
+              },
+              {
+                "id": "semi-automatic",
+                "title": "Semi Automatic",
+                "description": "",
+                "image": "assets/categories/electronics-3d.png"
+              }
+            ]
+          },
+          {
+            "id": "air-conditioner",
+            "title": "Air Conditioners",
+            "description": "",
+            "image": "assets/categories/electronics-3d.png",
+            "types": [
+              {
+                "id": "split-ac",
+                "title": "Split AC",
+                "description": "",
+                "image": "assets/categories/electronics-3d.png"
+              },
+              {
+                "id": "window-ac",
+                "title": "Window AC",
+                "description": "",
+                "image": "assets/categories/electronics-3d.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "small-appliances",
+        "title": "Small Appliances",
+        "description": "For a Smarter Everyday",
+        "icon": "assets/categories/small-appliances-3d.png",
+        "visualAsset": "assets/categories/visuals/small-appliances-visual.png",
+        "alt": "3D small kitchen appliances",
+        "displayOrder": 3,
+        "subCategories": [
+          {
+            "id": "kitchen",
+            "title": "Kitchen Appliances",
+            "description": "",
+            "image": "assets/products/kitchen-01.webp",
+            "types": [
+              {
+                "id": "mixer-grinder",
+                "title": "Mixer Grinder",
+                "description": "",
+                "image": "assets/products/kitchen-01.webp"
+              },
+              {
+                "id": "induction-cooktop",
+                "title": "Induction Cooktop",
+                "description": "",
+                "image": "assets/products/kitchen-01.webp"
+              },
+              {
+                "id": "electric-kettle",
+                "title": "Electric Kettle",
+                "description": "",
+                "image": "assets/products/kitchen-01.webp"
+              }
+            ]
+          },
+          {
+            "id": "home-care",
+            "title": "Home Care",
+            "description": "",
+            "image": "assets/categories/small-appliances-3d.png",
+            "types": [
+              {
+                "id": "iron-box",
+                "title": "Iron Box",
+                "description": "",
+                "image": "assets/categories/small-appliances-3d.png"
+              },
+              {
+                "id": "vacuum-cleaner",
+                "title": "Vacuum Cleaner",
+                "description": "",
+                "image": "assets/categories/small-appliances-3d.png"
+              },
+              {
+                "id": "water-heater",
+                "title": "Water Heater",
+                "description": "",
+                "image": "assets/categories/small-appliances-3d.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gift-items",
+        "title": "Gift Items",
+        "description": "Thoughtful Gifts for Every Occasion",
+        "icon": "assets/categories/gift-items-3d.png",
+        "visualAsset": "assets/categories/visuals/gift-items-visual.png",
+        "alt": "3D gift and decor objects",
+        "displayOrder": 4,
+        "subCategories": [
+          {
+            "id": "home-decor",
+            "title": "Home Decor",
+            "description": "",
+            "image": "assets/categories/gift-items-3d.png",
+            "types": [
+              {
+                "id": "wall-clocks",
+                "title": "Wall Clocks",
+                "description": "",
+                "image": "assets/categories/gift-items-3d.png"
+              },
+              {
+                "id": "photo-frames",
+                "title": "Photo Frames",
+                "description": "",
+                "image": "assets/categories/gift-items-3d.png"
+              },
+              {
+                "id": "showpieces",
+                "title": "Showpieces",
+                "description": "",
+                "image": "assets/categories/gift-items-3d.png"
+              }
+            ]
+          },
+          {
+            "id": "festive",
+            "title": "Festive Gifts",
+            "description": "",
+            "image": "assets/categories/gift-items-3d.png",
+            "types": [
+              {
+                "id": "diyas-lamps",
+                "title": "Diyas & Lamps",
+                "description": "",
+                "image": "assets/categories/gift-items-3d.png"
+              },
+              {
+                "id": "gift-hampers",
+                "title": "Gift Hampers",
+                "description": "",
+                "image": "assets/categories/gift-items-3d.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "baby-items",
+        "title": "Baby Items",
+        "description": "Safe, Smart & Comfortable",
+        "icon": "assets/categories/baby-items-3d.png",
+        "visualAsset": "assets/categories/visuals/baby-items-visual.png",
+        "alt": "3D crib and teddy bear",
+        "displayOrder": 5,
+        "subCategories": [
+          {
+            "id": "nursery",
+            "title": "Nursery",
+            "description": "",
+            "image": "assets/categories/baby-items-3d.png",
+            "types": [
+              {
+                "id": "baby-cots",
+                "title": "Baby Cots",
+                "description": "",
+                "image": "assets/categories/baby-items-3d.png"
+              },
+              {
+                "id": "cradles",
+                "title": "Cradles",
+                "description": "",
+                "image": "assets/categories/baby-items-3d.png"
+              }
+            ]
+          },
+          {
+            "id": "baby-gear",
+            "title": "Baby Gear",
+            "description": "",
+            "image": "assets/categories/baby-items-3d.png",
+            "types": [
+              {
+                "id": "strollers",
+                "title": "Strollers",
+                "description": "",
+                "image": "assets/categories/baby-items-3d.png"
+              },
+              {
+                "id": "walkers",
+                "title": "Walkers",
+                "description": "",
+                "image": "assets/categories/baby-items-3d.png"
+              },
+              {
+                "id": "high-chairs",
+                "title": "High Chairs",
+                "description": "",
+                "image": "assets/categories/baby-items-3d.png"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "products": [
+    {
+      "id": "linen-sofa",
+      "category": "furniture",
+      "subCategory": "sofas",
+      "type": "3-seater",
+      "name": "Linen Lounge Sofa",
+      "description": "Soft seating for everyday living.",
+      "longDescription": "A calm three-seater designed for family rooms. Balanced proportions, supportive cushions and a quiet fabric that suits Indian homes.",
+      "price": 28999,
+      "image": "assets/products/sofa-01.webp",
+      "images": [
+        "assets/products/sofa-01.webp"
+      ],
+      "alt": "Grey linen sofa with rust cushions",
+      "specs": {
+        "material": "Fabric",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 1
+    },
+    {
+      "id": "premium-teak-cot",
+      "category": "furniture",
+      "subCategory": "cots",
+      "type": "premium-teak-wood-cot",
+      "name": "Premium Teak Wood Cot",
+      "description": "Elegant design. Built to last.",
+      "longDescription": "Crafted from high-quality teak wood, this premium cot offers durable, elegant and superior comfort. Perfect for modern homes, it combines traditional craftsmanship with contemporary design.",
+      "price": 32999,
+      "image": "assets/products/cot-01.webp",
+      "images": [
+        "assets/products/cot-01.webp",
+        "assets/products/cot-detail-headboard.webp",
+        "assets/products/cot-detail-footboard.webp"
+      ],
+      "alt": "Premium teak wood cot with white bedding",
+      "specs": {
+        "material": "Teak Wood",
+        "size": "King size",
+        "finish": "Natural teak polish",
+        "storage": "Non-storage",
+        "assembly": "Professional installation",
+        "warranty": "Demo product — confirm in store"
+      },
+      "displayOrder": 2
+    },
+    {
+      "id": "classic-wood-cot",
+      "category": "furniture",
+      "subCategory": "cots",
+      "type": "wood-cot",
+      "name": "Classic Wooden Cot",
+      "description": "Simple lines for an easy bedroom.",
+      "longDescription": "Demo catalog product using the supplied cot reference image. Confirm material, size and availability in store.",
+      "price": 18999,
+      "image": "assets/products/cot-detail-headboard.webp",
+      "images": [
+        "assets/products/cot-detail-headboard.webp",
+        "assets/products/cot-01.webp"
+      ],
+      "alt": "Classic wooden cot demo",
+      "specs": {
+        "material": "Wood",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 3
+    },
+    {
+      "id": "modern-upholstered-cot",
+      "category": "furniture",
+      "subCategory": "cots",
+      "type": "premium-teak-wood-cot",
+      "name": "Modern Upholstered Cot",
+      "description": "A softer profile for modern rooms.",
+      "longDescription": "Demo catalog product. Final upholstery, dimensions and pricing should be confirmed through the showroom CRM.",
+      "price": 24999,
+      "image": "assets/products/bed-01.webp",
+      "images": [
+        "assets/products/bed-01.webp"
+      ],
+      "alt": "Modern upholstered cot demo",
+      "specs": {
+        "material": "Upholstered",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 4
+    },
+    {
+      "id": "storage-cot",
+      "category": "furniture",
+      "subCategory": "cots",
+      "type": "storage-cot",
+      "name": "Storage Cot",
+      "description": "Useful storage in a composed frame.",
+      "longDescription": "Demo catalog product. Storage configuration and exact dimensions are subject to showroom confirmation.",
+      "price": 28999,
+      "image": "assets/products/cot-detail-footboard.webp",
+      "images": [
+        "assets/products/cot-detail-footboard.webp",
+        "assets/products/cot-01.webp"
+      ],
+      "alt": "Storage cot demo",
+      "specs": {
+        "material": "Engineered Wood",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 5
+    },
+    {
+      "id": "metal-frame-cot",
+      "category": "furniture",
+      "subCategory": "cots",
+      "type": "metal-cot",
+      "name": "Metal Frame Cot",
+      "description": "A practical frame with clean lines.",
+      "longDescription": "Demo catalog product. Frame gauge, finish and dimensions should be confirmed in store.",
+      "price": 12999,
+      "image": "assets/products/cot-detail-headboard.webp",
+      "images": [
+        "assets/products/cot-detail-headboard.webp",
+        "assets/products/cot-01.webp"
+      ],
+      "alt": "Metal frame cot demo",
+      "specs": {
+        "material": "Metal",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 6
+    },
+    {
+      "id": "solid-wood-cot",
+      "category": "furniture",
+      "subCategory": "cots",
+      "type": "wood-cot",
+      "name": "Solid Wood Cot",
+      "description": "Warm timber and dependable support.",
+      "longDescription": "Demo catalog product using the supplied cot imagery. Confirm timber species, dimensions and availability in store.",
+      "price": 22999,
+      "image": "assets/products/cot-01.webp",
+      "images": [
+        "assets/products/cot-01.webp",
+        "assets/products/cot-detail-headboard.webp"
+      ],
+      "alt": "Solid wood cot demo",
+      "specs": {
+        "material": "Wood",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 7
+    },
+    {
+      "id": "panel-bed",
+      "category": "furniture",
+      "subCategory": "beds",
+      "type": "duroflex",
+      "name": "Panel Bed",
+      "description": "A clean, grounded bedroom centrepiece.",
+      "longDescription": "Low visual noise, sturdy rails and a headboard that reads well against both painted and wood-panelled walls.",
+      "price": 26999,
+      "image": "assets/products/bed-01.webp",
+      "images": [
+        "assets/products/bed-01.webp"
+      ],
+      "alt": "Wooden panel bed",
+      "specs": {
+        "material": "Wood",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 8
+    },
+    {
+      "id": "diwana-set",
+      "category": "furniture",
+      "subCategory": "diwan",
+      "type": "wooden-diwan",
+      "name": "Diwana Lounge Set",
+      "description": "Conversation seating with a light footprint.",
+      "longDescription": "A compact lounge arrangement for living rooms that need flexibility without looking temporary.",
+      "price": 21999,
+      "image": "assets/products/diwana-01.webp",
+      "images": [
+        "assets/products/diwana-01.webp",
+        "assets/products/diwana-detail.webp"
+      ],
+      "alt": "Diwana lounge set",
+      "specs": {
+        "material": "Wood",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 9
+    },
+    {
+      "id": "dining-set",
+      "category": "furniture",
+      "subCategory": "dining-tables",
+      "type": "6-seater-dining",
+      "name": "Family Dining Table",
+      "description": "Everyday meals, unhurried gatherings.",
+      "longDescription": "A solid dining table with a quiet grain and room for family seating. Pairs with simple chairs or a bench.",
+      "price": 29999,
+      "image": "assets/products/dining-01.webp",
+      "images": [
+        "assets/products/dining-01.webp"
+      ],
+      "alt": "Wooden dining table and chairs",
+      "specs": {
+        "material": "Wood",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 9
+    },
+    {
+      "id": "dressing-table",
+      "category": "furniture",
+      "subCategory": "dressing-tables",
+      "type": "storage-dressing",
+      "name": "Dressing Table",
+      "description": "Storage and mirror in one calm piece.",
+      "longDescription": "A dressing table with a balanced mirror, soft drawers and a finish that sits comfortably in a bedroom corner.",
+      "price": 14999,
+      "image": "assets/products/dressing-01.webp",
+      "images": [
+        "assets/products/dressing-01.webp"
+      ],
+      "alt": "Wooden dressing table with mirror",
+      "specs": {
+        "material": "Engineered Wood",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 10
+    },
+    {
+      "id": "office-table",
+      "category": "furniture",
+      "subCategory": "office-tables",
+      "type": "executive-desk",
+      "name": "Home Office Table",
+      "description": "Focused work without a bulky desk.",
+      "longDescription": "A practical work table with a clear surface and a silhouette that belongs in a home, not only an office.",
+      "price": 16999,
+      "image": "assets/products/office-01.webp",
+      "images": [
+        "assets/products/office-01.webp"
+      ],
+      "alt": "Wooden office table with chair",
+      "specs": {
+        "material": "Engineered Wood",
+        "finish": "Warm natural wood finish",
+        "assembly": "Professional installation included"
+      },
+      "displayOrder": 11
+    },
+    {
+      "id": "cot-crm-test-001",
+      "category": "furniture",
+      "subCategory": "cots",
+      "type": "premium-teak-wood-cot",
+      "name": "Teak Cot — CRM Test Listing",
+      "description": "Added via JSON with a hosted image URL.",
+      "longDescription": "Test product added by editing data/products-furniture.json only. The image is loaded from an external hosted URL exactly as CRM-uploaded images will be.",
+      "price": 41999,
+      "image": "https://picsum.photos/seed/sme-teak-cot/900/900",
+      "images": [
+        "https://picsum.photos/seed/sme-teak-cot/900/900"
+      ],
+      "alt": "CRM test cot listing",
+      "specs": {
+        "material": "Teak Wood",
+        "size": "King"
+      },
+      "displayOrder": 50
+    },
+    {
+      "id": "living-tv",
+      "category": "electronics",
+      "subCategory": "tv",
+      "type": "led-tv",
+      "name": "Living Room Television",
+      "description": "A clear picture for the family room.",
+      "longDescription": "Selected for everyday viewing. We help you match screen size to the wall, seating distance and the rest of the room.",
+      "price": null,
+      "image": "assets/products/tv-01.webp",
+      "images": [
+        "assets/products/tv-01.webp"
+      ],
+      "alt": "Flat screen television",
+      "specs": {
+        "screen_size": "43 inch",
+        "resolution": "Full HD",
+        "warranty": "1 year manufacturer"
+      },
+      "displayOrder": 12
+    },
+    {
+      "id": "kitchen-set",
+      "category": "small-appliances",
+      "subCategory": "kitchen",
+      "type": "mixer-grinder",
+      "name": "Everyday Kitchen Set",
+      "description": "Small appliances for a smarter everyday.",
+      "longDescription": "A practical starting set for daily cooking — compact, easy to store and chosen to sit well on an Indian kitchen counter.",
+      "price": null,
+      "image": "assets/products/kitchen-01.webp",
+      "images": [
+        "assets/products/kitchen-01.webp"
+      ],
+      "alt": "Cookware and small kitchen appliances",
+      "specs": {
+        "power": "500 W",
+        "warranty": "1 year manufacturer"
+      },
+      "displayOrder": 13
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Sri Maruthi Enterprises
 
-Vanilla HTML showcase site. Serve the folder over http (the site fetches JSON, so opening `index.html` directly from disk will not load the catalog):
+Vanilla HTML showcase site. Serve the folder over http (the site fetches its content file, so opening `index.html` directly from disk will show no content):
 
 ```bash
 python3 -m http.server 3000
@@ -8,35 +8,32 @@ python3 -m http.server 3000
 
 Then visit `http://localhost:3000`.
 
-The homepage is a single viewport: header, hero, shop-by-category, and compact footer. Internal views stay in the same tab via hash navigation.
+## One file controls the whole site: `data/content.json`
 
-## Editing the catalog without touching code
+You never edit `index.html`. Every text, number, image link, size, category, filter, and product lives in `data/content.json`. Edit a value, save, publish, reload.
 
-Everything a customer sees in the catalog is read from JSON files in `data/`. You never edit `index.html` to change content.
+| Want to change | Section in `data/content.json` |
+| --- | --- |
+| WhatsApp number (used by every WhatsApp button, once) | `business.whatsappNumber` |
+| Pre-filled WhatsApp messages | `business.whatsappMessage`, `business.appointmentMessage` |
+| Business name, caption, tagline, copyright, social links | `business` |
+| Footer branch line, branch list (popover + contact form), contact note | `branches` |
+| Hero title, description, subline, button labels, badge labels, hero image | `homepage.hero` (badge icons stay in code; only the words change) |
+| "Shop by Category" heading | `homepage.shopHeading` |
+| About, Manufacturing, Contact, Appointment, Categories page text and images | `pages` |
+| Sizes in pixels: hero text, category cards, product cards, header/footer height | `sizes` |
+| Categories → sub-categories → types (names, descriptions, images) | `catalog.categories` |
+| Price filter buttons and which spec fields become filters | `catalog.filters` |
+| Placeholder cards per type, products per page | `catalog.placeholderProductsPerType`, `catalog.productsPerPage` |
+| Products | `products` |
 
-| What you want to change | File | Field |
-| --- | --- | --- |
-| Category name, one-line description, homepage card image | `data/catalog.json` → `categories[]` | `title`, `description`, `icon`, `visualAsset` |
-| Sub-categories under a category (Cots, Sofa, …) | `data/catalog.json` → `categories[].subCategories[]` | `id`, `title`, `description`, `image` |
-| Types under a sub-category (Premium Teak Wood Cot, …) | `data/catalog.json` → `subCategories[].types[]` | `id`, `title`, `description`, `image` |
-| Price filter buttons | `data/catalog.json` → `filters.priceRanges[]` | `label`, `min`, `max` (`null` max = no upper limit) |
-| Which spec fields become filters (Material, Size, Colour…) | `data/catalog.json` → `filters.attributes[]` | `key` must match a key inside product `specs` |
-| WhatsApp number and pre-filled messages | `data/catalog.json` → `settings` | `whatsappNumber`, `whatsappMessage`, `appointmentMessage` |
-| How many placeholder cards a type shows until real products exist | `data/catalog.json` → `settings.placeholderProductsPerType` | set to `0` once real listings are in |
-| Products | `data/products-<category>.json` | one object per product (see below) |
+### Images from the CRM
 
-### Workflow with the CRM
+Upload the photo in the CRM asset area, copy its link (`https://...`), and paste it into any `image`, `icon`, `visualAsset`, or `images` field. Nothing else is needed.
 
-1. Upload the photo in the CRM's asset area and copy its link (`https://...`).
-2. Open the matching JSON file and paste the link into the `image` field (or add it to `images` for a gallery photo).
-3. Edit any text fields the same way.
-4. Save and publish the site. The next page load shows the change; nothing else needs rebuilding.
+### Products
 
-Keep ids in lowercase with hyphens (`premium-teak-wood-cot`). Ids are used in the page URL, so changing an id changes the link.
-
-### Adding a product
-
-Add one object to `data/products-<category>.json`:
+`products` is a list. Each product is one object:
 
 ```json
 {
@@ -54,15 +51,22 @@ Add one object to `data/products-<category>.json`:
 }
 ```
 
-- `category`, `subCategory`, and `type` must match ids in `data/catalog.json`.
-- `image` can be any hosted URL. `images` is optional and feeds the product gallery.
-- `price` is a number; omit it or use `null` to show "Price on request".
-- Any key in `specs` that is listed in `filters.attributes` becomes a checkbox filter automatically, and every key shows in the product's specs list.
+- **Add a product:** copy an existing object, paste it into the list, change the values. Give it a new `id`.
+- **Remove a product:** delete its object from the list.
+- **Change price:** edit `price` (a number, no ₹ or commas). Remove the line or set `null` for "Price on request".
+- **Change description:** edit `description` (card) and `longDescription` (product page).
+- `category`, `subCategory`, and `type` must match ids under `catalog.categories`.
+- Any `specs` key listed in `catalog.filters.attributes` becomes a checkbox filter automatically; every key shows in the product's spec list.
 
-### Adding a type or sub-category
+### Categories, sub-categories, types
 
-Add an entry in `data/catalog.json` with an `id`, `title`, optional `description`, and an `image` link. It appears in the sidebar and grids immediately; products point to it through their `subCategory` and `type` fields.
+Under `catalog.categories`, each category has `subCategories`, and each sub-category has `types`. Add or delete objects the same way as products. Each needs an `id` (lowercase, hyphens), a `title`, and optionally `description` and `image`.
 
-### Removing something
+### Sizes
 
-Delete the entry from the JSON. Products that still point to a removed type simply stop appearing in that sub-category.
+`sizes` values are pixels. For example `categoryCardPx: 210` sets the homepage category card square; `heroTitleMaxPx: 54` caps the hero heading size; `productCardMinPx: 200` sets how wide product cards are before the grid adds a column.
+
+### Rules
+
+- Keep the file valid JSON: every item in a list separated by a comma, no comma after the last one, text in double quotes. A JSON checker (search "JSON validator") will point to any mistake.
+- Ids appear in page links, so avoid renaming an id once a link has been shared. Titles can change freely.
