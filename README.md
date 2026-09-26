@@ -22,7 +22,8 @@ You never edit `index.html`. Every text, number, image link, size, category, fil
 | Hero title, description, subline, button labels, badge labels, hero image | `homepage.hero` (badge icons stay in code; only the words change) |
 | "Shop by Category" heading | `homepage.shopHeading` |
 | About, Manufacturing, Contact, Appointment, Categories page text and images | `pages` |
-| Contact/Appointment form: button label, first line of the WhatsApp message, thank-you text | `pages.contact`, `pages.appointment` (`submit`, `whatsappIntro`), `pages.formThanks` |
+| Contact form: button label, first line of the WhatsApp message, thank-you text | `pages.contact` (`submit`, `whatsappIntro`), `pages.formThanks` |
+| Book an Appointment page: heading, lead, field labels, placeholders, error text, time-of-day options, "Other" category label, side panel points | `pages.appointment` (`labels`, `placeholders`, `errors`, `timeOptions`, `otherCategory`, `aside`); the first line of the message is `business.appointmentMessage` |
 | Sizes in pixels: hero text, category cards, product cards, header/footer height | `sizes` |
 | Categories → sub-categories → types (names, descriptions, images) | `catalog.categories` |
 | Price filter buttons and which spec fields become filters | `catalog.filters` |
@@ -70,7 +71,10 @@ Under `catalog.categories`, each category has `subCategories`, and each sub-cate
 
 ### Contact and appointment forms
 
-There is no server, so the forms hand off to WhatsApp: pressing the button opens a chat with `business.whatsappNumber` and the name, phone, chosen branch, and message already typed in. The customer presses send in WhatsApp and you receive it there.
+There is no server, so the forms hand off to WhatsApp: pressing the button opens a chat with `business.whatsappNumber` with the details already typed in. The customer presses send in WhatsApp and you receive it there.
+
+- Contact form (`#/contact`): name, phone, chosen branch, message.
+- Book an Appointment (`#/appointment`, every "Book an Appointment" button): full name, phone, category of interest (the category list comes from `catalog.categories` plus `pages.appointment.otherCategory`), customization yes/no with details, preferred date and time, notes. Optional fields left blank are not included in the message.
 
 ### Rules
 

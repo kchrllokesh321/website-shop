@@ -132,12 +132,46 @@
     },
     "appointment": {
       "title": "Book an appointment.",
-      "lead": "Plan a room with someone who has walked the floor. Your request opens in WhatsApp.",
-      "formTitle": "Book an appointment",
-      "messageLabel": "What would you like to plan?",
-      "submit": "Request on WhatsApp",
+      "lead": "Tell us what you're planning and when you'd like to visit. Your details open in WhatsApp as one message — review it there and press send.",
+      "formTitle": "Appointment details",
+      "submit": "Send via WhatsApp",
       "image": "assets/sections/appointment.webp",
-      "whatsappIntro": "Appointment request from the website"
+      "whatsappIntro": "Hi, I'd like to book an appointment.",
+      "otherCategory": "Other",
+      "timeOptions": [
+        "Morning",
+        "Afternoon",
+        "Evening"
+      ],
+      "labels": {
+        "name": "Full Name",
+        "phone": "Phone Number",
+        "category": "Category of Interest",
+        "customization": "Customization Needed?",
+        "customizationDetails": "Customization Details",
+        "date": "Preferred Date",
+        "time": "Preferred Time",
+        "notes": "Additional Notes"
+      },
+      "placeholders": {
+        "name": "Your name",
+        "phone": "10-digit mobile number",
+        "customizationDetails": "Size, material, colour, finish — anything we should prepare for.",
+        "notes": "Anything else we should know?"
+      },
+      "errors": {
+        "name": "Please enter your full name.",
+        "phone": "Please enter a valid phone number (10 digits, or 12 with country code).",
+        "category": "Please choose a category."
+      },
+      "aside": {
+        "title": "What to expect",
+        "points": [
+          "A member of our showroom team confirms your slot on WhatsApp.",
+          "Bring room measurements or photos if you have them.",
+          "Custom pieces can be discussed with our manufacturing team on the day."
+        ]
+      }
     },
     "formThanks": "Opening WhatsApp with your message. Press send there and we will reply shortly.",
     "visitTitle": "Visit us"

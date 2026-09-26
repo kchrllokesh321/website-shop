@@ -709,6 +709,42 @@ input,textarea,select{
 input:focus,textarea:focus,select:focus{border-color:var(--orange)}
 textarea{min-height:110px;resize:vertical}
 .form-msg{margin-top:12px;color:#1fa463;font-size:13px;font-weight:700;display:none}
+/* Appointment form */
+.appt-form h3{font-size:20px;color:var(--navy)}
+.form-hint{margin-top:4px;font-size:12px;color:var(--muted)}
+.req{color:var(--orange);font-weight:800}
+.field{min-width:0}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.appt-form input,.appt-form select,.appt-form textarea{min-height:44px;font-size:15px;background:#fff;color:var(--text)}
+.appt-form select{appearance:none;-webkit-appearance:none;padding-right:36px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23687589' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center}
+.appt-form input[type='date']{-webkit-appearance:none;appearance:none}
+.appt-form input[type='date']::-webkit-date-and-time-value{text-align:left}
+.appt-form textarea{min-height:88px}
+.appt-form .is-invalid{border-color:#d63b2f;box-shadow:0 0 0 3px rgba(214,59,47,.12)}
+.field-error{min-height:0;margin-top:5px;font-size:12px;font-weight:600;color:#d63b2f}
+.field-error:empty{display:none}
+.choice-group{border:0;padding:0;margin:0}
+.choice-group legend{display:block;font-size:12px;font-weight:700;margin:10px 0 6px;padding:0}
+.choice-pills{display:flex;gap:10px}
+.pill{position:relative;margin:0;font-size:14px;font-weight:600}
+.pill input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pill span{display:inline-flex;align-items:center;justify-content:center;min-width:88px;min-height:44px;padding:0 18px;
+  border:1px solid var(--border);border-radius:999px;color:var(--text);cursor:pointer;transition:background .15s,border-color .15s}
+.pill input:checked + span{background:var(--navy);border-color:var(--navy);color:#fff}
+.pill input:focus-visible + span{outline:2px solid var(--orange);outline-offset:2px}
+.collapsible[hidden]{display:none}
+.btn-submit{margin-top:18px;min-height:46px;padding:0 22px}
+.appt-points{margin-top:8px;display:grid;gap:8px;color:var(--muted);font-size:14px;line-height:1.45;padding-left:18px;list-style:disc}
+@media (max-width:600px){
+  .field-row{grid-template-columns:1fr}
+  .form-card,.info-card{padding:18px 16px}
+  .appt-form .btn-submit{width:100%}
+  .choice-pills{width:100%}
+  .pill{flex:1}
+  .pill span{width:100%}
+}
 .info-card h3{margin-bottom:8px}
 .info-card p{color:var(--muted);font-size:14px;margin-top:8px}
 
@@ -1176,7 +1212,7 @@ body.home-mode .wa-float{display:none}
     <a href="#/about" data-nav="about">About</a>
     <a href="#/manufacturing" data-nav="manufacturing">Manufacturing</a>
     <a href="#/contact" data-nav="contact">Contact</a>
-    <a data-wa="appointment" href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment</a>
+    <a data-wa="appointment" data-nav="appointment" href="#/appointment">Book an Appointment</a>
   </nav>
 
   <main id="app">
@@ -1190,7 +1226,7 @@ body.home-mode .wa-float{display:none}
           <p class="hero-description">From furniture to appliances — all in one place.</p>
           <p class="hero-subline">Trusted by families across Rajampet &amp; Railway Koduru.</p>
           <div class="hero-actions">
-            <a class="btn btn-orange" data-wa="appointment" href="https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment." target="_blank" rel="noopener">Book an Appointment →</a>
+            <a class="btn btn-orange" data-wa="appointment" href="#/appointment">Book an Appointment →</a>
             <a class="btn btn-ghost" id="whatsapp-hero" href="https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products%20and%20would%20like%20to%20know%20more." target="_blank" rel="noopener">Chat on WhatsApp →</a>
           </div>
           <div class="hero-badges">
@@ -1282,7 +1318,6 @@ body.home-mode .wa-float{display:none}
 const CONTENT = {
   whatsappNumber: "919154444114",
   whatsapp: "https://wa.me/919154444114?text=Hi%2C%20I%27m%20interested%20in%20your%20products",
-  appointment: "https://wa.me/919154444114?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment.",
   social: {
     instagram: "https://instagram.com",
     x: "https://x.com",
@@ -1327,7 +1362,7 @@ function applyBusiness(biz){
   if (biz.whatsappNumber){
     CONTENT.whatsappNumber = biz.whatsappNumber;
     CONTENT.whatsapp = waLink(biz.whatsappNumber, biz.whatsappMessage || "Hi, I'm interested in your products and would like to know more.");
-    CONTENT.appointment = waLink(biz.whatsappNumber, biz.appointmentMessage || "Hi, I'd like to book an appointment.");
+    CONTENT.appointmentIntro = biz.appointmentMessage || "Hi, I'd like to book an appointment.";
     CONTENT.contact = waLink(biz.whatsappNumber, biz.contactMessage || "Hi, I have a question.");
     CONTENT.productMessage = biz.productMessage || "Hi, I'm interested in {product}. Could you share more details?";
   }
@@ -2115,10 +2150,152 @@ function renderContact(){
   $("#view-page").innerHTML = pageFrame(pg.title || "Contact", pg.lead || "", inner, "contact");
   bindForm("contact");
 }
+const APPT_TIMES = ["Morning", "Afternoon", "Evening"];
+
 function renderAppointment(){
   const pg = (SITE.pages || {}).appointment || {};
-  $("#view-page").innerHTML = pageFrame(pg.title || "Book an appointment", pg.lead || "", formPage("appointment"), "appointment");
-  bindForm("appointment");
+  const L = Object.assign({
+    name: "Full Name", phone: "Phone Number", category: "Category of Interest",
+    customization: "Customization Needed?", customizationDetails: "Customization Details",
+    date: "Preferred Date", time: "Preferred Time", notes: "Additional Notes"
+  }, pg.labels || {});
+  const PH = pg.placeholders || {};
+  const aside = pg.aside || {};
+  const categories = [...CATEGORIES].sort((a,b)=>a.displayOrder-b.displayOrder).map(c => c.title)
+    .concat(pg.otherCategory || "Other");
+  const times = pg.timeOptions || APPT_TIMES;
+  const today = new Date().toISOString().slice(0, 10);
+  const req = `<span class="req" aria-hidden="true">*</span>`;
+  const inner = `
+    <div class="form-grid">
+      <form class="form-card appt-form" id="appt-form" novalidate>
+        <h3>${pg.formTitle || "Appointment details"}</h3>
+        <p class="form-hint"><span class="req">*</span> Required</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="ap-name">${L.name} ${req}</label>
+            <input id="ap-name" name="name" autocomplete="name" placeholder="${PH.name || ""}" required aria-describedby="ap-name-err">
+            <p class="field-error" id="ap-name-err"></p>
+          </div>
+          <div class="field">
+            <label for="ap-phone">${L.phone} ${req}</label>
+            <input id="ap-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="${PH.phone || ""}" required aria-describedby="ap-phone-err">
+            <p class="field-error" id="ap-phone-err"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ap-category">${L.category} ${req}</label>
+          <select id="ap-category" name="category" required aria-describedby="ap-category-err">
+            <option value="" selected disabled>Select a category</option>
+            ${categories.map(t => `<option>${t}</option>`).join("")}
+          </select>
+          <p class="field-error" id="ap-category-err"></p>
+        </div>
+        <fieldset class="field choice-group">
+          <legend>${L.customization}</legend>
+          <div class="choice-pills">
+            <label class="pill"><input type="radio" name="customization" value="Yes"><span>Yes</span></label>
+            <label class="pill"><input type="radio" name="customization" value="No"><span>No</span></label>
+          </div>
+        </fieldset>
+        <div class="field collapsible" id="ap-custom-wrap" hidden>
+          <label for="ap-custom">${L.customizationDetails}</label>
+          <textarea id="ap-custom" name="customizationDetails" rows="3" placeholder="${PH.customizationDetails || ""}"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="ap-date">${L.date}</label>
+            <input id="ap-date" name="date" type="date" min="${today}">
+          </div>
+          <div class="field">
+            <label for="ap-time">${L.time}</label>
+            <select id="ap-time" name="time">
+              <option value="">Any time</option>
+              ${times.map(t => `<option>${t}</option>`).join("")}
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ap-notes">${L.notes}</label>
+          <textarea id="ap-notes" name="notes" rows="3" placeholder="${PH.notes || ""}"></textarea>
+        </div>
+        <button class="btn btn-orange btn-submit" type="submit">${pg.submit || "Send via WhatsApp"}</button>
+        <p class="form-msg" id="form-msg">${(SITE.pages || {}).formThanks || "Opening WhatsApp with your message."}</p>
+      </form>
+      <aside class="info-card appt-aside">
+        <h3>${aside.title || "What to expect"}</h3>
+        ${(aside.points || []).length ? `<ul class="appt-points">${aside.points.map(t => `<li>${t}</li>`).join("")}</ul>` : ""}
+        ${pg.image ? `<img src="${pg.image}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">` : ""}
+      </aside>
+    </div>`;
+  $("#view-page").innerHTML = pageFrame(pg.title || "Book an appointment", pg.lead || "", inner, "appointment");
+  bindAppointmentForm(L, pg);
+}
+
+// Only the fields the customer filled in make it into the message; blank optional
+// fields are dropped so the business receives a clean, readable request.
+function composeAppointmentMessage(data, L){
+  const v = k => String(data.get(k) || "").trim();
+  const lines = [CONTENT.appointmentIntro || "Hi, I'd like to book an appointment.", ""];
+  lines.push(`${L.name}: ${v("name")}`);
+  lines.push(`${L.phone}: ${v("phone")}`);
+  if (v("category")) lines.push(`${L.category}: ${v("category")}`);
+  const custom = v("customization");
+  if (custom) lines.push(`${L.customization.replace(/\?$/, "")}: ${custom}`);
+  if (custom === "Yes" && v("customizationDetails")) lines.push(`${L.customizationDetails}: ${v("customizationDetails")}`);
+  if (v("date")) lines.push(`${L.date}: ${formatApptDate(v("date"))}`);
+  if (v("time")) lines.push(`${L.time}: ${v("time")}`);
+  if (v("notes")) lines.push(`${L.notes}: ${v("notes")}`);
+  return lines.join("\n");
+}
+function formatApptDate(iso){
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return iso;
+  return new Date(y, m - 1, d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+}
+function validPhone(raw){
+  const digits = raw.replace(/\D/g, "");
+  return digits.length === 10 || (digits.length >= 11 && digits.length <= 13);
+}
+
+function bindAppointmentForm(L, pg){
+  const form = $("#appt-form");
+  if (!form) return;
+  const errors = Object.assign({
+    name: "Please enter your full name.",
+    phone: "Please enter a valid phone number (10 digits, or 12 with country code).",
+    category: "Please choose a category."
+  }, pg.errors || {});
+  const wrap = $("#ap-custom-wrap");
+  form.querySelectorAll("[name='customization']").forEach(r => r.addEventListener("change", () => {
+    const yes = r.value === "Yes" && r.checked;
+    wrap.hidden = !yes;
+    if (yes) $("#ap-custom").focus({ preventScroll: true });
+  }));
+  const setError = (id, msg) => {
+    const input = $(`#ap-${id}`), err = $(`#ap-${id}-err`);
+    input.setAttribute("aria-invalid", msg ? "true" : "false");
+    input.classList.toggle("is-invalid", !!msg);
+    err.textContent = msg || "";
+  };
+  ["name", "phone", "category"].forEach(id => {
+    $(`#ap-${id}`).addEventListener("input", () => setError(id, ""));
+  });
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const data = new FormData(form);
+    let firstBad = null;
+    const check = (id, ok) => { setError(id, ok ? "" : errors[id]); if (!ok && !firstBad) firstBad = $(`#ap-${id}`); };
+    check("name", String(data.get("name") || "").trim().length >= 2);
+    check("phone", validPhone(String(data.get("phone") || "")));
+    check("category", !!data.get("category"));
+    if (firstBad){ firstBad.focus(); return; }
+    const url = waLink(CONTENT.whatsappNumber, composeAppointmentMessage(data, L));
+    const link = document.createElement("a");
+    link.href = url; link.target = "_blank"; link.rel = "noopener";
+    document.body.appendChild(link); link.click(); link.remove();
+    $("#form-msg").style.display = "block";
+  });
 }
 
 function showHome(on){
@@ -2194,7 +2371,6 @@ function init(){
   $("#whatsapp-hero").href = CONTENT.whatsapp;
   const waFloat = $("#whatsapp-float");
   if (waFloat) waFloat.href = CONTENT.whatsapp;
-  $$("[data-wa='appointment']").forEach(a => { a.href = CONTENT.appointment; });
   $(".menu-toggle").addEventListener("click", () => {
     const nav = $("#mobile-nav");
     const open = !nav.classList.contains("is-open");
