@@ -641,8 +641,9 @@ body.home-mode .view-home.is-active{
 }
 .page-hero p{margin-top:8px;max-width:640px;color:rgba(255,255,255,.68);font-size:15px}
 .page-body{padding:32px 0 48px}
-.crumb{font-size:12px;color:var(--muted);margin-bottom:16px}
+.crumb{font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6}
 .crumb a:hover{color:var(--orange)}
+.crumb span[aria-current]{color:var(--navy);font-weight:700}
 .split{
   display:grid;
   grid-template-columns:1.1fr .9fr;
@@ -700,7 +701,7 @@ textarea{min-height:110px;resize:vertical}
   transition:transform .2s,box-shadow .2s;
 }
 .tile:hover,.product-box:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(4,25,55,.08)}
-.tile-img{height:150px;background:var(--navy-mid);overflow:hidden}
+.tile-img{aspect-ratio:1/1;width:100%;background:#f3f5f8;overflow:hidden}
 .product-box-image{aspect-ratio:1/1;height:auto;width:100%;background:#f3f5f8;overflow:hidden}
 .tile-img img,.product-box-image img,.gallery-thumb img{
   width:100%;
@@ -724,10 +725,8 @@ textarea{min-height:110px;resize:vertical}
 }
 .product-box-actions{display:flex;gap:8px;margin-top:12px}
 .product-box-actions .btn{flex:1;padding:8px 10px;font-size:12px}
-.navy-tile .tile-img{height:140px;background:#f3f5f8}
 .navy-tile .tile-img img{object-fit:contain;transform:none}
 .sub-grid{grid-template-columns:repeat(4,1fr)}
-.sub-grid .tile-img{height:110px}
 .sub-grid .tile-body{padding:11px 13px 13px}
 
 .layout-2{
@@ -791,13 +790,15 @@ textarea{min-height:110px;resize:vertical}
 .detail-copy h1{font-size:clamp(26px,3vw,38px);color:var(--navy);letter-spacing:-.03em}
 .detail-copy .muted{color:var(--muted);margin-top:8px}
 .detail-price{margin-top:16px;color:var(--navy);font-size:26px;font-weight:800}
-.detail-copy .hero-actions{flex-direction:column;align-items:stretch;max-width:250px}
+.detail-desc{margin-top:14px;color:#3b4a5e;font-size:14px;line-height:1.7}
+.detail-specs{margin-top:16px;grid-template-columns:repeat(2,1fr)}
+.detail-copy .hero-actions{margin-top:20px;flex-direction:column;align-items:stretch;max-width:250px}
 .detail-copy .hero-actions .btn{width:100%}
 .product-tabs{
   margin-top:28px;
   border-top:1px solid var(--border);
 }
-.tab-list{display:flex;gap:30px;border-bottom:1px solid var(--border)}
+.tab-list{display:flex;gap:clamp(14px,4vw,30px);flex-wrap:wrap;border-bottom:1px solid var(--border)}
 .tab-btn{
   padding:14px 2px 11px;
   color:var(--muted);
@@ -975,7 +976,9 @@ textarea{min-height:110px;resize:vertical}
 @media (max-width:600px){
   .container{width:min(var(--container),calc(100% - 24px))}
   .brand-title{font-size:12px}
-  .cat-grid,.product-grid,.sub-grid,.points,.mfg-cards{grid-template-columns:1fr}
+  .cat-grid,.product-grid,.points,.mfg-cards{grid-template-columns:1fr}
+  .sub-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .sub-grid .tile-body h3{font-size:14px}
   .category-card{flex-basis:210px;width:210px;height:210px}
   .hero-description br{display:none}
   .hero-description{font-size:14px}
@@ -1159,33 +1162,110 @@ const CATEGORIES = [
 
 const SUBCATEGORIES = {
   furniture: [
-    { id:"3-seater", title:"3 Seater Sofa", image:"assets/products/sofa-01.webp" },
-    { id:"3-1-1", title:"3+1+1 Sofa Sets", image:"assets/products/sofa-01.webp" },
-    { id:"l-shape", title:"L Shape Sofa", image:"assets/products/sofa-01.webp" },
-    { id:"u-shape", title:"U Shape Sofa", image:"assets/products/sofa-01.webp" },
-    { id:"sofa-cum-beds", title:"Sofa Cum Beds", image:"assets/products/sofa-01.webp" },
-    { id:"recliners", title:"Recliners", image:"assets/products/sofa-01.webp" },
-    { id:"cots", title:"Cots", image:"assets/products/cot-01.webp" },
-    { id:"duroflex", title:"Duroflex", image:"assets/products/bed-01.webp" },
-    { id:"neelkamal", title:"Neelkamal", image:"assets/products/bed-01.webp" },
-    { id:"relaxwell", title:"Relaxwell", image:"assets/products/bed-01.webp" },
-    { id:"cenflex", title:"Cenflex", image:"assets/products/bed-01.webp" },
-    { id:"ultraflex", title:"Ultraflex", image:"assets/products/bed-01.webp" },
-    { id:"sleepyhead", title:"Sleepyhead", image:"assets/products/bed-01.webp" },
-    { id:"customized", title:"Customized", image:"assets/products/bed-01.webp" },
-    { id:"diwana-sets", title:"Diwana Sets", image:"assets/products/diwana-01.webp" },
-    { id:"dining-tables", title:"Dining Tables", image:"assets/products/dining-01.webp" },
-    { id:"dressing-tables", title:"Dressing Tables", image:"assets/products/dressing-01.webp" },
-    { id:"office-tables", title:"Office Tables", image:"assets/products/office-01.webp" }
+    { id:"cots", title:"Cots", image:"assets/products/cot-01.webp", types:[
+      { id:"premium-teak-wood-cot", title:"Premium Teak Wood Cot", image:"assets/products/cot-01.webp" },
+      { id:"wood-cot", title:"Wood Cot", image:"assets/products/cot-detail-headboard.webp" },
+      { id:"storage-cot", title:"Storage Cot", image:"assets/products/cot-detail-footboard.webp" },
+      { id:"metal-cot", title:"Metal Cot", image:"assets/products/cot-detail-headboard.webp" }
+    ]},
+    { id:"sofas", title:"Sofa", image:"assets/products/sofa-01.webp", types:[
+      { id:"3-seater", title:"3 Seater Sofa", image:"assets/products/sofa-01.webp" },
+      { id:"3-1-1", title:"3+1+1 Sofa Sets", image:"assets/products/sofa-01.webp" },
+      { id:"l-shape", title:"L Shape Sofa", image:"assets/products/sofa-01.webp" },
+      { id:"u-shape", title:"U Shape Sofa", image:"assets/products/sofa-01.webp" },
+      { id:"sofa-cum-beds", title:"Sofa Cum Beds", image:"assets/products/sofa-01.webp" },
+      { id:"recliners", title:"Recliners", image:"assets/products/sofa-01.webp" }
+    ]},
+    { id:"beds", title:"Beds & Mattresses", image:"assets/products/bed-01.webp", types:[
+      { id:"duroflex", title:"Duroflex", image:"assets/products/bed-01.webp" },
+      { id:"neelkamal", title:"Neelkamal", image:"assets/products/bed-01.webp" },
+      { id:"relaxwell", title:"Relaxwell", image:"assets/products/bed-01.webp" },
+      { id:"cenflex", title:"Cenflex", image:"assets/products/bed-01.webp" },
+      { id:"ultraflex", title:"Ultraflex", image:"assets/products/bed-01.webp" },
+      { id:"sleepyhead", title:"Sleepyhead", image:"assets/products/bed-01.webp" },
+      { id:"customized", title:"Customized", image:"assets/products/bed-01.webp" }
+    ]},
+    { id:"office-chairs", title:"Office Chair", image:"assets/products/office-01.webp", types:[
+      { id:"executive-chair", title:"Executive Chair", image:"assets/products/office-01.webp" },
+      { id:"mesh-chair", title:"Mesh Chair", image:"assets/products/office-01.webp" },
+      { id:"visitor-chair", title:"Visitor Chair", image:"assets/products/office-01.webp" }
+    ]},
+    { id:"diwan", title:"Diwan", image:"assets/products/diwana-01.webp", types:[
+      { id:"wooden-diwan", title:"Wooden Diwan", image:"assets/products/diwana-01.webp" },
+      { id:"storage-diwan", title:"Storage Diwan", image:"assets/products/diwana-detail.webp" },
+      { id:"cushioned-diwan", title:"Cushioned Diwan", image:"assets/products/diwana-01.webp" }
+    ]},
+    { id:"dining-tables", title:"Dining Tables", image:"assets/products/dining-01.webp", types:[
+      { id:"4-seater-dining", title:"4 Seater Dining", image:"assets/products/dining-01.webp" },
+      { id:"6-seater-dining", title:"6 Seater Dining", image:"assets/products/dining-01.webp" },
+      { id:"glass-top-dining", title:"Glass Top Dining", image:"assets/products/dining-01.webp" }
+    ]},
+    { id:"dressing-tables", title:"Dressing Tables", image:"assets/products/dressing-01.webp", types:[
+      { id:"standing-dressing", title:"Standing Dressing Table", image:"assets/products/dressing-01.webp" },
+      { id:"wall-dressing", title:"Wall Mounted Dressing Table", image:"assets/products/dressing-01.webp" },
+      { id:"storage-dressing", title:"Dressing Table with Storage", image:"assets/products/dressing-01.webp" }
+    ]},
+    { id:"office-tables", title:"Office Tables", image:"assets/products/office-01.webp", types:[
+      { id:"executive-desk", title:"Executive Desk", image:"assets/products/office-01.webp" },
+      { id:"computer-table", title:"Computer Table", image:"assets/products/office-01.webp" },
+      { id:"study-table", title:"Study Table", image:"assets/products/office-01.webp" }
+    ]}
   ],
   electronics: [
-    { id:"tv", title:"TVs", image:"assets/products/tv-01.webp" },
-    { id:"refrigerator", title:"Refrigerators", image:"assets/categories/electronics-3d.png" },
-    { id:"washing-machine", title:"Washing Machines", image:"assets/categories/electronics-3d.png" }
+    { id:"tv", title:"Televisions", image:"assets/products/tv-01.webp", types:[
+      { id:"led-tv", title:"LED TV", image:"assets/products/tv-01.webp" },
+      { id:"smart-tv", title:"Smart TV", image:"assets/products/tv-01.webp" },
+      { id:"qled-tv", title:"QLED TV", image:"assets/products/tv-01.webp" }
+    ]},
+    { id:"refrigerator", title:"Refrigerators", image:"assets/categories/electronics-3d.png", types:[
+      { id:"single-door", title:"Single Door", image:"assets/categories/electronics-3d.png" },
+      { id:"double-door", title:"Double Door", image:"assets/categories/electronics-3d.png" },
+      { id:"side-by-side", title:"Side by Side", image:"assets/categories/electronics-3d.png" }
+    ]},
+    { id:"washing-machine", title:"Washing Machines", image:"assets/categories/electronics-3d.png", types:[
+      { id:"top-load", title:"Top Load", image:"assets/categories/electronics-3d.png" },
+      { id:"front-load", title:"Front Load", image:"assets/categories/electronics-3d.png" },
+      { id:"semi-automatic", title:"Semi Automatic", image:"assets/categories/electronics-3d.png" }
+    ]},
+    { id:"air-conditioner", title:"Air Conditioners", image:"assets/categories/electronics-3d.png", types:[
+      { id:"split-ac", title:"Split AC", image:"assets/categories/electronics-3d.png" },
+      { id:"window-ac", title:"Window AC", image:"assets/categories/electronics-3d.png" }
+    ]}
   ],
-  "small-appliances": [{ id:"kitchen", title:"Kitchen Appliances", image:"assets/products/kitchen-01.webp" }],
-  "gift-items": [{ id:"gifts", title:"Thoughtful Gifts", image:"assets/categories/gift-items-3d.png" }],
-  "baby-items": [{ id:"nursery", title:"Nursery", image:"assets/categories/baby-items-3d.png" }]
+  "small-appliances": [
+    { id:"kitchen", title:"Kitchen Appliances", image:"assets/products/kitchen-01.webp", types:[
+      { id:"mixer-grinder", title:"Mixer Grinder", image:"assets/products/kitchen-01.webp" },
+      { id:"induction-cooktop", title:"Induction Cooktop", image:"assets/products/kitchen-01.webp" },
+      { id:"electric-kettle", title:"Electric Kettle", image:"assets/products/kitchen-01.webp" }
+    ]},
+    { id:"home-care", title:"Home Care", image:"assets/categories/small-appliances-3d.png", types:[
+      { id:"iron-box", title:"Iron Box", image:"assets/categories/small-appliances-3d.png" },
+      { id:"vacuum-cleaner", title:"Vacuum Cleaner", image:"assets/categories/small-appliances-3d.png" },
+      { id:"water-heater", title:"Water Heater", image:"assets/categories/small-appliances-3d.png" }
+    ]}
+  ],
+  "gift-items": [
+    { id:"home-decor", title:"Home Decor", image:"assets/categories/gift-items-3d.png", types:[
+      { id:"wall-clocks", title:"Wall Clocks", image:"assets/categories/gift-items-3d.png" },
+      { id:"photo-frames", title:"Photo Frames", image:"assets/categories/gift-items-3d.png" },
+      { id:"showpieces", title:"Showpieces", image:"assets/categories/gift-items-3d.png" }
+    ]},
+    { id:"festive", title:"Festive Gifts", image:"assets/categories/gift-items-3d.png", types:[
+      { id:"diyas-lamps", title:"Diyas & Lamps", image:"assets/categories/gift-items-3d.png" },
+      { id:"gift-hampers", title:"Gift Hampers", image:"assets/categories/gift-items-3d.png" }
+    ]}
+  ],
+  "baby-items": [
+    { id:"nursery", title:"Nursery", image:"assets/categories/baby-items-3d.png", types:[
+      { id:"baby-cots", title:"Baby Cots", image:"assets/categories/baby-items-3d.png" },
+      { id:"cradles", title:"Cradles", image:"assets/categories/baby-items-3d.png" }
+    ]},
+    { id:"baby-gear", title:"Baby Gear", image:"assets/categories/baby-items-3d.png", types:[
+      { id:"strollers", title:"Strollers", image:"assets/categories/baby-items-3d.png" },
+      { id:"walkers", title:"Walkers", image:"assets/categories/baby-items-3d.png" },
+      { id:"high-chairs", title:"High Chairs", image:"assets/categories/baby-items-3d.png" }
+    ]}
+  ]
 };
 
 const DEFAULT_SPECS = [
@@ -1195,80 +1275,97 @@ const DEFAULT_SPECS = [
 ];
 const DEFAULT_CARE = "Dust with a soft, dry cloth. Keep away from direct heat and standing moisture. Use coasters and felt pads, and arrange periodic hardware checks.";
 const PRODUCTS = [
-  { id:"linen-sofa", category:"furniture", subcategory:"3-seater", title:"Linen Lounge Sofa", shortDescription:"Soft seating for everyday living.", longDescription:"A calm three-seater designed for family rooms. Balanced proportions, supportive cushions and a quiet fabric that suits Indian homes.", price:"₹ 28,999", image:"assets/products/sofa-01.webp", images:["assets/products/sofa-01.webp"], alt:"Grey linen sofa with rust cushions", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:1, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"premium-teak-cot", category:"furniture", subcategory:"cots", title:"Premium Teak Wood Cot", shortDescription:"Elegant design. Built to last.", longDescription:"Crafted from high-quality teak wood, this premium cot offers durable, elegant and superior comfort. Perfect for modern homes, it combines traditional craftsmanship with contemporary design.", price:"₹ 32,999", image:"assets/products/cot-01.webp", images:["assets/products/cot-01.webp","assets/products/cot-detail-headboard.webp","assets/products/cot-detail-footboard.webp"], alt:"Premium teak wood cot with white bedding", specifications:[["Material","Teak wood"],["Size","King size"],["Finish","Natural teak polish"],["Storage","Non-storage"],["Assembly","Professional installation"],["Warranty","Demo product — confirm in store"]], careInstructions:DEFAULT_CARE, displayOrder:2, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"classic-wood-cot", category:"furniture", subcategory:"cots", title:"Classic Wooden Cot", shortDescription:"Simple lines for an easy bedroom.", longDescription:"Demo catalog product using the supplied cot reference image. Confirm material, size and availability in store.", price:"₹ 18,999", image:"assets/products/cot-detail-headboard.webp", images:["assets/products/cot-detail-headboard.webp","assets/products/cot-01.webp"], alt:"Classic wooden cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:3, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"modern-upholstered-cot", category:"furniture", subcategory:"cots", title:"Modern Upholstered Cot", shortDescription:"A softer profile for modern rooms.", longDescription:"Demo catalog product. Final upholstery, dimensions and pricing should be confirmed through the showroom CRM.", price:"₹ 24,999", image:"assets/products/bed-01.webp", images:["assets/products/bed-01.webp"], alt:"Modern upholstered cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:4, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"storage-cot", category:"furniture", subcategory:"cots", title:"Storage Cot", shortDescription:"Useful storage in a composed frame.", longDescription:"Demo catalog product. Storage configuration and exact dimensions are subject to showroom confirmation.", price:"₹ 28,999", image:"assets/products/cot-detail-footboard.webp", images:["assets/products/cot-detail-footboard.webp","assets/products/cot-01.webp"], alt:"Storage cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:5, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"metal-frame-cot", category:"furniture", subcategory:"cots", title:"Metal Frame Cot", shortDescription:"A practical frame with clean lines.", longDescription:"Demo catalog product. Frame gauge, finish and dimensions should be confirmed in store.", price:"₹ 12,999", image:"assets/products/cot-detail-headboard.webp", images:["assets/products/cot-detail-headboard.webp","assets/products/cot-01.webp"], alt:"Metal frame cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:6, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"solid-wood-cot", category:"furniture", subcategory:"cots", title:"Solid Wood Cot", shortDescription:"Warm timber and dependable support.", longDescription:"Demo catalog product using the supplied cot imagery. Confirm timber species, dimensions and availability in store.", price:"₹ 22,999", image:"assets/products/cot-01.webp", images:["assets/products/cot-01.webp","assets/products/cot-detail-headboard.webp"], alt:"Solid wood cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:7, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"panel-bed", category:"furniture", subcategory:"duroflex", title:"Panel Bed", shortDescription:"A clean, grounded bedroom centrepiece.", longDescription:"Low visual noise, sturdy rails and a headboard that reads well against both painted and wood-panelled walls.", price:"₹ 26,999", image:"assets/products/bed-01.webp", images:["assets/products/bed-01.webp"], alt:"Wooden panel bed", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:8, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"diwana-set", category:"furniture", subcategory:"diwana-sets", title:"Diwana Lounge Set", shortDescription:"Conversation seating with a light footprint.", longDescription:"A compact lounge arrangement for living rooms that need flexibility without looking temporary.", price:"₹ 21,999", image:"assets/products/diwana-01.webp", images:["assets/products/diwana-01.webp","assets/products/diwana-detail.webp"], alt:"Diwana lounge set", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:9, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"dining-set", category:"furniture", subcategory:"dining-tables", title:"Family Dining Table", shortDescription:"Everyday meals, unhurried gatherings.", longDescription:"A solid dining table with a quiet grain and room for family seating. Pairs with simple chairs or a bench.", price:"₹ 29,999", image:"assets/products/dining-01.webp", images:["assets/products/dining-01.webp"], alt:"Wooden dining table and chairs", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:9, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"dressing-table", category:"furniture", subcategory:"dressing-tables", title:"Dressing Table", shortDescription:"Storage and mirror in one calm piece.", longDescription:"A dressing table with a balanced mirror, soft drawers and a finish that sits comfortably in a bedroom corner.", price:"₹ 14,999", image:"assets/products/dressing-01.webp", images:["assets/products/dressing-01.webp"], alt:"Wooden dressing table with mirror", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:10, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"office-table", category:"furniture", subcategory:"office-tables", title:"Home Office Table", shortDescription:"Focused work without a bulky desk.", longDescription:"A practical work table with a clear surface and a silhouette that belongs in a home, not only an office.", price:"₹ 16,999", image:"assets/products/office-01.webp", images:["assets/products/office-01.webp"], alt:"Wooden office table with chair", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:11, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"living-tv", category:"electronics", subcategory:"tv", title:"Living Room Television", shortDescription:"A clear picture for the family room.", longDescription:"Selected for everyday viewing. We help you match screen size to the wall, seating distance and the rest of the room.", price:"Price on request", image:"assets/products/tv-01.webp", images:["assets/products/tv-01.webp"], alt:"Flat screen television", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:12, cta:"Enquire Now", ctaLink:"#/appointment" },
-  { id:"kitchen-set", category:"small-appliances", subcategory:"kitchen", title:"Everyday Kitchen Set", shortDescription:"Small appliances for a smarter everyday.", longDescription:"A practical starting set for daily cooking — compact, easy to store and chosen to sit well on an Indian kitchen counter.", price:"Price on request", image:"assets/products/kitchen-01.webp", images:["assets/products/kitchen-01.webp"], alt:"Cookware and small kitchen appliances", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:13, cta:"Enquire Now", ctaLink:"#/appointment" }
+  { id:"linen-sofa", category:"furniture", subcategory:"sofas", type:"3-seater", title:"Linen Lounge Sofa", shortDescription:"Soft seating for everyday living.", longDescription:"A calm three-seater designed for family rooms. Balanced proportions, supportive cushions and a quiet fabric that suits Indian homes.", price:"₹ 28,999", image:"assets/products/sofa-01.webp", images:["assets/products/sofa-01.webp"], alt:"Grey linen sofa with rust cushions", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:1, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"premium-teak-cot", category:"furniture", subcategory:"cots", type:"premium-teak-wood-cot", title:"Premium Teak Wood Cot", shortDescription:"Elegant design. Built to last.", longDescription:"Crafted from high-quality teak wood, this premium cot offers durable, elegant and superior comfort. Perfect for modern homes, it combines traditional craftsmanship with contemporary design.", price:"₹ 32,999", image:"assets/products/cot-01.webp", images:["assets/products/cot-01.webp","assets/products/cot-detail-headboard.webp","assets/products/cot-detail-footboard.webp"], alt:"Premium teak wood cot with white bedding", specifications:[["Material","Teak wood"],["Size","King size"],["Finish","Natural teak polish"],["Storage","Non-storage"],["Assembly","Professional installation"],["Warranty","Demo product — confirm in store"]], careInstructions:DEFAULT_CARE, displayOrder:2, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"classic-wood-cot", category:"furniture", subcategory:"cots", type:"wood-cot", title:"Classic Wooden Cot", shortDescription:"Simple lines for an easy bedroom.", longDescription:"Demo catalog product using the supplied cot reference image. Confirm material, size and availability in store.", price:"₹ 18,999", image:"assets/products/cot-detail-headboard.webp", images:["assets/products/cot-detail-headboard.webp","assets/products/cot-01.webp"], alt:"Classic wooden cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:3, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"modern-upholstered-cot", category:"furniture", subcategory:"cots", type:"premium-teak-wood-cot", title:"Modern Upholstered Cot", shortDescription:"A softer profile for modern rooms.", longDescription:"Demo catalog product. Final upholstery, dimensions and pricing should be confirmed through the showroom CRM.", price:"₹ 24,999", image:"assets/products/bed-01.webp", images:["assets/products/bed-01.webp"], alt:"Modern upholstered cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:4, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"storage-cot", category:"furniture", subcategory:"cots", type:"storage-cot", title:"Storage Cot", shortDescription:"Useful storage in a composed frame.", longDescription:"Demo catalog product. Storage configuration and exact dimensions are subject to showroom confirmation.", price:"₹ 28,999", image:"assets/products/cot-detail-footboard.webp", images:["assets/products/cot-detail-footboard.webp","assets/products/cot-01.webp"], alt:"Storage cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:5, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"metal-frame-cot", category:"furniture", subcategory:"cots", type:"metal-cot", title:"Metal Frame Cot", shortDescription:"A practical frame with clean lines.", longDescription:"Demo catalog product. Frame gauge, finish and dimensions should be confirmed in store.", price:"₹ 12,999", image:"assets/products/cot-detail-headboard.webp", images:["assets/products/cot-detail-headboard.webp","assets/products/cot-01.webp"], alt:"Metal frame cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:6, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"solid-wood-cot", category:"furniture", subcategory:"cots", type:"wood-cot", title:"Solid Wood Cot", shortDescription:"Warm timber and dependable support.", longDescription:"Demo catalog product using the supplied cot imagery. Confirm timber species, dimensions and availability in store.", price:"₹ 22,999", image:"assets/products/cot-01.webp", images:["assets/products/cot-01.webp","assets/products/cot-detail-headboard.webp"], alt:"Solid wood cot demo", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:7, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"panel-bed", category:"furniture", subcategory:"beds", type:"duroflex", title:"Panel Bed", shortDescription:"A clean, grounded bedroom centrepiece.", longDescription:"Low visual noise, sturdy rails and a headboard that reads well against both painted and wood-panelled walls.", price:"₹ 26,999", image:"assets/products/bed-01.webp", images:["assets/products/bed-01.webp"], alt:"Wooden panel bed", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:8, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"diwana-set", category:"furniture", subcategory:"diwan", type:"wooden-diwan", title:"Diwana Lounge Set", shortDescription:"Conversation seating with a light footprint.", longDescription:"A compact lounge arrangement for living rooms that need flexibility without looking temporary.", price:"₹ 21,999", image:"assets/products/diwana-01.webp", images:["assets/products/diwana-01.webp","assets/products/diwana-detail.webp"], alt:"Diwana lounge set", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:9, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"dining-set", category:"furniture", subcategory:"dining-tables", type:"6-seater-dining", title:"Family Dining Table", shortDescription:"Everyday meals, unhurried gatherings.", longDescription:"A solid dining table with a quiet grain and room for family seating. Pairs with simple chairs or a bench.", price:"₹ 29,999", image:"assets/products/dining-01.webp", images:["assets/products/dining-01.webp"], alt:"Wooden dining table and chairs", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:9, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"dressing-table", category:"furniture", subcategory:"dressing-tables", type:"storage-dressing", title:"Dressing Table", shortDescription:"Storage and mirror in one calm piece.", longDescription:"A dressing table with a balanced mirror, soft drawers and a finish that sits comfortably in a bedroom corner.", price:"₹ 14,999", image:"assets/products/dressing-01.webp", images:["assets/products/dressing-01.webp"], alt:"Wooden dressing table with mirror", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:10, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"office-table", category:"furniture", subcategory:"office-tables", type:"executive-desk", title:"Home Office Table", shortDescription:"Focused work without a bulky desk.", longDescription:"A practical work table with a clear surface and a silhouette that belongs in a home, not only an office.", price:"₹ 16,999", image:"assets/products/office-01.webp", images:["assets/products/office-01.webp"], alt:"Wooden office table with chair", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:11, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"living-tv", category:"electronics", subcategory:"tv", type:"led-tv", title:"Living Room Television", shortDescription:"A clear picture for the family room.", longDescription:"Selected for everyday viewing. We help you match screen size to the wall, seating distance and the rest of the room.", price:"Price on request", image:"assets/products/tv-01.webp", images:["assets/products/tv-01.webp"], alt:"Flat screen television", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:12, cta:"Enquire Now", ctaLink:"#/appointment" },
+  { id:"kitchen-set", category:"small-appliances", subcategory:"kitchen", type:"mixer-grinder", title:"Everyday Kitchen Set", shortDescription:"Small appliances for a smarter everyday.", longDescription:"A practical starting set for daily cooking — compact, easy to store and chosen to sit well on an Indian kitchen counter.", price:"Price on request", image:"assets/products/kitchen-01.webp", images:["assets/products/kitchen-01.webp"], alt:"Cookware and small kitchen appliances", specifications:DEFAULT_SPECS, careInstructions:DEFAULT_CARE, displayOrder:13, cta:"Enquire Now", ctaLink:"#/appointment" }
 ];
 
 const $ = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
 
 function catById(id){ return CATEGORIES.find(c => c.id === id); }
-function productById(id){
-  const real = PRODUCTS.find(p => p.id === id);
-  if (real) return real;
-  const match = String(id).match(/^(.*)-model-([abc])$/i);
-  if (!match) return null;
-  for (const cat of CATEGORIES){
-    const type = (SUBCATEGORIES[cat.id] || []).find(item => item.id === match[1]);
-    if (type) return placeholderProduct(cat, type, match[2].toUpperCase());
-  }
-  return null;
+function subsOf(catId){ return SUBCATEGORIES[catId] || []; }
+function subById(catId, subId){ return subsOf(catId).find(s => s.id === subId) || null; }
+function typeById(sub, typeId){ return sub ? (sub.types || []).find(t => t.id === typeId) || null : null; }
+
+// Legacy links used the type id directly under the category; map them to their sub-category.
+function findSubByTypeId(catId, typeId){
+  return subsOf(catId).find(s => (s.types || []).some(t => t.id === typeId)) || null;
 }
-function productsOf(cat, sub){
+
+function productsOf(catId, subId, typeId){
   return PRODUCTS
-    .filter(p => p.category === cat && (!sub || p.subcategory === sub))
+    .filter(p => p.category === catId && (!subId || p.subcategory === subId) && (!typeId || p.type === typeId))
     .sort((a,b) => a.displayOrder - b.displayOrder);
 }
 
-const TYPE_ALIASES = { sofas:"3-seater", beds:"duroflex" };
+function placeholderId(sub, type, n){ return `${sub.id}-${type.id}-product-${n}`; }
 
-function resolveType(catId, typeId){
-  const types = SUBCATEGORIES[catId] || [];
-  const id = TYPE_ALIASES[typeId] || typeId;
-  return types.find(type => type.id === id) || types[0] || null;
-}
-
-function placeholderProduct(cat, type, letter){
+function placeholderProduct(cat, sub, type, n){
+  const image = type.image || sub.image || cat.icon;
   return {
-    id: `${type.id}-model-${letter.toLowerCase()}`,
+    id: placeholderId(sub, type, n),
     category: cat.id,
-    subcategory: type.id,
-    title: `${type.title} — Model ${letter}`,
+    subcategory: sub.id,
+    type: type.id,
+    title: `${type.title} — Product ${n}`,
     shortDescription: "Placeholder product. Replace with the showroom listing.",
-    longDescription: `${type.title} model ${letter} is a placeholder so this type can show a real product grid. Swap in the showroom name, photo and price when the listing is ready.`,
+    longDescription: `Placeholder listing under ${cat.title} / ${sub.title} / ${type.title}. Swap in the showroom name, photos, description and price when the real product is ready.`,
     price: "Price on request",
-    image: type.image || cat.icon,
-    images: [type.image || cat.icon],
-    alt: `${type.title} model ${letter} placeholder`,
-    specifications: DEFAULT_SPECS,
+    image,
+    images: [image],
+    alt: `${type.title} product ${n} placeholder`,
+    specifications: [["Category", cat.title],["Sub-category", sub.title],["Type", type.title],["Status","Placeholder — confirm in store"]],
     careInstructions: DEFAULT_CARE,
-    displayOrder: 90,
+    displayOrder: 900 + n,
     cta: "Enquire Now",
     ctaLink: "#/appointment",
     placeholder: true
   };
 }
 
-function productsForType(cat, type){
-  const real = productsOf(cat.id, type.id);
-  const letters = ["A","B","C"];
+const MIN_PRODUCTS_PER_TYPE = 3;
+
+function productsForType(cat, sub, type){
+  const real = productsOf(cat.id, sub.id, type.id);
   const extras = [];
-  while (real.length + extras.length < 2){
-    extras.push(placeholderProduct(cat, type, letters[real.length + extras.length]));
+  while (real.length + extras.length < MIN_PRODUCTS_PER_TYPE){
+    extras.push(placeholderProduct(cat, sub, type, real.length + extras.length + 1));
   }
   return real.concat(extras);
+}
+
+function productById(id){
+  const real = PRODUCTS.find(p => p.id === id);
+  if (real) return real;
+  const match = String(id).match(/^(.*)-product-(\d+)$/);
+  if (!match) return null;
+  for (const cat of CATEGORIES){
+    for (const sub of subsOf(cat.id)){
+      const type = (sub.types || []).find(t => `${sub.id}-${t.id}` === match[1]);
+      if (type) return placeholderProduct(cat, sub, type, Number(match[2]));
+    }
+  }
+  return null;
+}
+
+function crumbHTML(items){
+  const parts = items.map((item, index) => {
+    const last = index === items.length - 1;
+    return last || !item.href ? `<span aria-current="page">${item.label}</span>` : `<a href="${item.href}">${item.label}</a>`;
+  });
+  return `<nav class="crumb" aria-label="Breadcrumb">${parts.join(" / ")}</nav>`;
 }
 
 function cardHTML(cat){
@@ -1468,27 +1565,65 @@ function productCardHTML(p){
   </article>`;
 }
 
-function renderCategory(catId, subId){
+// Level 1 → 2: a category shows its sub-categories as a card grid.
+function renderCategory(catId, subId, typeId){
   const cat = catById(catId);
   if (!cat){ location.hash = "#/categories"; return; }
-  const types = SUBCATEGORIES[catId] || [];
-  const type = resolveType(catId, subId);
-  const list = type ? productsForType(cat, type) : [];
+  if (subId){
+    renderSubcategory(catId, subId, typeId);
+    return;
+  }
+  const subs = subsOf(catId);
+  const tiles = subs.map(s => `
+    <a class="tile" href="#/category/${cat.id}/${s.id}">
+      <div class="tile-img"><img src="${s.image || cat.icon}" alt="${s.title}"></div>
+      <div class="tile-body"><h3>${s.title}</h3><p>${(s.types || []).length} types</p></div>
+    </a>`).join("");
+  setActiveNav("categories");
+  $("#view-page").innerHTML = `<div class="catalog-page">
+    <div class="container">
+      ${crumbHTML([{label:"Home", href:"#/"},{label:cat.title}])}
+      <div class="catalog-heading">
+        <div><h1>${cat.title}</h1><p>Choose a sub-category to see its types and products.</p></div>
+      </div>
+      <div class="sub-grid">${tiles || "<p>Sub-categories coming soon.</p>"}</div>
+    </div>
+  </div>`;
+}
+
+// Level 2 → 3 → 4: a sub-category shows its types in the sidebar and the selected type's products.
+function renderSubcategory(catId, subId, typeId){
+  const cat = catById(catId);
+  let sub = subById(catId, subId);
+  if (!sub){
+    // Old links pointed straight at a type under the category.
+    sub = findSubByTypeId(catId, subId);
+    if (!sub){ location.hash = `#/category/${catId}`; return; }
+    typeId = subId;
+  }
+  const types = sub.types || [];
+  const type = typeById(sub, typeId) || types[0] || null;
+  const list = type ? productsForType(cat, sub, type) : [];
   const menu = types.map(item => `
-    <a href="#/category/${cat.id}/${item.id}" class="${type && item.id === type.id ? "is-active" : ""}">${item.title}</a>`).join("");
+    <a href="#/category/${cat.id}/${sub.id}/${item.id}" class="${type && item.id === type.id ? "is-active" : ""}">${item.title}</a>`).join("");
   const cards = list.map(productCardHTML).join("") || `<p>No products in this group yet.</p>`;
   setActiveNav("categories");
   $("#view-page").innerHTML = `<div class="catalog-page">
     <div class="container">
-      <p class="crumb"><a href="#/">Home</a> / <a href="#/categories">Categories</a> / ${cat.title}${type ? ` / ${type.title}` : ""}</p>
+      ${crumbHTML([
+        {label:"Home", href:"#/"},
+        {label:cat.title, href:`#/category/${cat.id}`},
+        {label:sub.title, href:`#/category/${cat.id}/${sub.id}`},
+        ...(type ? [{label:type.title}] : [])
+      ])}
       <div class="layout-2">
         <aside class="side">
-          <h4>CATEGORY MENU</h4>
+          <h4>${sub.title.toUpperCase()} TYPES</h4>
           ${menu || "<p>Types coming soon.</p>"}
         </aside>
         <div>
           <div class="catalog-heading">
-            <div><h1>${type ? type.title : cat.title}</h1><p>${list.length} products</p></div>
+            <div><h1>${type ? type.title : sub.title}</h1><p>${list.length} products</p></div>
           </div>
           <div class="product-grid">${cards}</div>
         </div>
@@ -1497,15 +1632,26 @@ function renderCategory(catId, subId){
   </div>`;
 }
 
-function renderProducts(catId, subId){
-  renderCategory(catId, subId);
+function renderProducts(catId, subId, typeId){
+  renderCategory(catId, subId, typeId);
 }
 
 function renderProduct(id){
   const p = productById(id);
   if (!p){ location.hash = "#/categories"; return; }
   const cat = catById(p.category);
-  const sub = (SUBCATEGORIES[p.category]||[]).find(s => s.id === p.subcategory);
+  const sub = subById(p.category, p.subcategory);
+  const type = typeById(sub, p.type);
+  const backHref = sub
+    ? `#/category/${p.category}/${sub.id}${type ? `/${type.id}` : ""}`
+    : `#/category/${p.category}`;
+  const crumbs = [
+    {label:"Home", href:"#/"},
+    ...(cat ? [{label:cat.title, href:`#/category/${cat.id}`}] : []),
+    ...(sub ? [{label:sub.title, href:`#/category/${p.category}/${sub.id}`}] : []),
+    ...(type ? [{label:type.title, href:backHref}] : []),
+    {label:p.title}
+  ];
   const images = p.images && p.images.length ? p.images : [p.image];
   const thumbs = images.map((src,index) => `
     <button class="gallery-thumb ${index===0?"is-active":""}" type="button" data-index="${index}" aria-label="View product image ${index+1}">
@@ -1516,7 +1662,7 @@ function renderProduct(id){
   setActiveNav("categories");
   $("#view-page").innerHTML = `<div class="product-detail-page">
     <div class="container">
-      <p class="crumb"><a href="#/category/${p.category}/${p.subcategory}">← Back to ${sub?sub.title:"products"}</a></p>
+      ${crumbHTML(crumbs)}
     <article class="detail">
       <div class="detail-gallery">
         <button class="detail-photo" type="button" id="open-viewer" aria-label="View image fullscreen">
@@ -1528,9 +1674,11 @@ function renderProduct(id){
         <h1>${p.title}</h1>
         <p class="muted">${p.shortDescription}</p>
         <p class="detail-price">${p.price}</p>
+        <p class="detail-desc">${p.longDescription}</p>
+        <div class="spec-list detail-specs">${specs}</div>
         <div class="hero-actions">
           <a class="btn btn-orange" href="${p.ctaLink}">${p.cta}</a>
-          <a class="btn btn-navy" href="${CONTENT.whatsapp}" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a class="btn btn-navy" href="${CONTENT.whatsapp}" target="_blank" rel="noopener">Consult on WhatsApp</a>
         </div>
       </div>
     </article>
@@ -1659,7 +1807,7 @@ function route(){
   if (!parts.length){ showHome(true); return; }
   showHome(false);
   if (top === "categories") return renderCategories();
-  if (top === "category") return renderCategory(parts[1], parts[2]);
+  if (top === "category") return renderCategory(parts[1], parts[2], parts[3]);
   if (top === "product") return renderProduct(parts[1]);
   if (top === "about") return renderAbout();
   if (top === "manufacturing") return renderManufacturing();
