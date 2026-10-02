@@ -1035,6 +1035,18 @@ body.home-mode .wa-float{display:none}
   }
   .hero{min-height:0}
 }
+/* Inside a builder preview the page is not the whole window, so the locked
+   full-screen height hides the category row below the pane. Scroll instead. */
+html.is-embedded body.home-mode,
+html.is-embedded body.home-mode .app-shell,
+html.is-embedded body.home-mode main,
+html.is-embedded body.home-mode .view-home.is-active{
+  height:auto;
+  max-height:none;
+  min-height:0;
+  overflow:visible;
+  display:block;
+}
 @media (max-width:1100px){
   .category-card{flex-basis:var(--card-size);width:var(--card-size);height:var(--card-size)}
   .split,.mfg-grid,.form-grid,.detail,.layout-2,.catalog-top{grid-template-columns:1fr}
@@ -1324,6 +1336,11 @@ body.home-mode .wa-float{display:none}
 <script type="application/json" id="site-content">
 </script>
 <script>
+try {
+  if (window.self !== window.top) document.documentElement.classList.add("is-embedded");
+} catch (err) {
+  document.documentElement.classList.add("is-embedded");
+}
 // Where the content file lives when the inline block above is empty.
 const CONTENT_URL = "data/content.json";
 const CONTENT = {
