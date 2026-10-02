@@ -854,6 +854,7 @@ textarea{min-height:110px;resize:vertical}
   grid-template-columns:240px 1fr;
   gap:24px;
 }
+.layout-2.no-side{grid-template-columns:1fr}
 .side{
   max-width:100%;
   min-width:0;
@@ -1953,7 +1954,7 @@ function attributeOptions(products, facetKey){
     .filter(attr => attr.values.length);
 }
 
-function filtersHTML(attributes, facet, state){
+function filtersHTML(attributes, state){
   const priceBtns = FILTERS.priceRanges.map(r => `
     <button type="button" class="chip ${state.price === r.id ? "is-active" : ""}" data-filter="price" data-value="${r.id}" aria-pressed="${state.price === r.id}">${r.label}</button>`).join("");
   const priceGroup = priceBtns ? `
@@ -1961,22 +1962,17 @@ function filtersHTML(attributes, facet, state){
       <legend>Price</legend>
       <div class="chips">${priceBtns}</div>
     </fieldset>` : "";
-  const facetBoxes = facet && facet.values.length ? `
-    <fieldset class="filter-group">
-      <legend>${facet.label}</legend>
-      ${facet.values.map(v => `<label class="check"><input type="checkbox" data-filter="facet" value="${v}" ${state.facet.has(v) ? "checked" : ""}> ${v}</label>`).join("")}
-    </fieldset>` : "";
   const attrBoxes = attributes.map(attr => `
     <fieldset class="filter-group">
       <legend>${attr.label}</legend>
       ${attr.values.map(v => `<label class="check"><input type="checkbox" data-filter="attr" data-key="${attr.key}" value="${v}" ${state.attrs[attr.key] && state.attrs[attr.key].has(v) ? "checked" : ""}> ${v}</label>`).join("")}
     </fieldset>`).join("");
-  return `${priceGroup}${facetBoxes}${attrBoxes}
+  return `${priceGroup}${attrBoxes}
     <button type="button" class="filter-clear" id="filter-clear">Clear filters</button>`;
 }
 
-// Level 4: the real products for one Type, filterable client-side. Style or material is a filter
-// here, not its own page. The side menu lists the other types in this sub-category.
+// Level 4: products for one Type. The side list is that type's pattern or fabric filter.
+// It never links to the other types — those stay on the previous card page.
 async function renderProductListing(cat, sub, type){
   const crumbs = [
     {label:"Home", href:"#/"},
@@ -1984,18 +1980,22 @@ async function renderProductListing(cat, sub, type){
     {label:sub.title, href:catalogHref(cat, sub)},
     {label:type.title}
   ];
-  const siblings = (sub.types || []).map(t => ({ title: t.title, href: catalogHref(cat, sub, t), active: t.id === type.id }));
-  const menu = siblings.map(item => `<a href="${item.href}" class="${item.active ? "is-active" : ""}">${item.title}</a>`).join("");
+  const facet = type.facet && type.facet.options.length ? { label: type.facet.label, values: type.facet.options.map(o => o.title) } : null;
+  const side = facet ? `
+        <aside class="side">
+          <h4>${facet.label.toUpperCase()}</h4>
+          <div class="side-list" id="facet-list">
+            <button type="button" data-facet="">All</button>
+            ${facet.values.map(v => `<button type="button" data-facet="${v.replace(/"/g, "&quot;")}">${v.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</button>`).join("")}
+          </div>
+        </aside>` : "";
 
   const view = $("#view-page");
   view.innerHTML = `<div class="catalog-page">
     <div class="container">
       ${crumbHTML(crumbs)}
-      <div class="layout-2">
-        <aside class="side">
-          <h4>${sub.title.toUpperCase()} TYPES</h4>
-          <div class="side-list">${menu}</div>
-        </aside>
+      <div class="layout-2${facet ? "" : " no-side"}">
+        ${side}
         <div class="listing">
           <div class="catalog-heading">
             <div><h1>${type.title}</h1>${type.description ? `<p class="catalog-lead">${type.description}</p>` : ""}<p id="result-count">Loading products…</p></div>
@@ -2009,13 +2009,6 @@ async function renderProductListing(cat, sub, type){
     </div>
   </div>`;
 
-  // The mobile side menu is a scroll box; keep the active entry in view.
-  const sideList = view.querySelector(".side-list");
-  const activeLink = sideList && sideList.querySelector("a.is-active");
-  if (sideList && activeLink && sideList.scrollHeight > sideList.clientHeight){
-    sideList.scrollTop = Math.max(0, activeLink.offsetTop - sideList.offsetTop - 44);
-  }
-
   let list;
   try {
     list = await loadProducts(cat.id);
@@ -2028,7 +2021,6 @@ async function renderProductListing(cat, sub, type){
   if (!view.querySelector("#product-grid")) return; // user navigated away while loading
 
   const all = productsForType(list, cat, sub, type);
-  const facet = type.facet && type.facet.options.length ? { label: type.facet.label, values: type.facet.options.map(o => o.title) } : null;
   const attributes = attributeOptions(all, type.facet ? type.facet.key : "");
   const state = { price:null, facet:new Set(), attrs:{}, shown:pageSize() };
 
@@ -2047,8 +2039,22 @@ async function renderProductListing(cat, sub, type){
     moreWrap.hidden = matches.length <= state.shown;
     const n = activeCount();
     toggle.textContent = n ? `Filters (${n})` : "Filters";
-    panel.innerHTML = filtersHTML(attributes, facet, state);
+    panel.innerHTML = filtersHTML(attributes, state);
+    $$("#facet-list button").forEach(btn => {
+      const chosen = btn.dataset.facet ? state.facet.has(btn.dataset.facet) : state.facet.size === 0;
+      btn.classList.toggle("is-active", chosen);
+    });
   }
+  const facetList = $("#facet-list");
+  if (facetList) facetList.addEventListener("click", e => {
+    const btn = e.target.closest("button[data-facet]");
+    if (!btn) return;
+    const value = btn.dataset.facet;
+    if (!value || (state.facet.size === 1 && state.facet.has(value))) state.facet.clear();
+    else { state.facet.clear(); state.facet.add(value); }
+    state.shown = pageSize();
+    paint();
+  });
   panel.addEventListener("click", e => {
     const chip = e.target.closest("[data-filter='price']");
     if (chip){
