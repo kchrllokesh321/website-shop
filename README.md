@@ -15,7 +15,7 @@ You never edit `index.html`. Every text, number, image link, size, category, fil
 | Want to change | Section in `data/content.json` |
 | --- | --- |
 | WhatsApp number (used by every WhatsApp button, once) | `business.whatsappNumber` |
-| Pre-filled WhatsApp messages (each button has its own) | `business.whatsappMessage` (Chat on WhatsApp + floating button), `business.appointmentMessage` (first line of the appointment form message), `business.contactMessage` (Contact page button), `business.enquireMessage` and `business.consultMessage` (product Enquire / Consult buttons; `{product}` becomes "Product Name (Type, Variant)", and `{name}`, `{type}`, `{variant}` are also available) |
+| Pre-filled WhatsApp messages (each button has its own) | `business.whatsappMessage` (Chat on WhatsApp + floating button), `business.appointmentMessage` (first line of the appointment form message), `business.contactMessage` (Contact page button), `business.enquireMessage` and `business.consultMessage` (product Enquire / Consult buttons; `{product}` becomes "Product Name (Type)" and adds the style or material when the product has one, for example "Modern Upholstered Cot (Premium Teak Wood Cot, Modern)". `{name}`, `{type}` and `{variant}` are also available) |
 | Phone (tel: link), email (mailto:, leave `""` to hide), opening hours + note | `business.phone`, `business.phoneDisplay`, `business.email`, `business.hours`, `business.hoursNote` |
 | Business name, caption, tagline, copyright, social links | `business` |
 | Footer branch line, branch list (footer popover + Contact page + form dropdown), contact note | `branches` |
@@ -25,7 +25,7 @@ You never edit `index.html`. Every text, number, image link, size, category, fil
 | Contact form: button label, first line of the WhatsApp message, thank-you text | `pages.contact` (`submit`, `whatsappIntro`), `pages.formThanks` |
 | Book an Appointment page: heading, lead, field labels, placeholders, error text, time-of-day options, "Other" category label, side panel points | `pages.appointment` (`labels`, `placeholders`, `errors`, `timeOptions`, `otherCategory`, `aside`); the first line of the message is `business.appointmentMessage` |
 | Sizes in pixels: hero text, category cards, product cards, header/footer height | `sizes` |
-| Categories → sub-categories → types → optional variants (names, descriptions, images) | `catalog.categories` |
+| Categories → sub-categories → types, plus the Style or Material filter options for a type | `catalog.categories` (`facet` is `"style"` or `"material"`, `options` is the filter list) |
 | Price filter buttons and which spec fields become filters | `catalog.filters` |
 | Placeholder cards per type, products per page | `catalog.placeholderProductsPerType`, `catalog.productsPerPage` |
 | Products | `products` |
@@ -44,7 +44,7 @@ Upload the photo in the CRM asset area, copy its link (`https://...`), and paste
   "category": "furniture",
   "subCategory": "cots",
   "type": "premium-teak-wood-cot",
-  "variant": "king-size",
+  "style": "Classic",
   "name": "Premium Teak Wood Cot",
   "description": "Elegant design. Built to last.",
   "longDescription": "Optional longer text shown on the product page.",
@@ -59,32 +59,37 @@ Upload the photo in the CRM asset area, copy its link (`https://...`), and paste
 - **Remove a product:** delete its object from the list.
 - **Change price:** edit `price` (a number, no ₹ or commas). Remove the line or set `null` for "Price on request".
 - **Change description:** edit `description` (card) and `longDescription` (product page).
-- `category`, `subCategory`, and `type` must match ids under `catalog.categories`. `variant` is optional and only used when that type has `variants`; a product without one still shows on the type page.
+- `category`, `subCategory`, and `type` must match ids under `catalog.categories`. If that type has a Style or Material filter, also set `"style": "Modern"` or `"material": "Fabric"` (the option's title, not its id).
 - Any `specs` key listed in `catalog.filters.attributes` becomes a checkbox filter automatically; every key shows in the product's spec list.
 
-### Categories, sub-categories, types, variants
+### Categories, sub-categories, types
 
-The catalog is five levels deep, and every level except the last is a grid of cards the shopper clicks through:
+The catalog is four levels. The first three are card grids; the last is the product list:
 
-1. Category (Furniture) → 2. Sub-category (Cots) → 3. Type (Premium Teak Wood Cot) → 4. Variant (Modern) → 5. Products (the real listings, with filters).
+1. Category (Furniture) → 2. Sub-category (Cots) → 3. Type (Premium Teak Wood Cot) → 4. Products, with filters.
 
-Under `catalog.categories`, each category has `subCategories`, each sub-category has `types`, and each type can have `variants`. Add or delete objects the same way as products. Each needs an `id` (lowercase, hyphens), a `title`, and optionally `description` and `image` (a missing image falls back to the parent's image).
+Clicking a type opens that type's products directly. Style and material are filters on that product list, not extra pages.
+
+Under `catalog.categories`, each category has `subCategories` and each sub-category has `types`. Each needs an `id` (lowercase, hyphens), a `title`, and optionally `description` and `image`.
+
+A type that should be filterable adds `facet` and `options`:
 
 ```json
 {
   "id": "l-shape",
   "title": "L Shape Sofa",
   "image": "https://your-crm-host/images/l-shape.jpg",
-  "variants": [
-    { "id": "fabric", "title": "Fabric", "description": "Upholstered in fabric.", "image": "https://your-crm-host/images/l-fabric.jpg" },
-    { "id": "wooden", "title": "Wooden", "description": "Solid wood frame.", "image": "https://your-crm-host/images/l-wooden.jpg" }
+  "facet": "material",
+  "options": [
+    { "id": "fabric", "title": "Fabric" },
+    { "id": "wooden", "title": "Wooden" }
   ]
 }
 ```
 
-Rule of thumb used for variants: when the type is a material (Teak Wood, Metal) the variants are styles (Classic, Modern, Carved); when the type is a shape or model (L Shape, LED TV) the variants are materials or sizes (Fabric, Wooden; 32 inch, 43 inch). If a type genuinely comes one way, leave `variants` out and its card opens the product list directly.
+`facet` is `"style"` when the type is a material (Teak Wood → Classic / Modern / Carved) and `"material"` when the type is a shape or model (L Shape → Fabric / Wooden, LED TV → 32 inch / 43 inch). Leave both out when a type comes only one way. Each product of that type then gets `"style": "Modern"` or `"material": "Fabric"`, matching an option title.
 
-Filters, prices and the Enquire / Consult buttons appear only on level 5. The card text at levels 2–4 under the heading comes from `pages.categories.subLead`, `typeLead`, `variantLead`, or the item's own `description`.
+Filters, prices and the Enquire / Consult buttons appear only on the product list. Card text under the heading comes from `pages.categories.subLead`, `typeLead`, or the item's own `description`.
 
 ### Sizes
 

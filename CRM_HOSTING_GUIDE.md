@@ -176,7 +176,16 @@ Find the product by its `title`, change the value in quotes. Save, publish.
 
 ### Change an image
 
-Upload the new image, copy the link, paste it over the old link in the JSON. Save, publish.
+The CRM picture panel (click a photo, then Library / Upload) only changes an image that is written directly in the page HTML. This site draws the hero, categories, types and products from the JSON every time the page loads, so a swap made in that panel is overwritten on the next visit.
+
+What does work, including after the site is published:
+
+1. Upload the photo with the same **Upload** button (it lands in the Asset Library).
+2. Click the image in the library to copy its link. The library says "Click to copy URL".
+3. In the HTML source, inside the `site-content` JSON, paste that link over the product's `"image"` (or a category's `"image"` / `"icon"` / `"visualAsset"`).
+4. Save and Publish.
+
+The logo is the one exception you can also set with `"logo"` under `business`.
 
 ### JSON rules (the only things that break the page)
 

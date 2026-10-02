@@ -78,8 +78,7 @@
       "title": "Categories",
       "lead": "Browse the home, room by room.",
       "subLead": "Choose a sub-category.",
-      "typeLead": "Choose a type.",
-      "variantLead": "Choose a variant."
+      "typeLead": "Choose a type."
     },
     "about": {
       "title": "Building homes with trust.",
@@ -248,24 +247,19 @@
                 "title": "Premium Teak Wood Cot",
                 "description": "",
                 "image": "assets/products/cot-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "classic",
-                    "title": "Classic",
-                    "description": "Traditional teak cots with turned posts and panel headboards.",
-                    "image": "assets/products/cot-01.webp"
+                    "title": "Classic"
                   },
                   {
                     "id": "modern",
-                    "title": "Modern",
-                    "description": "Clean-lined teak cots with low headboards.",
-                    "image": "assets/products/cot-01.webp"
+                    "title": "Modern"
                   },
                   {
                     "id": "carved",
-                    "title": "Carved",
-                    "description": "Hand-carved teak headboards and posts.",
-                    "image": "assets/products/cot-01.webp"
+                    "title": "Carved"
                   }
                 ]
               },
@@ -274,18 +268,15 @@
                 "title": "Wood Cot",
                 "description": "",
                 "image": "assets/products/cot-detail-headboard.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "classic",
-                    "title": "Classic",
-                    "description": "Plain solid-wood cots in traditional proportions.",
-                    "image": "assets/products/cot-detail-headboard.webp"
+                    "title": "Classic"
                   },
                   {
                     "id": "modern",
-                    "title": "Modern",
-                    "description": "Slim, contemporary solid-wood cots.",
-                    "image": "assets/products/cot-detail-headboard.webp"
+                    "title": "Modern"
                   }
                 ]
               },
@@ -294,18 +285,15 @@
                 "title": "Storage Cot",
                 "description": "",
                 "image": "assets/products/cot-detail-footboard.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Storage cots built in solid wood.",
-                    "image": "assets/products/cot-detail-footboard.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "engineered-wood",
-                    "title": "Engineered Wood",
-                    "description": "Laminated engineered-wood storage cots.",
-                    "image": "assets/products/cot-detail-footboard.webp"
+                    "title": "Engineered Wood"
                   }
                 ]
               },
@@ -314,18 +302,15 @@
                 "title": "Metal Cot",
                 "description": "",
                 "image": "assets/products/cot-detail-headboard.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "classic",
-                    "title": "Classic",
-                    "description": "Wrought-iron style metal cots.",
-                    "image": "assets/products/cot-detail-headboard.webp"
+                    "title": "Classic"
                   },
                   {
                     "id": "modern",
-                    "title": "Modern",
-                    "description": "Powder-coated tubular metal cots.",
-                    "image": "assets/products/cot-detail-headboard.webp"
+                    "title": "Modern"
                   }
                 ]
               }
@@ -342,24 +327,19 @@
                 "title": "3 Seater Sofa",
                 "description": "",
                 "image": "assets/products/sofa-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "fabric",
-                    "title": "Fabric",
-                    "description": "Upholstered in fabric.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Fabric"
                   },
                   {
                     "id": "leatherette",
-                    "title": "Leatherette",
-                    "description": "Upholstered in easy-clean leatherette.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Leatherette"
                   },
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Solid wood frame with loose cushions.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Wooden"
                   }
                 ]
               },
@@ -368,24 +348,19 @@
                 "title": "3+1+1 Sofa Sets",
                 "description": "",
                 "image": "assets/products/sofa-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "fabric",
-                    "title": "Fabric",
-                    "description": "Upholstered in fabric.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Fabric"
                   },
                   {
                     "id": "leatherette",
-                    "title": "Leatherette",
-                    "description": "Upholstered in easy-clean leatherette.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Leatherette"
                   },
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Solid wood frame with loose cushions.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Wooden"
                   }
                 ]
               },
@@ -394,24 +369,19 @@
                 "title": "L Shape Sofa",
                 "description": "",
                 "image": "assets/products/sofa-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "fabric",
-                    "title": "Fabric",
-                    "description": "Upholstered in fabric.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Fabric"
                   },
                   {
                     "id": "leatherette",
-                    "title": "Leatherette",
-                    "description": "Upholstered in easy-clean leatherette.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Leatherette"
                   },
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Solid wood frame with loose cushions.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Wooden"
                   }
                 ]
               },
@@ -420,24 +390,19 @@
                 "title": "U Shape Sofa",
                 "description": "",
                 "image": "assets/products/sofa-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "fabric",
-                    "title": "Fabric",
-                    "description": "Upholstered in fabric.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Fabric"
                   },
                   {
                     "id": "leatherette",
-                    "title": "Leatherette",
-                    "description": "Upholstered in easy-clean leatherette.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Leatherette"
                   },
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Solid wood frame with loose cushions.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Wooden"
                   }
                 ]
               },
@@ -446,18 +411,15 @@
                 "title": "Sofa Cum Beds",
                 "description": "",
                 "image": "assets/products/sofa-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "fabric",
-                    "title": "Fabric",
-                    "description": "Fabric sofa cum beds.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Fabric"
                   },
                   {
                     "id": "leatherette",
-                    "title": "Leatherette",
-                    "description": "Leatherette sofa cum beds.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Leatherette"
                   }
                 ]
               },
@@ -466,18 +428,15 @@
                 "title": "Recliners",
                 "description": "",
                 "image": "assets/products/sofa-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "fabric",
-                    "title": "Fabric",
-                    "description": "Fabric recliners.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Fabric"
                   },
                   {
                     "id": "leatherette",
-                    "title": "Leatherette",
-                    "description": "Leatherette recliners.",
-                    "image": "assets/products/sofa-01.webp"
+                    "title": "Leatherette"
                   }
                 ]
               }
@@ -494,24 +453,19 @@
                 "title": "Duroflex",
                 "description": "",
                 "image": "assets/products/bed-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "foam",
-                    "title": "Foam",
-                    "description": "Memory and PU foam mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Foam"
                   },
                   {
                     "id": "spring",
-                    "title": "Spring",
-                    "description": "Bonnell and pocket spring mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Spring"
                   },
                   {
                     "id": "coir",
-                    "title": "Coir",
-                    "description": "Natural coir mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Coir"
                   }
                 ]
               },
@@ -520,24 +474,19 @@
                 "title": "Neelkamal",
                 "description": "",
                 "image": "assets/products/bed-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "foam",
-                    "title": "Foam",
-                    "description": "Memory and PU foam mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Foam"
                   },
                   {
                     "id": "spring",
-                    "title": "Spring",
-                    "description": "Bonnell and pocket spring mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Spring"
                   },
                   {
                     "id": "coir",
-                    "title": "Coir",
-                    "description": "Natural coir mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Coir"
                   }
                 ]
               },
@@ -546,24 +495,19 @@
                 "title": "Relaxwell",
                 "description": "",
                 "image": "assets/products/bed-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "foam",
-                    "title": "Foam",
-                    "description": "Memory and PU foam mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Foam"
                   },
                   {
                     "id": "spring",
-                    "title": "Spring",
-                    "description": "Bonnell and pocket spring mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Spring"
                   },
                   {
                     "id": "coir",
-                    "title": "Coir",
-                    "description": "Natural coir mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Coir"
                   }
                 ]
               },
@@ -572,24 +516,19 @@
                 "title": "Cenflex",
                 "description": "",
                 "image": "assets/products/bed-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "foam",
-                    "title": "Foam",
-                    "description": "Memory and PU foam mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Foam"
                   },
                   {
                     "id": "spring",
-                    "title": "Spring",
-                    "description": "Bonnell and pocket spring mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Spring"
                   },
                   {
                     "id": "coir",
-                    "title": "Coir",
-                    "description": "Natural coir mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Coir"
                   }
                 ]
               },
@@ -598,24 +537,19 @@
                 "title": "Ultraflex",
                 "description": "",
                 "image": "assets/products/bed-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "foam",
-                    "title": "Foam",
-                    "description": "Memory and PU foam mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Foam"
                   },
                   {
                     "id": "spring",
-                    "title": "Spring",
-                    "description": "Bonnell and pocket spring mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Spring"
                   },
                   {
                     "id": "coir",
-                    "title": "Coir",
-                    "description": "Natural coir mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Coir"
                   }
                 ]
               },
@@ -624,24 +558,19 @@
                 "title": "Sleepyhead",
                 "description": "",
                 "image": "assets/products/bed-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "foam",
-                    "title": "Foam",
-                    "description": "Memory and PU foam mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Foam"
                   },
                   {
                     "id": "spring",
-                    "title": "Spring",
-                    "description": "Bonnell and pocket spring mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Spring"
                   },
                   {
                     "id": "coir",
-                    "title": "Coir",
-                    "description": "Natural coir mattresses.",
-                    "image": "assets/products/bed-01.webp"
+                    "title": "Coir"
                   }
                 ]
               },
@@ -664,18 +593,15 @@
                 "title": "Executive Chair",
                 "description": "",
                 "image": "assets/products/office-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "leatherette",
-                    "title": "Leatherette",
-                    "description": "High-back executive chairs in leatherette.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Leatherette"
                   },
                   {
                     "id": "fabric",
-                    "title": "Fabric",
-                    "description": "Executive chairs in breathable fabric.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Fabric"
                   }
                 ]
               },
@@ -684,18 +610,15 @@
                 "title": "Mesh Chair",
                 "description": "",
                 "image": "assets/products/office-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "high-back",
-                    "title": "High Back",
-                    "description": "Mesh chairs with headrest.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "High Back"
                   },
                   {
                     "id": "mid-back",
-                    "title": "Mid Back",
-                    "description": "Compact mesh task chairs.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Mid Back"
                   }
                 ]
               },
@@ -704,18 +627,15 @@
                 "title": "Visitor Chair",
                 "description": "",
                 "image": "assets/products/office-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "cushioned",
-                    "title": "Cushioned",
-                    "description": "Padded visitor chairs.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Cushioned"
                   },
                   {
                     "id": "steel",
-                    "title": "Steel",
-                    "description": "Steel-frame visitor chairs.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Steel"
                   }
                 ]
               }
@@ -732,24 +652,19 @@
                 "title": "Wooden Diwan",
                 "description": "",
                 "image": "assets/products/diwana-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "classic",
-                    "title": "Classic",
-                    "description": "Traditional wooden diwans.",
-                    "image": "assets/products/diwana-01.webp"
+                    "title": "Classic"
                   },
                   {
                     "id": "carved",
-                    "title": "Carved",
-                    "description": "Carved wooden diwans.",
-                    "image": "assets/products/diwana-01.webp"
+                    "title": "Carved"
                   },
                   {
                     "id": "modern",
-                    "title": "Modern",
-                    "description": "Contemporary wooden diwans.",
-                    "image": "assets/products/diwana-01.webp"
+                    "title": "Modern"
                   }
                 ]
               },
@@ -758,18 +673,15 @@
                 "title": "Storage Diwan",
                 "description": "",
                 "image": "assets/products/diwana-detail.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Storage diwans in solid wood.",
-                    "image": "assets/products/diwana-detail.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "engineered-wood",
-                    "title": "Engineered Wood",
-                    "description": "Storage diwans in engineered wood.",
-                    "image": "assets/products/diwana-detail.webp"
+                    "title": "Engineered Wood"
                   }
                 ]
               },
@@ -778,18 +690,15 @@
                 "title": "Cushioned Diwan",
                 "description": "",
                 "image": "assets/products/diwana-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "fabric",
-                    "title": "Fabric",
-                    "description": "Fabric-cushioned diwans.",
-                    "image": "assets/products/diwana-01.webp"
+                    "title": "Fabric"
                   },
                   {
                     "id": "leatherette",
-                    "title": "Leatherette",
-                    "description": "Leatherette-cushioned diwans.",
-                    "image": "assets/products/diwana-01.webp"
+                    "title": "Leatherette"
                   }
                 ]
               }
@@ -806,24 +715,19 @@
                 "title": "4 Seater Dining",
                 "description": "",
                 "image": "assets/products/dining-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Solid wood tops and legs.",
-                    "image": "assets/products/dining-01.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "marble-top",
-                    "title": "Marble Top",
-                    "description": "Marble or stone tops on wooden bases.",
-                    "image": "assets/products/dining-01.webp"
+                    "title": "Marble Top"
                   },
                   {
                     "id": "glass-top",
-                    "title": "Glass Top",
-                    "description": "Toughened glass tops.",
-                    "image": "assets/products/dining-01.webp"
+                    "title": "Glass Top"
                   }
                 ]
               },
@@ -832,24 +736,19 @@
                 "title": "6 Seater Dining",
                 "description": "",
                 "image": "assets/products/dining-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Solid wood tops and legs.",
-                    "image": "assets/products/dining-01.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "marble-top",
-                    "title": "Marble Top",
-                    "description": "Marble or stone tops on wooden bases.",
-                    "image": "assets/products/dining-01.webp"
+                    "title": "Marble Top"
                   },
                   {
                     "id": "glass-top",
-                    "title": "Glass Top",
-                    "description": "Toughened glass tops.",
-                    "image": "assets/products/dining-01.webp"
+                    "title": "Glass Top"
                   }
                 ]
               },
@@ -858,18 +757,15 @@
                 "title": "Glass Top Dining",
                 "description": "",
                 "image": "assets/products/dining-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "4-seater",
-                    "title": "4 Seater",
-                    "description": "Glass-top tables for four.",
-                    "image": "assets/products/dining-01.webp"
+                    "title": "4 Seater"
                   },
                   {
                     "id": "6-seater",
-                    "title": "6 Seater",
-                    "description": "Glass-top tables for six.",
-                    "image": "assets/products/dining-01.webp"
+                    "title": "6 Seater"
                   }
                 ]
               }
@@ -886,18 +782,15 @@
                 "title": "Standing Dressing Table",
                 "description": "",
                 "image": "assets/products/dressing-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Solid wood dressing tables.",
-                    "image": "assets/products/dressing-01.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "engineered-wood",
-                    "title": "Engineered Wood",
-                    "description": "Engineered wood dressing tables.",
-                    "image": "assets/products/dressing-01.webp"
+                    "title": "Engineered Wood"
                   }
                 ]
               },
@@ -906,18 +799,15 @@
                 "title": "Wall Mounted Dressing Table",
                 "description": "",
                 "image": "assets/products/dressing-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Solid wood dressing tables.",
-                    "image": "assets/products/dressing-01.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "engineered-wood",
-                    "title": "Engineered Wood",
-                    "description": "Engineered wood dressing tables.",
-                    "image": "assets/products/dressing-01.webp"
+                    "title": "Engineered Wood"
                   }
                 ]
               },
@@ -926,18 +816,15 @@
                 "title": "Dressing Table with Storage",
                 "description": "",
                 "image": "assets/products/dressing-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Solid wood dressing tables.",
-                    "image": "assets/products/dressing-01.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "engineered-wood",
-                    "title": "Engineered Wood",
-                    "description": "Engineered wood dressing tables.",
-                    "image": "assets/products/dressing-01.webp"
+                    "title": "Engineered Wood"
                   }
                 ]
               }
@@ -954,24 +841,19 @@
                 "title": "Executive Desk",
                 "description": "",
                 "image": "assets/products/office-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Solid wood tables.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "engineered-wood",
-                    "title": "Engineered Wood",
-                    "description": "Engineered wood tables.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Engineered Wood"
                   },
                   {
                     "id": "metal-frame",
-                    "title": "Metal Frame",
-                    "description": "Metal frame with wooden top.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Metal Frame"
                   }
                 ]
               },
@@ -980,24 +862,19 @@
                 "title": "Computer Table",
                 "description": "",
                 "image": "assets/products/office-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Solid wood tables.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "engineered-wood",
-                    "title": "Engineered Wood",
-                    "description": "Engineered wood tables.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Engineered Wood"
                   },
                   {
                     "id": "metal-frame",
-                    "title": "Metal Frame",
-                    "description": "Metal frame with wooden top.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Metal Frame"
                   }
                 ]
               },
@@ -1006,24 +883,19 @@
                 "title": "Study Table",
                 "description": "",
                 "image": "assets/products/office-01.webp",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "solid-wood",
-                    "title": "Solid Wood",
-                    "description": "Solid wood tables.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Solid Wood"
                   },
                   {
                     "id": "engineered-wood",
-                    "title": "Engineered Wood",
-                    "description": "Engineered wood tables.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Engineered Wood"
                   },
                   {
                     "id": "metal-frame",
-                    "title": "Metal Frame",
-                    "description": "Metal frame with wooden top.",
-                    "image": "assets/products/office-01.webp"
+                    "title": "Metal Frame"
                   }
                 ]
               }
@@ -1051,24 +923,19 @@
                 "title": "LED TV",
                 "description": "",
                 "image": "assets/products/tv-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "32-inch",
-                    "title": "32 inch",
-                    "description": "Bedroom and compact living-room sizes.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "32 inch"
                   },
                   {
                     "id": "43-inch",
-                    "title": "43 inch",
-                    "description": "Mid-size living-room screens.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "43 inch"
                   },
                   {
                     "id": "55-inch-plus",
-                    "title": "55 inch & above",
-                    "description": "Large-format screens.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "55 inch & above"
                   }
                 ]
               },
@@ -1077,24 +944,19 @@
                 "title": "Smart TV",
                 "description": "",
                 "image": "assets/products/tv-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "32-inch",
-                    "title": "32 inch",
-                    "description": "Bedroom and compact living-room sizes.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "32 inch"
                   },
                   {
                     "id": "43-inch",
-                    "title": "43 inch",
-                    "description": "Mid-size living-room screens.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "43 inch"
                   },
                   {
                     "id": "55-inch-plus",
-                    "title": "55 inch & above",
-                    "description": "Large-format screens.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "55 inch & above"
                   }
                 ]
               },
@@ -1103,24 +965,19 @@
                 "title": "QLED TV",
                 "description": "",
                 "image": "assets/products/tv-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "32-inch",
-                    "title": "32 inch",
-                    "description": "Bedroom and compact living-room sizes.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "32 inch"
                   },
                   {
                     "id": "43-inch",
-                    "title": "43 inch",
-                    "description": "Mid-size living-room screens.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "43 inch"
                   },
                   {
                     "id": "55-inch-plus",
-                    "title": "55 inch & above",
-                    "description": "Large-format screens.",
-                    "image": "assets/products/tv-01.webp"
+                    "title": "55 inch & above"
                   }
                 ]
               }
@@ -1137,18 +994,15 @@
                 "title": "Single Door",
                 "description": "",
                 "image": "assets/categories/electronics-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "under-200l",
-                    "title": "Under 200 L",
-                    "description": "Compact single-door fridges.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "Under 200 L"
                   },
                   {
                     "id": "200l-plus",
-                    "title": "200 L & above",
-                    "description": "Family-size single-door fridges.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "200 L & above"
                   }
                 ]
               },
@@ -1157,18 +1011,15 @@
                 "title": "Double Door",
                 "description": "",
                 "image": "assets/categories/electronics-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "250-350l",
-                    "title": "250 – 350 L",
-                    "description": "Frost-free double-door fridges.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "250 – 350 L"
                   },
                   {
                     "id": "350l-plus",
-                    "title": "350 L & above",
-                    "description": "Large double-door fridges.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "350 L & above"
                   }
                 ]
               },
@@ -1191,18 +1042,15 @@
                 "title": "Top Load",
                 "description": "",
                 "image": "assets/categories/electronics-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "6-7kg",
-                    "title": "6 – 7 kg",
-                    "description": "For small families.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "6 – 7 kg"
                   },
                   {
                     "id": "8kg-plus",
-                    "title": "8 kg & above",
-                    "description": "For larger families.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "8 kg & above"
                   }
                 ]
               },
@@ -1211,18 +1059,15 @@
                 "title": "Front Load",
                 "description": "",
                 "image": "assets/categories/electronics-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "6-7kg",
-                    "title": "6 – 7 kg",
-                    "description": "For small families.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "6 – 7 kg"
                   },
                   {
                     "id": "8kg-plus",
-                    "title": "8 kg & above",
-                    "description": "For larger families.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "8 kg & above"
                   }
                 ]
               },
@@ -1231,18 +1076,15 @@
                 "title": "Semi Automatic",
                 "description": "",
                 "image": "assets/categories/electronics-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "6-7kg",
-                    "title": "6 – 7 kg",
-                    "description": "For small families.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "6 – 7 kg"
                   },
                   {
                     "id": "8kg-plus",
-                    "title": "8 kg & above",
-                    "description": "For larger families.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "8 kg & above"
                   }
                 ]
               }
@@ -1259,24 +1101,19 @@
                 "title": "Split AC",
                 "description": "",
                 "image": "assets/categories/electronics-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "1-ton",
-                    "title": "1 Ton",
-                    "description": "Rooms up to 120 sq ft.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "1 Ton"
                   },
                   {
                     "id": "1-5-ton",
-                    "title": "1.5 Ton",
-                    "description": "Rooms up to 180 sq ft.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "1.5 Ton"
                   },
                   {
                     "id": "2-ton",
-                    "title": "2 Ton",
-                    "description": "Large rooms and halls.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "2 Ton"
                   }
                 ]
               },
@@ -1285,24 +1122,19 @@
                 "title": "Window AC",
                 "description": "",
                 "image": "assets/categories/electronics-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "1-ton",
-                    "title": "1 Ton",
-                    "description": "Rooms up to 120 sq ft.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "1 Ton"
                   },
                   {
                     "id": "1-5-ton",
-                    "title": "1.5 Ton",
-                    "description": "Rooms up to 180 sq ft.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "1.5 Ton"
                   },
                   {
                     "id": "2-ton",
-                    "title": "2 Ton",
-                    "description": "Large rooms and halls.",
-                    "image": "assets/categories/electronics-3d.png"
+                    "title": "2 Ton"
                   }
                 ]
               }
@@ -1330,18 +1162,15 @@
                 "title": "Mixer Grinder",
                 "description": "",
                 "image": "assets/products/kitchen-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "500-w",
-                    "title": "500 W",
-                    "description": "Everyday mixer grinders.",
-                    "image": "assets/products/kitchen-01.webp"
+                    "title": "500 W"
                   },
                   {
                     "id": "750-w-plus",
-                    "title": "750 W & above",
-                    "description": "Heavy-duty mixer grinders.",
-                    "image": "assets/products/kitchen-01.webp"
+                    "title": "750 W & above"
                   }
                 ]
               },
@@ -1350,18 +1179,15 @@
                 "title": "Induction Cooktop",
                 "description": "",
                 "image": "assets/products/kitchen-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "1200-1600w",
-                    "title": "1200 – 1600 W",
-                    "description": "Compact cooktops.",
-                    "image": "assets/products/kitchen-01.webp"
+                    "title": "1200 – 1600 W"
                   },
                   {
                     "id": "1800-2000w",
-                    "title": "1800 – 2000 W",
-                    "description": "Fast-heating cooktops.",
-                    "image": "assets/products/kitchen-01.webp"
+                    "title": "1800 – 2000 W"
                   }
                 ]
               },
@@ -1370,18 +1196,15 @@
                 "title": "Electric Kettle",
                 "description": "",
                 "image": "assets/products/kitchen-01.webp",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "1l",
-                    "title": "1 L",
-                    "description": "Compact kettles.",
-                    "image": "assets/products/kitchen-01.webp"
+                    "title": "1 L"
                   },
                   {
                     "id": "1-5l-plus",
-                    "title": "1.5 L & above",
-                    "description": "Family-size kettles.",
-                    "image": "assets/products/kitchen-01.webp"
+                    "title": "1.5 L & above"
                   }
                 ]
               }
@@ -1398,18 +1221,15 @@
                 "title": "Iron Box",
                 "description": "",
                 "image": "assets/categories/small-appliances-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "dry",
-                    "title": "Dry Iron",
-                    "description": "Classic dry irons.",
-                    "image": "assets/categories/small-appliances-3d.png"
+                    "title": "Dry Iron"
                   },
                   {
                     "id": "steam",
-                    "title": "Steam Iron",
-                    "description": "Steam irons.",
-                    "image": "assets/categories/small-appliances-3d.png"
+                    "title": "Steam Iron"
                   }
                 ]
               },
@@ -1418,18 +1238,15 @@
                 "title": "Vacuum Cleaner",
                 "description": "",
                 "image": "assets/categories/small-appliances-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "handheld",
-                    "title": "Handheld",
-                    "description": "Light handheld vacuums.",
-                    "image": "assets/categories/small-appliances-3d.png"
+                    "title": "Handheld"
                   },
                   {
                     "id": "wet-dry",
-                    "title": "Wet & Dry",
-                    "description": "Canister wet & dry vacuums.",
-                    "image": "assets/categories/small-appliances-3d.png"
+                    "title": "Wet & Dry"
                   }
                 ]
               },
@@ -1438,18 +1255,15 @@
                 "title": "Water Heater",
                 "description": "",
                 "image": "assets/categories/small-appliances-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "instant",
-                    "title": "Instant",
-                    "description": "Instant water heaters.",
-                    "image": "assets/categories/small-appliances-3d.png"
+                    "title": "Instant"
                   },
                   {
                     "id": "storage",
-                    "title": "Storage",
-                    "description": "Storage geysers.",
-                    "image": "assets/categories/small-appliances-3d.png"
+                    "title": "Storage"
                   }
                 ]
               }
@@ -1477,18 +1291,15 @@
                 "title": "Wall Clocks",
                 "description": "",
                 "image": "assets/categories/gift-items-3d.png",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Wooden wall clocks.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Wooden"
                   },
                   {
                     "id": "metal",
-                    "title": "Metal",
-                    "description": "Metal wall clocks.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Metal"
                   }
                 ]
               },
@@ -1497,24 +1308,19 @@
                 "title": "Photo Frames",
                 "description": "",
                 "image": "assets/categories/gift-items-3d.png",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Wooden photo frames.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Wooden"
                   },
                   {
                     "id": "metal",
-                    "title": "Metal",
-                    "description": "Metal photo frames.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Metal"
                   },
                   {
                     "id": "acrylic",
-                    "title": "Acrylic",
-                    "description": "Acrylic photo frames.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Acrylic"
                   }
                 ]
               },
@@ -1523,24 +1329,19 @@
                 "title": "Showpieces",
                 "description": "",
                 "image": "assets/categories/gift-items-3d.png",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "brass",
-                    "title": "Brass",
-                    "description": "Brass showpieces.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Brass"
                   },
                   {
                     "id": "resin",
-                    "title": "Resin",
-                    "description": "Resin showpieces.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Resin"
                   },
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Wooden showpieces.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Wooden"
                   }
                 ]
               }
@@ -1557,18 +1358,15 @@
                 "title": "Diyas & Lamps",
                 "description": "",
                 "image": "assets/categories/gift-items-3d.png",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "brass",
-                    "title": "Brass",
-                    "description": "Brass diyas and lamps.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Brass"
                   },
                   {
                     "id": "terracotta",
-                    "title": "Terracotta",
-                    "description": "Clay diyas and lamps.",
-                    "image": "assets/categories/gift-items-3d.png"
+                    "title": "Terracotta"
                   }
                 ]
               },
@@ -1602,18 +1400,15 @@
                 "title": "Baby Cots",
                 "description": "",
                 "image": "assets/categories/baby-items-3d.png",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Wooden baby cots.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Wooden"
                   },
                   {
                     "id": "metal",
-                    "title": "Metal",
-                    "description": "Metal baby cots.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Metal"
                   }
                 ]
               },
@@ -1622,18 +1417,15 @@
                 "title": "Cradles",
                 "description": "",
                 "image": "assets/categories/baby-items-3d.png",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Wooden cradles.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Wooden"
                   },
                   {
                     "id": "steel",
-                    "title": "Steel",
-                    "description": "Steel-frame cradles.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Steel"
                   }
                 ]
               }
@@ -1650,24 +1442,19 @@
                 "title": "Strollers",
                 "description": "",
                 "image": "assets/categories/baby-items-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "standard",
-                    "title": "Standard",
-                    "description": "Everyday strollers.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Standard"
                   },
                   {
                     "id": "lightweight",
-                    "title": "Lightweight",
-                    "description": "Compact travel strollers.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Lightweight"
                   },
                   {
                     "id": "twin",
-                    "title": "Twin",
-                    "description": "Strollers for two.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Twin"
                   }
                 ]
               },
@@ -1676,18 +1463,15 @@
                 "title": "Walkers",
                 "description": "",
                 "image": "assets/categories/baby-items-3d.png",
-                "variants": [
+                "facet": "style",
+                "options": [
                   {
                     "id": "basic",
-                    "title": "Basic",
-                    "description": "Simple baby walkers.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Basic"
                   },
                   {
                     "id": "musical",
-                    "title": "Musical",
-                    "description": "Walkers with lights and music.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Musical"
                   }
                 ]
               },
@@ -1696,18 +1480,15 @@
                 "title": "High Chairs",
                 "description": "",
                 "image": "assets/categories/baby-items-3d.png",
-                "variants": [
+                "facet": "material",
+                "options": [
                   {
                     "id": "wooden",
-                    "title": "Wooden",
-                    "description": "Wooden high chairs.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Wooden"
                   },
                   {
                     "id": "plastic",
-                    "title": "Plastic",
-                    "description": "Plastic high chairs.",
-                    "image": "assets/categories/baby-items-3d.png"
+                    "title": "Plastic"
                   }
                 ]
               }
@@ -1723,7 +1504,7 @@
       "category": "furniture",
       "subCategory": "sofas",
       "type": "3-seater",
-      "variant": "fabric",
+      "material": "Fabric",
       "name": "Linen Lounge Sofa",
       "description": "Soft seating for everyday living.",
       "longDescription": "A calm three-seater designed for family rooms. Balanced proportions, supportive cushions and a quiet fabric that suits Indian homes.",
@@ -1745,7 +1526,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "premium-teak-wood-cot",
-      "variant": "classic",
+      "style": "Classic",
       "name": "Premium Teak Wood Cot",
       "description": "Elegant design. Built to last.",
       "longDescription": "Crafted from high-quality teak wood, this premium cot offers durable, elegant and superior comfort. Perfect for modern homes, it combines traditional craftsmanship with contemporary design.",
@@ -1772,7 +1553,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "wood-cot",
-      "variant": "classic",
+      "style": "Classic",
       "name": "Classic Wooden Cot",
       "description": "Simple lines for an easy bedroom.",
       "longDescription": "Demo catalog product using the supplied cot reference image. Confirm material, size and availability in store.",
@@ -1795,7 +1576,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "premium-teak-wood-cot",
-      "variant": "modern",
+      "style": "Modern",
       "name": "Modern Upholstered Cot",
       "description": "A softer profile for modern rooms.",
       "longDescription": "Demo catalog product. Final upholstery, dimensions and pricing should be confirmed through the showroom CRM.",
@@ -1817,7 +1598,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "storage-cot",
-      "variant": "engineered-wood",
+      "material": "Engineered Wood",
       "name": "Storage Cot",
       "description": "Useful storage in a composed frame.",
       "longDescription": "Demo catalog product. Storage configuration and exact dimensions are subject to showroom confirmation.",
@@ -1840,7 +1621,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "metal-cot",
-      "variant": "modern",
+      "style": "Modern",
       "name": "Metal Frame Cot",
       "description": "A practical frame with clean lines.",
       "longDescription": "Demo catalog product. Frame gauge, finish and dimensions should be confirmed in store.",
@@ -1863,7 +1644,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "wood-cot",
-      "variant": "modern",
+      "style": "Modern",
       "name": "Solid Wood Cot",
       "description": "Warm timber and dependable support.",
       "longDescription": "Demo catalog product using the supplied cot imagery. Confirm timber species, dimensions and availability in store.",
@@ -1886,7 +1667,7 @@
       "category": "furniture",
       "subCategory": "beds",
       "type": "duroflex",
-      "variant": "foam",
+      "material": "Foam",
       "name": "Panel Bed",
       "description": "A clean, grounded bedroom centrepiece.",
       "longDescription": "Low visual noise, sturdy rails and a headboard that reads well against both painted and wood-panelled walls.",
@@ -1908,7 +1689,7 @@
       "category": "furniture",
       "subCategory": "diwan",
       "type": "wooden-diwan",
-      "variant": "classic",
+      "style": "Classic",
       "name": "Diwana Lounge Set",
       "description": "Conversation seating with a light footprint.",
       "longDescription": "A compact lounge arrangement for living rooms that need flexibility without looking temporary.",
@@ -1931,7 +1712,7 @@
       "category": "furniture",
       "subCategory": "dining-tables",
       "type": "6-seater-dining",
-      "variant": "solid-wood",
+      "material": "Solid Wood",
       "name": "Family Dining Table",
       "description": "Everyday meals, unhurried gatherings.",
       "longDescription": "A solid dining table with a quiet grain and room for family seating. Pairs with simple chairs or a bench.",
@@ -1953,7 +1734,7 @@
       "category": "furniture",
       "subCategory": "dressing-tables",
       "type": "storage-dressing",
-      "variant": "engineered-wood",
+      "material": "Engineered Wood",
       "name": "Dressing Table",
       "description": "Storage and mirror in one calm piece.",
       "longDescription": "A dressing table with a balanced mirror, soft drawers and a finish that sits comfortably in a bedroom corner.",
@@ -1975,7 +1756,7 @@
       "category": "furniture",
       "subCategory": "office-tables",
       "type": "executive-desk",
-      "variant": "engineered-wood",
+      "material": "Engineered Wood",
       "name": "Home Office Table",
       "description": "Focused work without a bulky desk.",
       "longDescription": "A practical work table with a clear surface and a silhouette that belongs in a home, not only an office.",
@@ -1997,7 +1778,7 @@
       "category": "furniture",
       "subCategory": "cots",
       "type": "premium-teak-wood-cot",
-      "variant": "carved",
+      "style": "Carved",
       "name": "Teak Cot — CRM Test Listing",
       "description": "Added via JSON with a hosted image URL.",
       "longDescription": "Test product added by editing data/products-furniture.json only. The image is loaded from an external hosted URL exactly as CRM-uploaded images will be.",
@@ -2018,7 +1799,7 @@
       "category": "electronics",
       "subCategory": "tv",
       "type": "led-tv",
-      "variant": "43-inch",
+      "style": "43 inch",
       "name": "Living Room Television",
       "description": "A clear picture for the family room.",
       "longDescription": "Selected for everyday viewing. We help you match screen size to the wall, seating distance and the rest of the room.",
@@ -2040,7 +1821,7 @@
       "category": "small-appliances",
       "subCategory": "kitchen",
       "type": "mixer-grinder",
-      "variant": "750-w-plus",
+      "style": "750 W & above",
       "name": "Everyday Kitchen Set",
       "description": "Small appliances for a smarter everyday.",
       "longDescription": "A practical starting set for daily cooking — compact, easy to store and chosen to sit well on an Indian kitchen counter.",
