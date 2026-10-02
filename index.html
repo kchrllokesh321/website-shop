@@ -451,6 +451,9 @@ body.home-mode .view-home.is-active{
   transform-origin:center bottom;
   transition:transform .25s;
   z-index:2;
+  /* A missing picture must not paint its alt text across the card. */
+  color:transparent;
+  font-size:0;
 }
 .category-card h3{
   flex:0 0 auto;
