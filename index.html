@@ -1235,7 +1235,8 @@ html.is-embedded body.home-mode .view-home.is-active{
     <section class="view view-home is-active" id="view-home" data-view="home">
       <div class="hero">
         <div class="hero-media" aria-hidden="true">
-          <img src="assets/hero/hero-living.png" alt="">
+          <!-- ========== PASTE HERO IMAGE URL HERE. Upload assets/hero/hero-living.png and paste its link. ========== -->
+          <img data-hero-src="PASTE HERO IMAGE URL HERE" alt="" onerror="this.style.visibility='hidden'">
         </div>
         <div class="page-container hero-copy">
           <h1>Thoughtful Spaces for Every Home.</h1>
@@ -1455,7 +1456,17 @@ function applyText(){
   setText(".hero-actions [data-wa='appointment']", hero.appointmentButton);
   setText("#whatsapp-hero", hero.whatsappButton);
   (hero.badges || []).forEach((label, i) => setText(`.badge-text[data-badge='${i}']`, label));
-  if (hero.image){ const img = $(".hero-media img"); if (img && img.getAttribute("src") !== hero.image) img.src = hero.image; }
+  const heroImg = $(".hero-media img");
+  if (heroImg){
+    const clean = value => {
+      const v = String(value || "").trim();
+      return !v || v.includes("PASTE HERO IMAGE URL HERE") ? "" : v;
+    };
+    const fromJson = clean(hero.image);
+    const fromTag = clean(heroImg.getAttribute("data-hero-src"));
+    const chosen = (fromJson.startsWith("http") ? fromJson : "") || (fromTag.startsWith("http") ? fromTag : "") || fromJson || fromTag;
+    if (chosen) heroImg.src = chosen;
+  }
   setText(".shop-head h2", (SITE.homepage || {}).shopHeading);
   setText("#branches-toggle strong", br.summary);
   const dash = `<i class="footer-dash">–</i> `;
