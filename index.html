@@ -2518,6 +2518,16 @@ function init(){
     if ($("#viewer").classList.contains("is-open") && e.key === "ArrowRight") moveViewer(1);
   });
   window.addEventListener("hashchange", route);
+  // Some page builders cancel normal link clicks inside their preview.
+  // These in-page links (#/categories, #/about, …) still switch section here.
+  window.addEventListener("click", e => {
+    const link = e.target.closest && e.target.closest("a[href^='#/']");
+    if (!link) return;
+    e.preventDefault();
+    const next = link.getAttribute("href");
+    if (location.hash === next) route();
+    else location.hash = next;
+  }, true);
   route();
 }
 loadSite()
