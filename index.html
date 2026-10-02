@@ -1327,14 +1327,11 @@ html.is-embedded body.home-mode .view-home.is-active{
   <div class="viewer-thumbs" id="viewer-thumbs"></div>
 </div>
 
-<!--
-  HOSTING WITHOUT A SEPARATE FILE (CRM / page builders):
-  paste the whole of data/content.json between the two lines below. When this block
-  has content it is used instead of downloading data/content.json.
-  Add "assetBase": "https://your-cdn/..." to the JSON to point every "assets/..." path at uploaded files.
--->
+<!-- ========== PASTE data/content.json BELOW THIS LINE ========== -->
 <script type="application/json" id="site-content">
+PASTE data/content.json HERE
 </script>
+<!-- ========== PASTE data/content.json ABOVE THIS LINE ========== -->
 <script>
 try {
   if (window.self !== window.top) document.documentElement.classList.add("is-embedded");
@@ -1498,8 +1495,10 @@ function resolveAssets(node, base){
 
 async function loadSite(){
   const inline = document.getElementById("site-content");
-  if (inline && inline.textContent.trim()){
-    SITE = JSON.parse(inline.textContent);
+  const pasted = inline ? inline.textContent.trim() : "";
+  const hasPaste = pasted && !pasted.includes("PASTE data/content.json HERE");
+  if (hasPaste){
+    SITE = JSON.parse(pasted);
   } else {
     const res = await fetch(CONTENT_URL, { cache: "no-store" });
     if (!res.ok) throw new Error(`${CONTENT_URL}: ${res.status}`);

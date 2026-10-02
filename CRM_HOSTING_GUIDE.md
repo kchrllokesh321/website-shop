@@ -106,14 +106,17 @@ When finished, search the file for `assets/` — there should be no matches left
 
 ### Step 4. Paste `content.json` into `index.html`
 
-Open `index.html` in the text editor. Search for `id="site-content"`. You will see:
+Open `index.html` in the text editor. Search for `PASTE data/content.json HERE`. You will see:
 
 ```html
+<!-- ========== PASTE data/content.json BELOW THIS LINE ========== -->
 <script type="application/json" id="site-content">
+PASTE data/content.json HERE
 </script>
+<!-- ========== PASTE data/content.json ABOVE THIS LINE ========== -->
 ```
 
-Select **all** of `content.json` (Ctrl+A, Ctrl+C) and paste it on the empty line between those two tags. Save.
+Delete the line `PASTE data/content.json HERE` and paste the whole of `content.json` in its place. Leave the two comment lines and the `<script>` tags. Save.
 
 ### Step 5. Paste `index.html` into the CRM
 
