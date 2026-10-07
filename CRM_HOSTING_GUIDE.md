@@ -144,7 +144,27 @@ If an image is missing, that link was not replaced or was pasted wrongly. Search
 
 All edits are made in the CRM's HTML source box, inside the block that starts `<script type="application/json" id="site-content">`. Everything between that line and its `</script>` is the same JSON described in `README.md`.
 
-**Do not use the CRM's click-to-edit / visual editor on the page.** The site draws its text and images from the JSON every time it loads, so visual edits are overwritten. Edit the JSON, save, publish.
+Words, prices, and phone numbers still live in the JSON block. Pictures can be set either way.
+
+### Pictures — two ways
+
+The CRM does not keep an `assets/` folder. Uploading a file does not put it at `assets/hero/hero-living.png`. The file gets a new link like `https://myappz-v2.b-cdn.net/agency/…/uploads/….jpeg`.
+
+**Way 1. Click the picture and press Upload** (logo, hero, category cards, product photos, sub-category photos):
+
+1. Click the picture itself, not the name under it.
+2. In the picture panel, press **Upload** (or pick one from the library).
+3. Save, then Publish.
+
+Clicking the **name** under a category still opens that category. In the builder, clicking the **picture** does not. On the published site, clicking the picture opens the category as before.
+
+**Way 2. Paste the link in the JSON** (same as before):
+
+1. Upload, then click the file in the Asset Library so the link is copied.
+2. Paste it over the matching field: `homepage.hero.image`, a category `visualAsset` or `icon`, or a product `image`.
+3. The hero can also take the link in `data-hero-src="https://…"` on the hero image tag.
+
+If the picture on the page is already an `https://` link, that is the one that shows. A pasted `https://` link in the JSON is used when the picture tag still points at `assets/…`.
 
 ### Where things live
 
@@ -179,16 +199,9 @@ Find the product by its `title`, change the value in quotes. Save, publish.
 
 ### Change an image
 
-The CRM picture panel (click a photo, then Library / Upload) only changes an image that is written directly in the page HTML. This site draws the hero, categories, types and products from the JSON every time the page loads, so a swap made in that panel is overwritten on the next visit.
+Use either way from **Pictures — two ways** above. Click the picture and press Upload, or paste the copied link into the JSON field (`visualAsset` for a homepage category card, `icon` for the Categories page, `image` for a product).
 
-What does work, including after the site is published:
-
-1. Upload the photo with the same **Upload** button (it lands in the Asset Library).
-2. Click the image in the library to copy its link. The library says "Click to copy URL".
-3. In the HTML source, inside the `site-content` JSON, paste that link over the product's `"image"` (or a category's `"image"` / `"icon"` / `"visualAsset"`).
-4. Save and Publish.
-
-The logo is the one exception you can also set with `"logo"` under `business`.
+A normal photo stays a normal photo. It does not become the drawn 3D category icon. The homepage cards use the five files in `assets/categories/visuals/`. Upload those if you want the same cut-out look, then click each card picture and choose the file you just uploaded.
 
 ### JSON rules (the only things that break the page)
 
@@ -207,4 +220,5 @@ The logo is the one exception you can also set with `"logo"` under `business`.
 | One image missing | Its `assets/…` path was not replaced, or the link has a typo. |
 | Old version still showing on your phone | The phone cached it. Close the tab and reopen the link, or clear site data. |
 | WhatsApp button opens the wrong number | Change `business.whatsappNumber` (digits only, no `+`, no spaces). |
-| Edits made with the CRM's visual editor disappeared | Expected — edit the JSON block instead. |
+| Category picture click opens the category instead of Upload | Click the picture, not the name. Paste the latest `index.html` into the page so the picture is not inside the link. |
+| Visual text edits disappeared | Headings and prices still come from the JSON. Change them there. Pictures can be changed with Upload. |

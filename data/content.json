@@ -8,7 +8,7 @@
     "sizes     → pixel sizes for hero text, category cards, product cards, header/footer height.",
     "catalog   → categories → subCategories → types, filters, placeholder settings.",
     "products  → one object per product. Add an object to add a product, delete it to remove it.",
-    "Image fields accept any hosted URL: upload in the CRM, copy the link, paste it here."
+    "Image fields accept any hosted URL. You can paste the link here, or click the picture in the CRM and press Upload."
   ],
   "assetBase": "",
   "business": {

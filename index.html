@@ -222,6 +222,10 @@ body.home-mode .view-home.is-active{
   z-index:1;
   pointer-events:none;
 }
+/* In the CRM preview the hero photo can be clicked and replaced. Buttons stay clickable. */
+html.is-embedded .hero-media{pointer-events:auto}
+html.is-embedded .hero-media:before,
+html.is-embedded .hero-media:after{pointer-events:none}
 .hero-media img{
   position:absolute;
   inset:0;
@@ -455,6 +459,15 @@ body.home-mode .view-home.is-active{
   color:transparent;
   font-size:0;
 }
+/* A missing file still leaves a picture the CRM can click and replace. */
+html.is-embedded .card-object,
+html.is-embedded .tile-img img,
+html.is-embedded .product-box-image img{
+  min-height:70%;
+  min-width:70%;
+}
+.category-card .card-open{display:contents;color:inherit;text-decoration:none}
+a.tile-body{display:block;color:inherit;text-decoration:none}
 .category-card h3{
   flex:0 0 auto;
   font-size:var(--card-title);
@@ -1201,7 +1214,7 @@ html.is-embedded body.home-mode .view-home.is-active{
   <header class="site-header">
     <div class="nav">
       <a class="brand" href="#/" data-nav="home" aria-label="Sri Maruthi Enterprises home">
-        <span class="logo-badge"><img class="logo" src="assets/brand/logo.png" alt="Sri Maruthi Enterprises logo"></span>
+        <span class="logo-badge"><img class="logo" data-slot="logo" draggable="false" src="assets/brand/logo.png" alt="Sri Maruthi Enterprises logo"></span>
         <span>
           <span class="brand-title">SRI MARUTHI ENTERPRISES</span>
           <span class="brand-caption">Since 2020.</span>
@@ -1234,9 +1247,9 @@ html.is-embedded body.home-mode .view-home.is-active{
   <main id="app">
     <section class="view view-home is-active" id="view-home" data-view="home">
       <div class="hero">
-        <div class="hero-media" aria-hidden="true">
-          <!-- ========== PASTE HERO IMAGE URL HERE. Upload assets/hero/hero-living.png and paste its link. ========== -->
-          <img data-hero-src="PASTE HERO IMAGE URL HERE" alt="" onerror="this.style.visibility='hidden'">
+        <div class="hero-media">
+          <!-- ========== HERO PICTURE. Click this image in the CRM and press Upload, or paste its link into data-hero-src or homepage.hero.image. ========== -->
+          <img data-slot="hero" data-hero-src="PASTE HERO IMAGE URL HERE" draggable="false" src="assets/hero/hero-living.png" alt="">
         </div>
         <div class="page-container hero-copy">
           <h1>Thoughtful Spaces for Every Home.</h1>
@@ -1273,7 +1286,61 @@ html.is-embedded body.home-mode .view-home.is-active{
             </div>
           </div>
           <div class="carousel-viewport" id="carousel-viewport">
-            <div class="carousel-track" id="carousel-track"></div>
+            <!-- Category pictures are real images so the CRM Upload panel can replace them.
+                 Click the picture to change it. Click the name to open the category.
+                 A link in visualAsset inside the JSON still works too. -->
+            <div class="carousel-track" id="carousel-track">
+              <article class="category-card" data-cat="furniture" data-href="#/category/furniture">
+                <div class="card-visual">
+                  <img class="card-object card-object-furniture" data-slot="visual:furniture" draggable="false" src="assets/categories/visuals/furniture-visual.png" alt="3D furniture armchair">
+                </div>
+                <a class="card-open" href="#/category/furniture" aria-label="Open Furniture category">
+                  <h3>Furniture</h3>
+                  <p>Sofas, Cots, Dining, Storage &amp; More</p>
+                  <span class="card-arrow" aria-hidden="true">→</span>
+                </a>
+              </article>
+              <article class="category-card" data-cat="electronics" data-href="#/category/electronics">
+                <div class="card-visual">
+                  <img class="card-object card-object-electronics" data-slot="visual:electronics" draggable="false" src="assets/categories/visuals/electronics-visual.png" alt="3D television and refrigerator">
+                </div>
+                <a class="card-open" href="#/category/electronics" aria-label="Open Electronics category">
+                  <h3>Electronics</h3>
+                  <p>TVs, Refrigerators, Washing Machines &amp; More</p>
+                  <span class="card-arrow" aria-hidden="true">→</span>
+                </a>
+              </article>
+              <article class="category-card" data-cat="small-appliances" data-href="#/category/small-appliances">
+                <div class="card-visual">
+                  <img class="card-object card-object-small-appliances" data-slot="visual:small-appliances" draggable="false" src="assets/categories/visuals/small-appliances-visual.png" alt="3D small kitchen appliances">
+                </div>
+                <a class="card-open" href="#/category/small-appliances" aria-label="Open Small Appliances category">
+                  <h3>Small Appliances</h3>
+                  <p>For a Smarter Everyday</p>
+                  <span class="card-arrow" aria-hidden="true">→</span>
+                </a>
+              </article>
+              <article class="category-card" data-cat="gift-items" data-href="#/category/gift-items">
+                <div class="card-visual">
+                  <img class="card-object card-object-gift-items" data-slot="visual:gift-items" draggable="false" src="assets/categories/visuals/gift-items-visual.png" alt="3D gift and decor objects">
+                </div>
+                <a class="card-open" href="#/category/gift-items" aria-label="Open Gift Items category">
+                  <h3>Gift Items</h3>
+                  <p>Thoughtful Gifts for Every Occasion</p>
+                  <span class="card-arrow" aria-hidden="true">→</span>
+                </a>
+              </article>
+              <article class="category-card" data-cat="baby-items" data-href="#/category/baby-items">
+                <div class="card-visual">
+                  <img class="card-object card-object-baby-items" data-slot="visual:baby-items" draggable="false" src="assets/categories/visuals/baby-items-visual.png" alt="3D crib and teddy bear">
+                </div>
+                <a class="card-open" href="#/category/baby-items" aria-label="Open Baby Items category">
+                  <h3>Baby Items</h3>
+                  <p>Safe, Smart &amp; Comfortable</p>
+                  <span class="card-arrow" aria-hidden="true">→</span>
+                </a>
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -1458,15 +1525,13 @@ function applyText(){
   (hero.badges || []).forEach((label, i) => setText(`.badge-text[data-badge='${i}']`, label));
   const heroImg = $(".hero-media img");
   if (heroImg){
-    const clean = value => {
-      const v = String(value || "").trim();
-      return !v || v.includes("PASTE HERO IMAGE URL HERE") ? "" : v;
-    };
-    const fromJson = clean(hero.image);
-    const fromTag = clean(heroImg.getAttribute("data-hero-src"));
-    const chosen = (fromJson.startsWith("http") ? fromJson : "") || (fromTag.startsWith("http") ? fromTag : "") || fromJson || fromTag;
-    if (chosen) heroImg.src = chosen;
+    const fromJson = cleanUrl(hero.image);
+    const fromTag = cleanUrl(heroImg.getAttribute("data-hero-src"));
+    const preferred = (isHttp(fromJson) ? fromJson : "") || (isHttp(fromTag) ? fromTag : "") || fromJson || fromTag;
+    applyImg(heroImg, "hero", preferred);
+    bindImageFallback(heroImg);
   }
+  applyImg($("img.logo"), "logo", biz.logo || "");
   setText(".shop-head h2", (SITE.homepage || {}).shopHeading);
   setText("#branches-toggle strong", br.summary);
   const dash = `<i class="footer-dash">–</i> `;
@@ -1521,14 +1586,16 @@ async function loadSite(){
   if (SITE.assetBase){
     const base = String(SITE.assetBase).replace(/\/?$/, "/");
     resolveAssets(SITE, base);
-    document.querySelectorAll("img.logo, link[rel='icon'], .hero-media img").forEach(el => {
+    document.querySelectorAll("img.logo, link[rel='icon'], .hero-media img, img[data-slot]").forEach(el => {
       const attr = el.tagName === "LINK" ? "href" : "src";
       const v = el.getAttribute(attr) || "";
       if (v.startsWith("assets/")) el.setAttribute(attr, base + v.slice("assets/".length));
     });
   }
-  if (SITE.business && SITE.business.logo){
-    document.querySelectorAll("img.logo, link[rel='icon']").forEach(el => el.setAttribute(el.tagName === "LINK" ? "href" : "src", SITE.business.logo));
+  if (SITE._uploads && typeof SITE._uploads === "object"){
+    for (const [slot, url] of Object.entries(SITE._uploads)){
+      if (isHttp(url)) UPLOADS.set(slot, url);
+    }
   }
   applyBusiness(SITE.business);
   applyCatalog(SITE.catalog || {});
@@ -1547,6 +1614,170 @@ const DEFAULT_CARE = "Dust with a soft, dry cloth. Keep away from direct heat an
 
 const $ = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+
+// Pictures set two ways: an https link already on the <img> (CRM Upload) wins over a local
+// assets/ path. An https link in the JSON wins when the <img> still has a local path.
+const UPLOADS = new Map();
+// Src changes we made ourselves. The observer runs after this function returns, so a flag
+// that we clear immediately would miss them. The next matching src on that image is ignored.
+const ignoreSrc = new WeakMap();
+
+function isHttp(value){
+  return /^https?:\/\//i.test(String(value || "").trim());
+}
+// A real uploaded picture, not a local assets file the browser turned into a full page URL.
+function isUploadUrl(value){
+  const v = cleanUrl(value);
+  if (!isHttp(v)) return false;
+  try {
+    const path = new URL(v, location.href).pathname;
+    if (path === "/assets" || path.startsWith("/assets/") || path.includes("/assets/")) return false;
+  } catch (err) {
+    return false;
+  }
+  return true;
+}
+function cleanUrl(value){
+  const v = String(value || "").trim();
+  if (!v || v.includes("PASTE HERO IMAGE URL HERE") || v.includes("PASTE data/content.json HERE")) return "";
+  return v;
+}
+function escapeAttr(value){
+  return String(value || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+}
+function escapeText(value){
+  return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function imageUrl(slot, jsonSrc){
+  const uploaded = slot ? UPLOADS.get(slot) : "";
+  if (isHttp(uploaded)) return uploaded;
+  const json = cleanUrl(jsonSrc);
+  if (json) return json;
+  return uploaded || "";
+}
+function categoryPicture(cat, kind){
+  const visual = imageUrl("visual:" + cat.id, cat.visualAsset);
+  const icon = imageUrl("icon:" + cat.id, cat.icon);
+  if (kind === "icon") return (isHttp(icon) && icon) || (isHttp(visual) && visual) || icon || visual || "";
+  return (isHttp(visual) && visual) || (isHttp(icon) && icon) || visual || icon || "";
+}
+function writeInlineJson(){
+  const inline = document.getElementById("site-content");
+  if (!inline) return;
+  const pasted = inline.textContent.trim();
+  if (!pasted || pasted.includes("PASTE data/content.json HERE")) return;
+  inline.textContent = JSON.stringify(SITE);
+}
+// Keeps a CRM upload on the matching JSON field so the next page draw uses the same link.
+function setBySlot(slot, url){
+  if (!slot || !isHttp(url) || !SITE) return;
+  SITE._uploads = SITE._uploads || {};
+  const sameUpload = SITE._uploads[slot] === url;
+  SITE._uploads[slot] = url;
+  const parts = slot.split(":");
+  const kind = parts[0];
+  let fieldChanged = false;
+  const cats = (SITE.catalog && SITE.catalog.categories) || [];
+  if (kind === "visual" || kind === "icon"){
+    const key = kind === "visual" ? "visualAsset" : "icon";
+    const cat = cats.find(c => c.id === parts[1]);
+    if (cat && cat[key] !== url){ cat[key] = url; fieldChanged = true; }
+    const mem = CATEGORIES.find(c => c.id === parts[1]);
+    if (mem) mem[key] = url;
+  } else if (kind === "product" && !parts[2]){
+    const raw = (SITE.products || []).find(p => p.id === parts[1]);
+    if (raw && raw.image !== url){
+      raw.image = url;
+      if (Array.isArray(raw.images) && raw.images.length) raw.images[0] = url;
+      else raw.images = [url];
+      fieldChanged = true;
+      for (const k of Object.keys(productCache)) delete productCache[k];
+    }
+  } else if (kind === "sub" || kind === "type"){
+    const cat = cats.find(c => c.id === parts[1]);
+    const subs = cat ? (cat.subCategories || cat.subcategories || []) : [];
+    const sub = subs.find(s => s.id === parts[2]);
+    if (kind === "sub" && sub && sub.image !== url){ sub.image = url; fieldChanged = true; }
+    if (kind === "type" && sub){
+      const type = (sub.types || []).find(t => t.id === parts[3]);
+      if (type && type.image !== url){ type.image = url; fieldChanged = true; }
+    }
+    const memSub = typeof subById === "function" ? subById(parts[1], parts[2]) : null;
+    if (kind === "sub" && memSub) memSub.image = url;
+    if (kind === "type" && memSub){
+      const memType = typeById(memSub, parts[3]);
+      if (memType) memType.image = url;
+    }
+  } else if (slot === "hero"){
+    const hero = SITE.homepage && SITE.homepage.hero;
+    if (hero && hero.image !== url){ hero.image = url; fieldChanged = true; }
+  } else if (slot === "logo"){
+    SITE.business = SITE.business || {};
+    if (SITE.business.logo !== url){ SITE.business.logo = url; fieldChanged = true; }
+    document.querySelectorAll("link[rel='icon']").forEach(el => el.setAttribute("href", url));
+  } else if (kind === "page"){
+    const pg = SITE.pages && SITE.pages[parts[1]];
+    if (pg && pg.image !== url){ pg.image = url; fieldChanged = true; }
+  }
+  if (!sameUpload || fieldChanged) writeInlineJson();
+}
+function applyImg(img, slot, jsonSrc){
+  if (!img) return;
+  if (slot) img.setAttribute("data-slot", slot);
+  const live = cleanUrl(img.getAttribute("src"));
+  if (isUploadUrl(live)){
+    if (slot){
+      UPLOADS.set(slot, live);
+      setBySlot(slot, live);
+    }
+    img.style.visibility = "";
+    return;
+  }
+  const next = imageUrl(slot, jsonSrc);
+  if (!next || next === live) return;
+  ignoreSrc.set(img, next);
+  img.setAttribute("src", next);
+  if (isHttp(next)) img.style.visibility = "";
+}
+function bindImageFallback(img){
+  if (!img || img.dataset.fallbackBound) return;
+  img.dataset.fallbackBound = "1";
+  img.addEventListener("error", () => {
+    // Keep a broken hero clickable inside the CRM so Upload can replace it.
+    if (embedded()) return;
+    if (!isHttp(img.getAttribute("src"))) img.style.visibility = "hidden";
+  });
+  img.addEventListener("load", () => { img.style.visibility = ""; });
+}
+function harvestUploads(){
+  document.querySelectorAll("img[data-slot]").forEach(img => {
+    const slot = img.getAttribute("data-slot");
+    const src = cleanUrl(img.getAttribute("src"));
+    if (!slot || !isUploadUrl(src) || UPLOADS.get(slot) === src) return;
+    UPLOADS.set(slot, src);
+    setBySlot(slot, src);
+  });
+}
+function watchUploads(){
+  const obs = new MutationObserver(records => {
+    for (const rec of records){
+      if (rec.attributeName !== "src") continue;
+      const img = rec.target;
+      if (!img || !img.getAttribute) continue;
+      const slot = img.getAttribute("data-slot");
+      const src = cleanUrl(img.getAttribute("src"));
+      if (ignoreSrc.get(img) === src){ ignoreSrc.delete(img); continue; }
+      if (!slot || !isUploadUrl(src) || UPLOADS.get(slot) === src) continue;
+      UPLOADS.set(slot, src);
+      img.style.visibility = "";
+      setBySlot(slot, src);
+    }
+  });
+  obs.observe(document.body, {subtree:true, attributes:true, attributeFilter:["src"]});
+}
+function embedded(){
+  return document.documentElement.classList.contains("is-embedded");
+}
 
 function catById(id){ return CATEGORIES.find(c => c.id === id); }
 function subsOf(catId){ return SUBCATEGORIES[catId] || []; }
@@ -1696,21 +1927,54 @@ function crumbHTML(items){
 }
 
 function cardHTML(cat){
-  const visual = cat.visualAsset || cat.image || cat.icon;
-  return `<a class="category-card" href="#/category/${cat.id}" aria-label="Open ${cat.title} category">
+  const href = `#/category/${cat.id}`;
+  const src = categoryPicture(cat, "visual");
+  return `<article class="category-card" data-cat="${escapeAttr(cat.id)}" data-href="${href}">
     <div class="card-visual">
-      <img class="card-object card-object-${cat.id}" src="${visual}" alt="${cat.alt}">
+      <img class="card-object card-object-${escapeAttr(cat.id)}" data-slot="visual:${escapeAttr(cat.id)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(cat.alt || cat.title)}">
     </div>
-    <h3>${cat.title}</h3>
-    <p>${cat.description}</p>
-    <span class="card-arrow" aria-hidden="true">→</span>
-  </a>`;
+    <a class="card-open" href="${href}" aria-label="Open ${escapeAttr(cat.title)} category">
+      <h3>${escapeText(cat.title)}</h3>
+      <p>${escapeText(cat.description || "")}</p>
+      <span class="card-arrow" aria-hidden="true">→</span>
+    </a>
+  </article>`;
 }
 
 function renderHomeCards(){
   const track = $("#carousel-track");
+  if (!track) return;
   const items = [...CATEGORIES].sort((a,b)=>a.displayOrder-b.displayOrder);
-  track.innerHTML = items.map(cardHTML).join("");
+  const keep = new Set(items.map(cat => cat.id));
+  items.forEach(cat => {
+    let card = track.querySelector(`.category-card[data-cat="${CSS.escape(cat.id)}"]`);
+    if (!card){
+      track.insertAdjacentHTML("beforeend", cardHTML(cat));
+      card = track.querySelector(`.category-card[data-cat="${CSS.escape(cat.id)}"]`);
+    }
+    if (!card) return;
+    const href = `#/category/${cat.id}`;
+    card.setAttribute("data-href", href);
+    const img = card.querySelector("img");
+    applyImg(img, "visual:" + cat.id, cat.visualAsset || cat.icon || "");
+    if (img){
+      img.classList.add("card-object", "card-object-" + cat.id);
+      img.alt = cat.alt || cat.title || "";
+    }
+    const title = card.querySelector("h3");
+    const copy = card.querySelector("p");
+    const link = card.querySelector("a");
+    if (title) title.textContent = cat.title;
+    if (copy) copy.textContent = cat.description || "";
+    if (link){
+      link.href = href;
+      link.setAttribute("aria-label", `Open ${cat.title} category`);
+    }
+    track.appendChild(card);
+  });
+  [...track.querySelectorAll(".category-card")].forEach(card => {
+    if (!keep.has(card.getAttribute("data-cat"))) card.remove();
+  });
 }
 
 let carouselIndex = 0;
@@ -1753,6 +2017,11 @@ function bindCarousel(){
   $("#carousel-prev").addEventListener("click", () => moveCarousel(-1));
   $("#carousel-next").addEventListener("click", () => moveCarousel(1));
   const vp = $("#carousel-viewport");
+  // The CRM uses the same pointer to pick a picture. Don't steal it inside the preview.
+  if (embedded()){
+    window.addEventListener("resize", applyCarousel);
+    return;
+  }
   let startX = null;
   let dragged = false;
   let lastX = null;
@@ -1768,8 +2037,10 @@ function bindCarousel(){
       return;
     }
     const hit = document.elementFromPoint(clientX, clientY);
-    const card = hit && hit.closest("a.category-card");
-    if (card) location.hash = card.getAttribute("href");
+    if (hit && hit.closest("img")) return;
+    const card = hit && hit.closest(".category-card");
+    const href = card && (card.getAttribute("data-href") || "");
+    if (href) location.hash = href;
   }
   vp.addEventListener("pointerdown", e => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
@@ -1865,23 +2136,26 @@ function pageFrame(title, lead, inner, nav){
 }
 
 function renderCategories(){
-  const cards = [...CATEGORIES].sort((a,b)=>a.displayOrder-b.displayOrder).map(c => `
-    <a class="tile navy-tile" href="#/category/${c.id}">
-      <div class="tile-img"><img src="${c.icon}" alt="${c.alt}"></div>
-      <div class="tile-body"><h3>${c.title}</h3><p>${c.description}</p></div>
-    </a>`).join("");
+  const cards = [...CATEGORIES].sort((a,b)=>a.displayOrder-b.displayOrder).map(c => {
+    const href = `#/category/${c.id}`;
+    const src = categoryPicture(c, "icon");
+    return `<article class="tile" data-href="${href}">
+      <div class="tile-img"><img data-slot="icon:${escapeAttr(c.id)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(c.alt || c.title)}"></div>
+      <a class="tile-body" href="${href}"><h3>${escapeText(c.title)}</h3><p>${escapeText(c.description || "")}</p></a>
+    </article>`;
+  }).join("");
   const pg = (SITE.pages || {}).categories || {};
   $("#view-page").innerHTML = pageFrame(pg.title || "Categories", pg.lead || "", `<div class="cat-grid">${cards}</div>`, "categories");
 }
 
 // Single card template: every product on every listing page goes through this.
 function renderProductCard(p){
-  return `<article class="product-box" data-id="${p.id}">
-    <a href="#/product/${p.id}">
-      <div class="product-box-image"><img src="${p.image}" alt="${p.alt}" loading="lazy"></div>
-    </a>
+  const href = `#/product/${p.id}`;
+  const src = imageUrl("product:" + p.id, p.image);
+  return `<article class="product-box" data-id="${escapeAttr(p.id)}" data-href="${href}">
+    <div class="product-box-image"><img data-slot="product:${escapeAttr(p.id)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(p.alt)}"></div>
     <div class="product-box-body">
-      <h3><a href="#/product/${p.id}">${p.title}</a></h3>
+      <h3><a href="${href}">${escapeText(p.title)}</a></h3>
       <p>${p.shortDescription}</p>
       <p class="product-price">${p.price}</p>
       <div class="product-box-actions">
@@ -1900,12 +2174,16 @@ function catalogLeads(){
     type: pg.typeLead || "Choose a type."
   };
 }
-function tileGridHTML(items, hrefFor, fallbackImage){
-  return items.map(item => `
-    <a class="tile" href="${hrefFor(item)}">
-      <div class="tile-img"><img src="${item.image || fallbackImage}" alt="${item.title}"></div>
-      <div class="tile-body"><h3>${item.title}</h3>${item.description ? `<p>${item.description}</p>` : ""}</div>
-    </a>`).join("");
+function tileGridHTML(items, hrefFor, fallbackImage, slotFor){
+  return items.map(item => {
+    const href = hrefFor(item);
+    const slot = slotFor ? slotFor(item) : "";
+    const src = imageUrl(slot, item.image || fallbackImage || "");
+    return `<article class="tile" data-href="${escapeAttr(href)}">
+      <div class="tile-img"><img data-slot="${escapeAttr(slot)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(item.title)}"></div>
+      <a class="tile-body" href="${escapeAttr(href)}"><h3>${escapeText(item.title)}</h3>${item.description ? `<p>${escapeText(item.description)}</p>` : ""}</a>
+    </article>`;
+  }).join("");
 }
 function levelPageHTML(crumbs, title, lead, tiles, emptyText){
   return `<div class="catalog-page">
@@ -1931,7 +2209,7 @@ function renderCategory(catId, subId, typeId, variantId){
 
   // Level 2: sub-categories
   if (!subId){
-    const tiles = tileGridHTML(subsOf(catId), s => catalogHref(cat, s), cat.icon);
+    const tiles = tileGridHTML(subsOf(catId), s => catalogHref(cat, s), cat.icon, s => `sub:${cat.id}:${s.id}`);
     view.innerHTML = levelPageHTML([{label:"Home", href:"#/"},{label:cat.title}], cat.title, cat.description || leads.sub, tiles, "Sub-categories coming soon.");
     return;
   }
@@ -1945,7 +2223,7 @@ function renderCategory(catId, subId, typeId, variantId){
 
   // Level 3: types
   if (!typeId){
-    const tiles = tileGridHTML(sub.types || [], t => catalogHref(cat, sub, t), sub.image || cat.icon);
+    const tiles = tileGridHTML(sub.types || [], t => catalogHref(cat, sub, t), sub.image || cat.icon, t => `type:${cat.id}:${sub.id}:${t.id}`);
     view.innerHTML = levelPageHTML(
       [{label:"Home", href:"#/"},{label:cat.title, href:catalogHref(cat)},{label:sub.title}],
       sub.title, sub.description || leads.type, tiles, "Types coming soon.");
@@ -2134,10 +2412,10 @@ async function renderProduct(id){
     ...(type ? [{label:type.title, href:typeHref}] : []),
     {label:p.title}
   ];
-  const images = p.images && p.images.length ? p.images : [p.image];
+  const images = (p.images && p.images.length ? p.images : [p.image]).map((src, index) => index === 0 ? imageUrl("product:" + p.id, src) : src);
   const thumbs = images.map((src,index) => `
     <button class="gallery-thumb ${index===0?"is-active":""}" type="button" data-index="${index}" aria-label="View product image ${index+1}">
-      <img src="${src}" alt="">
+      <img data-slot="product:${escapeAttr(p.id)}:${index}" draggable="false" src="${escapeAttr(src)}" alt="">
     </button>`).join("");
   const specs = (p.specifications || DEFAULT_SPECS).map(([label,value]) => `
     <div class="spec-item"><strong>${label}</strong><span>${value}</span></div>`).join("");
@@ -2148,7 +2426,7 @@ async function renderProduct(id){
     <article class="detail">
       <div class="detail-gallery">
         <button class="detail-photo" type="button" id="open-viewer" aria-label="View image fullscreen">
-          <img id="detail-main-image" src="${images[0]}" alt="${p.alt}">
+          <img id="detail-main-image" data-slot="product:${escapeAttr(p.id)}" draggable="false" src="${escapeAttr(images[0])}" alt="${escapeAttr(p.alt)}">
         </button>
         <div class="gallery-thumbs">${thumbs}</div>
       </div>
@@ -2177,10 +2455,17 @@ async function renderProduct(id){
   let selectedImage = 0;
   $$(".gallery-thumb").forEach(button => button.addEventListener("click", () => {
     selectedImage = Number(button.dataset.index);
-    $("#detail-main-image").src = images[selectedImage];
+    const main = $("#detail-main-image");
+    if (main){
+      ignoreSrc.set(main, images[selectedImage]);
+      main.src = images[selectedImage];
+    }
     $$(".gallery-thumb").forEach(item => item.classList.toggle("is-active", item === button));
   }));
-  $("#open-viewer").addEventListener("click", () => openViewer(images, selectedImage, p.alt));
+  $("#open-viewer").addEventListener("click", e => {
+    if (embedded() && e.target.closest("img")) return;
+    openViewer(images, selectedImage, p.alt);
+  });
   $$(".tab-btn").forEach(button => button.addEventListener("click", () => {
     $$(".tab-btn").forEach(item => item.classList.toggle("is-active", item === button));
     if (button.dataset.tab === "description") $("#tab-panel").innerHTML = p.longDescription;
@@ -2199,7 +2484,7 @@ function renderAbout(){
         ${paragraphs}
         ${points ? `<div class="points">${points}</div>` : ""}
       </div>
-      ${pg.image ? `<img src="${pg.image}" alt="${pg.imageAlt || ""}">` : ""}
+      ${pg.image ? `<img data-slot="page:about" draggable="false" src="${escapeAttr(imageUrl("page:about", pg.image))}" alt="${escapeAttr(pg.imageAlt || "")}">` : ""}
     </div>
   `, "about");
 }
@@ -2209,7 +2494,7 @@ function renderManufacturing(){
   const steps = (pg.steps || []).map((st, i) => `<div class="mfg-card"><strong>${String(i + 1).padStart(2, "0")}</strong><h3>${st.title}</h3><p>${st.text || ""}</p></div>`).join("");
   $("#view-page").innerHTML = pageFrame(pg.title || "Manufacturing", pg.lead || "", `
     <div class="mfg-grid">
-      ${pg.image ? `<img src="${pg.image}" alt="${pg.imageAlt || ""}" style="width:100%;height:100%;min-height:280px;object-fit:cover;border-radius:18px">` : ""}
+      ${pg.image ? `<img data-slot="page:manufacturing" draggable="false" src="${escapeAttr(imageUrl("page:manufacturing", pg.image))}" alt="${escapeAttr(pg.imageAlt || "")}" style="width:100%;height:100%;min-height:280px;object-fit:cover;border-radius:18px">` : ""}
       <div class="mfg-cards">${steps}</div>
     </div>
   `, "manufacturing");
@@ -2242,7 +2527,7 @@ function formPage(kind, opts = {}){
         <h3>${pages.visitTitle || "Visit us"}</h3>
         ${br.summary ? `<p>${br.summary}</p>` : ""}
         ${br.note ? `<p>${br.note}</p>` : ""}
-        ${pg.image ? `<img src="${pg.image}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">` : ""}
+        ${pg.image ? `<img data-slot="page:${escapeAttr(kind)}" draggable="false" src="${escapeAttr(imageUrl("page:" + kind, pg.image))}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">` : ""}
       </aside>
     </div>`;
 }
@@ -2386,7 +2671,7 @@ function renderAppointment(){
       <aside class="info-card appt-aside">
         <h3>${aside.title || "What to expect"}</h3>
         ${(aside.points || []).length ? `<ul class="appt-points">${aside.points.map(t => `<li>${t}</li>`).join("")}</ul>` : ""}
-        ${pg.image ? `<img src="${pg.image}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">` : ""}
+        ${pg.image ? `<img data-slot="page:appointment" draggable="false" src="${escapeAttr(imageUrl("page:appointment", pg.image))}" alt="" style="margin-top:16px;height:220px;object-fit:cover;border-radius:12px">` : ""}
       </aside>
     </div>`;
   $("#view-page").innerHTML = pageFrame(pg.title || "Book an appointment", pg.lead || "", inner, "appointment");
@@ -2526,6 +2811,8 @@ function closeViewer(){
 }
 
 function init(){
+  harvestUploads();
+  watchUploads();
   renderHomeCards();
   bindCarousel();
   bindBranches();
@@ -2551,6 +2838,19 @@ function init(){
   // Some page builders cancel normal link clicks inside their preview.
   // These in-page links (#/categories, #/about, …) still switch section here.
   window.addEventListener("click", e => {
+    const img = e.target.closest && e.target.closest("img");
+    // In the CRM, a click on a picture selects it for Upload. It does not open the page.
+    if (img){
+      if (embedded()) return;
+      const host = img.closest("[data-href]");
+      const href = host && host.getAttribute("data-href");
+      if (href && href.startsWith("#/")){
+        e.preventDefault();
+        if (location.hash === href) route();
+        else location.hash = href;
+      }
+      return;
+    }
     const link = e.target.closest && e.target.closest("a[href^='#/']");
     if (!link) return;
     e.preventDefault();
@@ -2565,7 +2865,7 @@ loadSite()
   .catch(err => {
     console.error("Site content failed to load", err);
     const track = $("#carousel-track");
-    if (track) track.innerHTML = `<p class="load-error">Site content could not be loaded. Serve the site over http(s) and check data/content.json.</p>`;
+    if (track && !track.querySelector(".category-card")) track.innerHTML = `<p class="load-error">Site content could not be loaded. Serve the site over http(s) and check data/content.json.</p>`;
     init();
   });
 </script>
