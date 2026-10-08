@@ -1,308 +1,121 @@
-# Maruthi Enterprises Website
+# Sri Maruthi Enterprises
 
-A professional showcase website for **Maruthi Enterprises**, a business specializing in **cement products, sand, metal, and related building materials**.
-
-## 🚀 Quick Start
-
-### Prerequisites
-
--   Node.js (v20.x recommended)
--   npm (or yarn/pnpm)
-
-### Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone <repository-url>
-    cd maruthi-enterprises-website
-    ```
-
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-
-3.  Start the development server:
-    ```bash
-    npm run dev
-    ```
-
-    The site will be available at `http://localhost:3000`.
-
-4.  Build for production:
-    ```bash
-    npm run build
-    ```
-
-5.  Start production server:
-    ```bash
-    npm run start
-    ```
-
----
-
-## 🛠️ Tech Stack
-
--   **Framework**: **Next.js 15** (App Router)
--   **Language**: **TypeScript**
--   **Styling**: **Tailwind CSS v4** + **Radix UI**
--   **Icons**: **Lucide React**
--   **Deployment**: **Vercel** (optimized for)
-
----
-
-## 📂 Project Structure
-
-```
-maruthi-enterprises-website/
-├── app/                      # Next.js App Router
-│   ├── (marketing)/          # Public marketing pages
-│   │   ├── page.tsx          # Homepage
-│   │   └── ...
-│   ├── admin/                # Admin dashboard
-│   │   ├── page.tsx
-│   │   └── ...
-│   ├── api/                  # API routes
-│   ├── layout.tsx            # Root layout
-│   └── globals.css           # Global styles
-├── components/               # Reusable components
-│   ├── ui/                   # Radix UI + custom components
-│   ├── marketing/            # Marketing-specific components
-│   └── admin/                # Admin-specific components
-├── lib/                      # Business logic
-│   ├── database.ts           # Database operations
-│   ├── validation.ts         # Validation schemas
-│   └── utils.ts              # Utility functions
-├── public/                   # Static assets
-└── prisma/                   # Prisma ORM
-    ├── schema.prisma         # Database schema
-    └── migrations/           # Database migrations
-```
-
----
-
-## 🏗️ Architecture
-
-### 1. **Routing (App Router)**
-
-```
-app/page.tsx             → / (Homepage)
-app/about/page.tsx       → /about
-app/services/page.tsx    → /services
-app/(marketing)/contact/page.tsx → /contact
-app/admin/page.tsx       → /admin (Dashboard)
-```
-
-### 2. **Database Schema**
-
-The database uses **Prisma** with the following models:
-
--   `User`: Admin users
--   `ProductCategory`: Product categories
--   `Product`: Products (cement, sand, metal, etc.)
--   `Order`: Customer orders
--   `OrderProduct`: Order items
-
-**Schema location**: `prisma/schema.prisma`
-
----
-
-## 🗄️ Database Setup
-
-### Requirements
-
--   **PostgreSQL** (recommended for production)
--   **SQLite** (default for development)
-
-### Configuration
-
-Update `prisma/schema.prisma` with your database connection:
-
-```prisma
-generator client { provider = "prisma-client-js" }
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-// ... model definitions
-```
-
-### Migration
-
-Run migrations to create/update tables:
+Vanilla HTML showcase site. Serve the folder over http (the site fetches its content file, so opening `index.html` directly from disk will show no content):
 
 ```bash
-npx prisma migrate dev --name init
+python3 -m http.server 3000
 ```
 
-### Database URL Environment Variable
+Then visit `http://localhost:3000`.
 
-Add to your `.env` file:
+## One file controls the whole site: `data/content.json`
 
-```env
-DATABASE_URL="postgresql://user:password@host:port/dbname"
-```
+You never edit `index.html`. Every text, number, image link, size, category, filter, and product lives in `data/content.json`. Edit a value, save, publish, reload.
 
----
+| Want to change | Section in `data/content.json` |
+| --- | --- |
+| WhatsApp number (used by every WhatsApp button, once) | `business.whatsappNumber` |
+| Pre-filled WhatsApp messages (each button has its own) | `business.whatsappMessage` (Chat on WhatsApp + floating button), `business.appointmentMessage` (first line of the appointment form message), `business.contactMessage` (Contact page button), `business.enquireMessage` and `business.consultMessage` (product Enquire / Consult buttons; `{product}` becomes "Product Name (Type)" and adds the style or material when the product has one, for example "Modern Upholstered Cot (Premium Teak Wood Cot, Modern)". `{name}`, `{type}` and `{variant}` are also available) |
+| Phone (tel: link), email (mailto:, leave `""` to hide), opening hours + note | `business.phone`, `business.phoneDisplay`, `business.email`, `business.hours`, `business.hoursNote` |
+| Business name, caption, tagline, copyright, social links | `business` |
+| Footer branch line, branch list (footer popover + Contact page + form dropdown), contact note | `branches` |
+| Hero title, description, subline, button labels, badge labels, hero image | `homepage.hero` (badge icons stay in code; only the words change) |
+| "Shop by Category" heading | `homepage.shopHeading` |
+| About, Manufacturing, Contact, Appointment, Categories page text and images | `pages` |
+| Contact form: button label, first line of the WhatsApp message, thank-you text | `pages.contact` (`submit`, `whatsappIntro`), `pages.formThanks` |
+| Book an Appointment page: heading, lead, field labels, placeholders, error text, time-of-day options, "Other" category label, side panel points | `pages.appointment` (`labels`, `placeholders`, `errors`, `timeOptions`, `otherCategory`, `aside`); the first line of the message is `business.appointmentMessage` |
+| Sizes in pixels: hero text, category cards, product cards, header/footer height | `sizes` |
+| Categories → sub-categories → types, plus the Style or Material filter options for a type | `catalog.categories` (`facet` is `"style"` or `"material"`, `options` is the filter list) |
+| Price filter buttons and which spec fields become filters | `catalog.filters` |
+| Placeholder cards per type, products per page | `catalog.placeholderProductsPerType`, `catalog.productsPerPage` |
+| Products | `products` |
 
-## 👤 Admin Authentication
+### Images from the CRM
 
-### Initial Setup
+Upload the photo in the CRM asset area, copy its link (`https://...`), and paste it into any `image`, `icon`, `visualAsset`, or `images` field. Nothing else is needed.
 
-Create the first admin user:
+### Products
 
-```bash
-# Add this script to package.json
-"scripts": {
-  "create-admin": "ts-node scripts/create-admin.ts"
-}
+`products` is a list. Each product is one object:
 
-# Run it
-npm run create-admin
-```
-
-The script will prompt for:
--   Admin email
--   Admin password
--   Admin name
-
-### Admin URLs
-
--   **Dashboard**: `/admin`
--   **Login**: `/admin/login`
-
----
-
-## 📋 Admin Operations
-
-### Product Management
-
-#### Add Product
-
-1.  Go to **Products** > **Add Product**
-2.  Fill in:
-    -   Name (e.g., "Birla Cement - 50kg")
-    -   Category (Cement, Sand, Metal, etc.)
-    -   Unit (Bag, Ton, Cu.Meter)
-    -   Price per unit
-    -   Description
-    -   Features (bullet points)
-3.  Upload product image (optional)
-
-#### Categories
-
-Manage categories from **Categories** tab:
--   Add new categories
--   Edit category names
--   Delete categories
-
-### Order Management
-
-#### View Orders
-
-1.  Go to **Orders**
-2.  Browse all customer orders
-3.  Filter by status (Pending, Processing, Completed, Cancelled)
-4.  View order details:
-    -   Customer information
-    -   Order date and time
-    -   Total amount
-    -   Products ordered
-    -   Status history
-
-#### Update Order Status
-
-1.  Click on an order to view details
-2.  Select new status
-3.  Add internal notes (optional)
-4.  Update order
-
----
-
-## 📱 Responsiveness
-
-The website is fully responsive and optimized for all devices:
-
--   **Mobile**: Portrait and landscape
--   **Tablet**: iPad, Android tablets
--   **Desktop**: All screen sizes
-
-### Breakpoints
-
-```typescript
-// tailwind.config.ts
-const theme = {
-  screens: {
-    sm: '480px',    // Mobile (Portrait)
-    md: '768px',    // Tablet (Portrait)
-    lg: '1024px',   // Desktop (Small)
-    xl: '1280px',   // Desktop (Medium)
-    '2xl': '1536px' // Desktop (Large)
-  }
+```json
+{
+  "id": "cot-001",
+  "category": "furniture",
+  "subCategory": "cots",
+  "type": "premium-teak-wood-cot",
+  "style": "Classic",
+  "name": "Premium Teak Wood Cot",
+  "description": "Elegant design. Built to last.",
+  "longDescription": "Optional longer text shown on the product page.",
+  "price": 32999,
+  "image": "https://your-crm-host/images/cot-001.jpg",
+  "images": ["https://your-crm-host/images/cot-001.jpg", "https://your-crm-host/images/cot-001-side.jpg"],
+  "specs": { "material": "Teak Wood", "size": "Queen" }
 }
 ```
 
-### Mobile Navigation
+- **Add a product:** copy an existing object, paste it into the list, change the values. Give it a new `id`.
+- **Remove a product:** delete its object from the list.
+- **Change price:** edit `price` (a number, no ₹ or commas). Remove the line or set `null` for "Price on request".
+- **Change description:** edit `description` (card) and `longDescription` (product page).
+- `category`, `subCategory`, and `type` must match ids under `catalog.categories`. If that type has a Style or Material filter, also set `"style": "Modern"` or `"material": "Fabric"` (the option's title, not its id).
+- Any `specs` key listed in `catalog.filters.attributes` becomes a checkbox filter automatically; every key shows in the product's spec list.
 
--   **Hamburger menu** on mobile devices
--   **Full-screen overlay** for mobile navigation
--   **Back button** in mobile headers
+### Categories, sub-categories, types
 
----
+The catalog is four levels. The first three are card grids; the last is the product list:
 
-## 🔐 Security
+1. Category (Furniture) → 2. Sub-category (Cots) → 3. Type (Premium Teak Wood Cot) → 4. Products, with filters.
 
-### Authentication
+Clicking a type opens that type's products directly. Style and material are filters on that product list, not extra pages.
 
--   **NextAuth.js** with email/password
--   **Password hashing**: bcrypt
--   **Session management**
+Under `catalog.categories`, each category has `subCategories` and each sub-category has `types`. Each needs an `id` (lowercase, hyphens), a `title`, and optionally `description` and `image`.
 
-### Input Validation
+A type that should be filterable adds `facet` and `options`:
 
--   **Zod** schemas for all forms
--   **Type safety** with TypeScript
--   **Server-side validation**
-
-### Environment Variables
-
-Create `.env` file in the root directory:
-
-```env
-# Database
-DATABASE_URL="postgresql://user:password@host:port/dbname"
-
-# NextAuth
-NEXTAUTH_SECRET="your-nextauth-secret"
-NEXTAUTH_URL="http://localhost:3000"
-```
-
-**Generate NextAuth secret**:
-```bash
-node -e 'console.log(crypto.randomBytes(32).toString("hex"))'
-```
-
----
-
-## 📝 Content Management
-
-### Adding Pages
-
-Create a new page in `app/` directory:
-
-```typescript
-// app/new-page/page.tsx
-
-export default function NewPage() {
-  return (
-    <main>
-      <h1>New Page Title</h1>
-      {/* Page content */}
-    </main>
-  )
+```json
+{
+  "id": "l-shape",
+  "title": "L Shape Sofa",
+  "image": "https://your-crm-host/images/l-shape.jpg",
+  "facet": "material",
+  "options": [
+    { "id": "fabric", "title": "Fabric" },
+    { "id": "wooden", "title": "Wooden" }
+  ]
 }
 ```
 
-### SEO Optimization
+`facet` is `"style"` when the type is a material (Teak Wood → Classic / Modern / Carved) and `"material"` when the type is a shape or model (L Shape → Fabric / Wooden, LED TV → 32 inch / 43 inch). Leave both out when a type comes only one way. Each product of that type then gets `"style": "Modern"` or `"material": "Fabric"`, matching an option title.
+
+Filters, prices and the Enquire / Consult buttons appear only on the product list. Card text under the heading comes from `pages.categories.subLead`, `typeLead`, or the item's own `description`.
+
+### Sizes
+
+`sizes` values are pixels. For example `categoryCardPx: 210` sets the homepage category card square; `heroTitleMaxPx: 54` caps the hero heading size; `productCardMinPx: 200` sets how wide product cards are before the grid adds a column.
+
+### Contact and appointment forms
+
+There is no server, so the forms hand off to WhatsApp: pressing the button opens a chat with `business.whatsappNumber` with the details already typed in. The customer presses send in WhatsApp and you receive it there.
+
+- Contact form (`#/contact`): name, phone, chosen branch, message.
+- Book an Appointment (`#/appointment`, every "Book an Appointment" button): full name, phone, category of interest (the category list comes from `catalog.categories` plus `pages.appointment.otherCategory`), customization yes/no with details, preferred date and time, notes. Optional fields left blank are not included in the message.
+
+### Hosting in a CRM / page builder (one HTML box, uploaded images)
+
+Some hosts give you a single HTML source box per page plus an "Upload" for images, and cannot serve `data/content.json` as a separate file. For those:
+
+1. Upload every file from `assets/` (keep the same file names). Note the web address of one uploaded file, for example `https://cdn.example.com/site123/hero-living.png`. The part before the file name is your `assetBase`.
+   - If the host keeps sub-folders, upload the folders as they are and `assetBase` is the address of the `assets` folder itself.
+   - If the host flattens everything into one folder, upload the files and also change each `assets/hero/...`, `assets/products/...` path in `content.json` to just the file name after `assetBase` (or ask for the paths to be flattened for you).
+2. Set `"assetBase"` at the top of `content.json` to that prefix. Optionally set `business.logo` to the uploaded logo address.
+3. Open `index.html`, find `<script type="application/json" id="site-content">` near the top of the script section, and paste the entire `content.json` between that tag and its `</script>`.
+4. Paste the whole `index.html` into the host's HTML source box for the home page and publish.
+
+When the inline block is filled the site never downloads `data/content.json`, so future edits are made inside that block in the host's editor. Locally, leave the block empty and keep editing `data/content.json` as before.
+
+### Rules
+
+- Keep the file valid JSON: every item in a list separated by a comma, no comma after the last one, text in double quotes. A JSON checker (search "JSON validator") will point to any mistake.
+- Ids appear in page links, so avoid renaming an id once a link has been shared. Titles can change freely.
