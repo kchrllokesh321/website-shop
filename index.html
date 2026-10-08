@@ -459,13 +459,28 @@ html.is-embedded .hero-media:after{pointer-events:none}
   color:transparent;
   font-size:0;
 }
-/* A missing file still leaves a picture the CRM can click and replace. */
+/* In the builder, keep every category picture inside its own card.
+   The first card's picture used to hang off the left edge, so the Upload control was clipped. */
+html.is-embedded .carousel-viewport{overflow:visible;padding:8px 0 0}
 html.is-embedded .card-object,
 html.is-embedded .tile-img img,
 html.is-embedded .product-box-image img{
   min-height:70%;
-  min-width:70%;
+  min-width:0;
 }
+html.is-embedded .card-object{
+  inset:0;
+  width:100%;
+  height:100%;
+  max-width:100%;
+  min-width:0;
+  min-height:0;
+  transform:none;
+  object-fit:contain;
+  object-position:center bottom;
+}
+html.is-embedded .category-card:hover,
+html.is-embedded .category-card:hover .card-object{transform:none;box-shadow:none}
 .category-card .card-open{display:contents;color:inherit;text-decoration:none}
 a.tile-body{display:block;color:inherit;text-decoration:none}
 .category-card h3{
@@ -907,6 +922,7 @@ textarea{min-height:110px;resize:vertical}
 }
 .detail-gallery{min-width:0}
 .detail-photo{
+  position:relative;
   width:100%;
   height:390px;
   background:#f5f6f8;
@@ -914,17 +930,48 @@ textarea{min-height:110px;resize:vertical}
   cursor:zoom-in;
 }
 .detail-photo img{width:100%;height:100%;object-fit:contain}
+.gallery-nav{
+  position:absolute;
+  top:50%;
+  z-index:2;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  transform:translateY(-50%);
+  background:rgba(3,25,54,.78);
+  color:#fff;
+  font-size:22px;
+  line-height:1;
+}
+.gallery-nav.prev{left:10px}
+.gallery-nav.next{right:10px}
+.gallery-nav[hidden]{display:none}
 .gallery-thumbs{display:flex;gap:9px;margin-top:10px}
+.gallery-thumbs[hidden]{display:none}
 .gallery-thumb{
+  position:relative;
   width:72px;
   height:58px;
   border:1px solid var(--border);
   background:#f5f6f8;
   border-radius:5px;
   overflow:hidden;
+  padding:0;
 }
 .gallery-thumb.is-active{border:2px solid var(--orange)}
 .gallery-thumb img{width:100%;height:100%;object-fit:contain;object-position:center}
+html.is-embedded .detail-photo.is-empty::after,
+html.is-embedded .gallery-thumb.is-empty::after{
+  content:"Add photo";
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#6b7c90;
+  font-size:11px;
+  font-weight:700;
+  pointer-events:none;
+}
 .detail-copy{padding:12px 0 0}
 .detail-copy h1{font-size:clamp(26px,3vw,38px);color:var(--navy);letter-spacing:-.03em}
 .detail-copy .muted{color:var(--muted);margin-top:8px}
@@ -3514,6 +3561,31 @@ function imageUrl(slot, jsonSrc){
   if (json) return json;
   return uploaded || "";
 }
+const BLANK_PHOTO = "assets/products/empty.webp";
+const GALLERY_SLOTS = 3;
+let galleryWatch = null;
+// The first photo is the main picture. Later photos are the ones you swipe to.
+function frameSrc(id, index, fallback){
+  const indexed = UPLOADS.get("product:" + id + ":" + index);
+  if (isHttp(indexed)) return indexed;
+  if (index === 0){
+    const main = UPLOADS.get("product:" + id);
+    if (isHttp(main)) return main;
+  }
+  return cleanUrl(fallback) || "";
+}
+function galleryFrames(p){
+  const list = (p.images && p.images.length ? p.images : (p.image ? [p.image] : [])).slice();
+  const total = embedded() ? Math.max(GALLERY_SLOTS, list.length) : list.length;
+  const frames = [];
+  for (let i = 0; i < total; i++){
+    const src = frameSrc(p.id, i, list[i] || "");
+    if (!embedded() && !src) continue;
+    frames.push({index: i, src});
+  }
+  if (!frames.length) frames.push({index: 0, src: frameSrc(p.id, 0, p.image || "")});
+  return frames;
+}
 function categoryPicture(cat, kind){
   const visual = imageUrl("visual:" + cat.id, cat.visualAsset);
   const icon = imageUrl("icon:" + cat.id, cat.icon);
@@ -3543,14 +3615,17 @@ function setBySlot(slot, url){
     if (cat && cat[key] !== url){ cat[key] = url; fieldChanged = true; }
     const mem = CATEGORIES.find(c => c.id === parts[1]);
     if (mem) mem[key] = url;
-  } else if (kind === "product" && !parts[2]){
+  } else if (kind === "product"){
     const raw = (SITE.products || []).find(p => p.id === parts[1]);
-    if (raw && raw.image !== url){
-      raw.image = url;
-      if (Array.isArray(raw.images) && raw.images.length) raw.images[0] = url;
-      else raw.images = [url];
-      fieldChanged = true;
-      for (const k of Object.keys(productCache)) delete productCache[k];
+    const index = parts[2] === undefined || parts[2] === "" ? 0 : Number(parts[2]);
+    if (raw && Number.isInteger(index) && index >= 0){
+      if (!Array.isArray(raw.images) || !raw.images.length) raw.images = raw.image ? [raw.image] : [];
+      while (raw.images.length <= index) raw.images.push("");
+      if (raw.images[index] !== url){ raw.images[index] = url; fieldChanged = true; }
+      if (index === 0 && raw.image !== url){ raw.image = url; fieldChanged = true; }
+      if (fieldChanged){
+        for (const k of Object.keys(productCache)) delete productCache[k];
+      }
     }
   } else if (kind === "sub" || kind === "type"){
     const cat = cats.find(c => c.id === parts[1]);
@@ -3579,6 +3654,7 @@ function setBySlot(slot, url){
     if (pg && pg.image !== url){ pg.image = url; fieldChanged = true; }
   }
   if (!sameUpload || fieldChanged) writeInlineJson();
+  if (galleryWatch) galleryWatch(slot, url);
 }
 function applyImg(img, slot, jsonSrc){
   if (!img) return;
@@ -4012,9 +4088,9 @@ function renderCategories(){
 // Single card template: every product on every listing page goes through this.
 function renderProductCard(p){
   const href = `#/product/${p.id}`;
-  const src = imageUrl("product:" + p.id, p.image);
+  const src = frameSrc(p.id, 0, p.image) || p.image || "";
   return `<article class="product-box" data-id="${escapeAttr(p.id)}" data-href="${href}">
-    <div class="product-box-image"><img data-slot="product:${escapeAttr(p.id)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(p.alt)}"></div>
+    <div class="product-box-image"><img data-slot="product:${escapeAttr(p.id)}:0" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(p.alt)}"></div>
     <div class="product-box-body">
       <h3><a href="${href}">${escapeText(p.title)}</a></h3>
       <p>${p.shortDescription}</p>
@@ -4273,11 +4349,8 @@ async function renderProduct(id){
     ...(type ? [{label:type.title, href:typeHref}] : []),
     {label:p.title}
   ];
-  const images = (p.images && p.images.length ? p.images : [p.image]).map((src, index) => index === 0 ? imageUrl("product:" + p.id, src) : src);
-  const thumbs = images.map((src,index) => `
-    <button class="gallery-thumb ${index===0?"is-active":""}" type="button" data-index="${index}" aria-label="View product image ${index+1}">
-      <img data-slot="product:${escapeAttr(p.id)}:${index}" draggable="false" src="${escapeAttr(src)}" alt="">
-    </button>`).join("");
+  const frames = galleryFrames(p);
+  const shown = src => src || BLANK_PHOTO;
   const specs = (p.specifications || DEFAULT_SPECS).map(([label,value]) => `
     <div class="spec-item"><strong>${label}</strong><span>${value}</span></div>`).join("");
   setActiveNav("categories");
@@ -4285,11 +4358,16 @@ async function renderProduct(id){
     <div class="container">
       ${crumbHTML(crumbs)}
     <article class="detail">
-      <div class="detail-gallery">
-        <button class="detail-photo" type="button" id="open-viewer" aria-label="View image fullscreen">
-          <img id="detail-main-image" data-slot="product:${escapeAttr(p.id)}" draggable="false" src="${escapeAttr(images[0])}" alt="${escapeAttr(p.alt)}">
-        </button>
-        <div class="gallery-thumbs">${thumbs}</div>
+      <div class="detail-gallery" data-product="${escapeAttr(p.id)}">
+        <div class="detail-photo ${frames[0].src ? "" : "is-empty"}" id="open-viewer">
+          <img id="detail-main-image" data-slot="product:${escapeAttr(p.id)}:${frames[0].index}" draggable="false" src="${escapeAttr(shown(frames[0].src))}" alt="${escapeAttr(p.alt)}">
+          <button class="gallery-nav prev" type="button" data-dir="-1" aria-label="Previous photo" ${frames.length > 1 ? "" : "hidden"}>‹</button>
+          <button class="gallery-nav next" type="button" data-dir="1" aria-label="Next photo" ${frames.length > 1 ? "" : "hidden"}>›</button>
+        </div>
+        <div class="gallery-thumbs" ${frames.length > 1 ? "" : "hidden"}>${frames.map((frame, index) => `
+          <div class="gallery-thumb ${index === 0 ? "is-active" : ""} ${frame.src ? "" : "is-empty"}" data-index="${index}" role="button" tabindex="0" aria-label="View product image ${index + 1}">
+            <img data-slot="product:${escapeAttr(p.id)}:${frame.index}" draggable="false" src="${escapeAttr(shown(frame.src))}" alt="">
+          </div>`).join("")}</div>
       </div>
       <div class="detail-copy">
         <h1>${p.title}</h1>
@@ -4314,18 +4392,74 @@ async function renderProduct(id){
     </div>
   </div>`;
   let selectedImage = 0;
-  $$(".gallery-thumb").forEach(button => button.addEventListener("click", () => {
-    selectedImage = Number(button.dataset.index);
-    const main = $("#detail-main-image");
-    if (main){
-      ignoreSrc.set(main, images[selectedImage]);
-      main.src = images[selectedImage];
-    }
-    $$(".gallery-thumb").forEach(item => item.classList.toggle("is-active", item === button));
+  let swiped = false;
+  const photo = $("#open-viewer");
+  const main = $("#detail-main-image");
+  function paintFrame(pos){
+    if (!frames.length || !main || !photo) return;
+    selectedImage = (pos + frames.length) % frames.length;
+    const frame = frames[selectedImage];
+    const src = shown(frame.src);
+    photo.classList.toggle("is-empty", !frame.src);
+    ignoreSrc.set(main, src);
+    main.setAttribute("data-slot", "product:" + p.id + ":" + frame.index);
+    main.src = src;
+    $$(".gallery-thumb").forEach(item => {
+      const on = Number(item.dataset.index) === selectedImage;
+      item.classList.toggle("is-active", on);
+      item.classList.toggle("is-empty", !frames[Number(item.dataset.index)].src);
+    });
+    const multi = frames.length > 1;
+    $$(".gallery-nav").forEach(btn => { btn.hidden = !multi; });
+    const strip = $(".gallery-thumbs");
+    if (strip) strip.hidden = !multi;
+  }
+  function rememberFrame(slot, url){
+    const match = String(slot).match(/^product:([^:]+):(\d+)$/);
+    if (!match || match[1] !== p.id) return;
+    const index = Number(match[2]);
+    const frame = frames.find(item => item.index === index);
+    if (frame) frame.src = url;
+    else frames.push({index, src: url});
+    frames.sort((a, b) => a.index - b.index);
+    document.querySelectorAll(`img[data-slot="${slot}"]`).forEach(img => {
+      if (img.getAttribute("src") === url) return;
+      ignoreSrc.set(img, url);
+      img.src = url;
+    });
+    const thumb = $(`.gallery-thumb img[data-slot="${slot}"]`);
+    if (thumb) thumb.closest(".gallery-thumb").classList.remove("is-empty");
+    const pos = frames.findIndex(item => item.index === index);
+    if (pos === selectedImage) paintFrame(pos);
+  }
+  galleryWatch = rememberFrame;
+  $$(".gallery-thumb").forEach(item => item.addEventListener("click", () => paintFrame(Number(item.dataset.index))));
+  $$(".gallery-nav").forEach(btn => btn.addEventListener("click", e => {
+    e.stopPropagation();
+    paintFrame(selectedImage + Number(btn.dataset.dir));
   }));
-  $("#open-viewer").addEventListener("click", e => {
+  if (!embedded()){
+    let startX = null;
+    photo.addEventListener("pointerdown", e => {
+      if (e.target.closest(".gallery-nav")) return;
+      startX = e.clientX;
+    });
+    photo.addEventListener("pointerup", e => {
+      if (startX == null) return;
+      const dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) < 36) return;
+      swiped = true;
+      paintFrame(selectedImage + (dx < 0 ? 1 : -1));
+    });
+  }
+  photo.addEventListener("click", e => {
+    if (swiped){ swiped = false; return; }
+    if (e.target.closest(".gallery-nav")) return;
     if (embedded() && e.target.closest("img")) return;
-    openViewer(images, selectedImage, p.alt);
+    const view = frames.map(frame => frame.src).filter(Boolean);
+    if (!view.length) return;
+    openViewer(view, Math.max(0, view.indexOf(frames[selectedImage].src)), p.alt);
   });
   $$(".tab-btn").forEach(button => button.addEventListener("click", () => {
     $$(".tab-btn").forEach(item => item.classList.toggle("is-active", item === button));

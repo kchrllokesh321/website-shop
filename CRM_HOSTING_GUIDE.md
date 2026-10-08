@@ -154,7 +154,9 @@ The CRM does not keep an `assets/` folder. Uploading a file does not put it at `
 2. In the picture panel, press **Upload** (or pick one from the library).
 3. Save, then Publish.
 
-Clicking the **name** under a category still opens that category. In the builder, clicking the **picture** does not. On the published site, clicking the picture opens the category as before.
+Clicking the **name** under a category still opens that category. In the builder, clicking the **picture** does not. On the published site, clicking the picture opens the category as before. Every category card, including the first one, has a picture you can click.
+
+On a product, the **first photo is the main picture**. It shows on the product card and in the large photo. Use the arrows beside that photo to move to photo 2 and photo 3, click each one, and press Upload. You do not set a separate main image. Swipe, or press the arrows, to see the photos you added.
 
 **Way 2. Paste the link in the JSON** (same as before):
 
