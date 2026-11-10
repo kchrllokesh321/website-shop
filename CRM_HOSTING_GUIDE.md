@@ -140,9 +140,18 @@ If an image is missing, that link was not replaced or was pasted wrongly. Search
 
 ## Part B — Editing the site later
 
-All edits are made in the CRM's HTML source box, inside the block that starts `<script type="application/json" id="site-content">`. Everything between that line and its `</script>` is the same JSON described in `README.md`.
+The shop owner does not need the JSON or the CRM picture tools.
 
-Words, prices, and phone numbers still live in the JSON block. Pictures can be set either way.
+1. On the website, double-tap the small line under the logo that says **Since 2020.**
+2. Enter the number **441142** and press Open.
+3. Edit products (name, price, descriptions, type, material or style, up to 3 photos), types and materials, category cards, and the words, phone, hours and page headings.
+4. Press the save button on that section. The phone remembers it.
+5. Press **Download website file**.
+6. In the CRM, open the page HTML, select all, paste this downloaded file in its place, then Save and Publish.
+
+Customers see the changes only after that file is published. Until then, the edits stay on the phone that made them. The number is only a door into this page. It is stored in the page, so do not treat it like a bank password.
+
+Words, prices, and phone numbers still live in the JSON block if you prefer to edit them by hand. Pictures can be set either way.
 
 ### Pictures — two ways
 
@@ -221,4 +230,4 @@ A normal photo stays a normal photo. It does not become the drawn 3D category ic
 | Old version still showing on your phone | The phone cached it. Close the tab and reopen the link, or clear site data. |
 | WhatsApp button opens the wrong number | Change `business.whatsappNumber` (digits only, no `+`, no spaces). |
 | Category picture click opens the category instead of Upload | Click the picture, not the name. Paste the latest `index.html` into the page so the picture is not inside the link. |
-| Visual text edits disappeared | Headings and prices still come from the JSON. Change them there. Pictures can be changed with Upload. |
+| Visual text edits disappeared | Headings and prices come from the saved website file. Double-tap **Since 2020.**, enter 441142, edit there, download the file, and replace the page HTML. |

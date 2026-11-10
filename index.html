@@ -714,6 +714,27 @@ a.tile-body{display:block;color:inherit;text-decoration:none}
 .form-card,.info-card{
   background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;
 }
+.owner{max-width:760px;margin:0 auto}
+.owner-bar h1{font-size:28px;color:var(--navy);letter-spacing:-.03em}
+.owner-bar p{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.5}
+.owner-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.owner-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+.owner-tabs button,.owner-chip button{border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700;color:var(--navy)}
+.owner-tabs button.is-active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.owner-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:12px}
+.owner-card h2{font-size:18px;color:var(--navy)}
+.owner label{display:block;margin:12px 0 4px;font-size:12px;font-weight:800;color:var(--navy)}
+.owner input,.owner select,.owner textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px;background:#fff;color:var(--navy)}
+.owner textarea{min-height:88px;resize:vertical}
+.owner-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.owner-photos figure{margin:0;background:#f4f6f8;border-radius:10px;overflow:hidden;aspect-ratio:1}
+.owner-photos img{width:100%;height:100%;object-fit:cover}
+.owner-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.owner-status{margin-top:10px;font-size:13px;font-weight:700;color:var(--orange-dark,#c2410c)}
+.owner-lock{max-width:420px;margin:24px auto;background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px}
+.owner-type{border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
+.owner-chip{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+@media (max-width:600px){.owner-photos{grid-template-columns:1fr}}
 .contact-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:22px}
 .contact-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
 .contact-card h3{font-size:14px;color:var(--navy)}
@@ -1264,7 +1285,7 @@ html.is-embedded body.home-mode .view-home.is-active{
         <span class="logo-badge"><img class="logo" data-slot="logo" draggable="false" src="assets/brand/logo.png" alt="Sri Maruthi Enterprises logo"></span>
         <span>
           <span class="brand-title">SRI MARUTHI ENTERPRISES</span>
-          <span class="brand-caption">Since 2020.</span>
+          <span class="brand-caption" id="owner-spot">Since 2020.</span>
         </span>
       </a>
       <nav class="nav-links" aria-label="Primary">
@@ -1460,12 +1481,14 @@ html.is-embedded body.home-mode .view-home.is-active{
     "Image fields accept any hosted URL. You can paste the link here, or click the picture in the CRM and press Upload."
   ],
   "assetBase": "",
+  "updatedAt": 0,
   "business": {
     "name": "SRI MARUTHI ENTERPRISES",
     "shortName": "SME",
     "caption": "Since 2020.",
     "tagline": "Quality Homes, Happier Families.",
     "whatsappNumber": "919154444114",
+    "editorPin": "441142",
     "phone": "+919154444114",
     "phoneDisplay": "+91 91544 44114",
     "email": "",
@@ -3291,6 +3314,7 @@ html.is-embedded body.home-mode .view-home.is-active{
 </script>
 <!-- ========== PASTE data/content.json ABOVE THIS LINE ========== -->
 <script>
+const PAGE_SNAPSHOT = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
 try {
   if (window.self !== window.top) document.documentElement.classList.add("is-embedded");
 } catch (err) {
@@ -3489,6 +3513,8 @@ async function loadSite(){
   const fromFile = embedded() ? null : await readContentFile();
   SITE = fromFile || inlineData;
   if (!SITE) throw new Error("Site content is missing");
+  const ownerDraft = readOwnerDraft();
+  if (ownerDraft && Number(ownerDraft.updatedAt) > Number(SITE.updatedAt || 0)) SITE = ownerDraft.site;
   if (SITE.assetBase){
     const base = String(SITE.assetBase).replace(/\/?$/, "/");
     resolveAssets(SITE, base);
@@ -4739,6 +4765,588 @@ function bindAppointmentForm(L, pg){
   });
 }
 
+let ownerTapArm = false;
+let ownerTab = "products";
+let ownerProductId = "";
+let ownerCatId = "";
+let ownerSubId = "";
+
+function readOwnerDraft(){
+  try {
+    const raw = localStorage.getItem("sme-owner-edits");
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (!data || !data.site || !Array.isArray(data.site.products)) return null;
+    return data;
+  } catch (err) {
+    return null;
+  }
+}
+function ownerPin(){
+  return String((SITE.business && SITE.business.editorPin) || "441142").replace(/\D/g, "");
+}
+function ownerUnlocked(){
+  return sessionStorage.getItem("sme-owner-ok") === "1";
+}
+function ownerCats(){ return ((SITE.catalog || {}).categories) || []; }
+function ownerSubs(cat){ return (cat && (cat.subCategories || cat.subcategories)) || []; }
+function ownerTypes(sub){ return (sub && sub.types) || []; }
+function slugId(text){
+  const base = String(text || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return base || "item";
+}
+function uniqueId(list, text){
+  const ids = new Set((list || []).map(item => item && item.id));
+  let id = slugId(text);
+  let n = 2;
+  while (ids.has(id)) id = slugId(text) + "-" + (n++);
+  return id;
+}
+function clearUploadSlot(slot){
+  UPLOADS.delete(slot);
+  if (SITE._uploads) delete SITE._uploads[slot];
+}
+function commitEdits(){
+  SITE.updatedAt = Date.now();
+  applyBusiness(SITE.business);
+  applyCatalog(SITE.catalog || {});
+  RAW_PRODUCTS = Array.isArray(SITE.products) ? SITE.products : [];
+  for (const key of Object.keys(productCache)) delete productCache[key];
+  applyText();
+  renderHomeCards();
+  let stored = true;
+  try {
+    localStorage.setItem("sme-owner-edits", JSON.stringify({ updatedAt: SITE.updatedAt, site: SITE }));
+  } catch (err) {
+    stored = false;
+  }
+  writeInlineJson();
+  return stored;
+}
+function readPhotoFile(file){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const max = 1000;
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(img.width * scale));
+      canvas.height = Math.max(1, Math.round(img.height * scale));
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", 0.72));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("photo")); };
+    img.src = url;
+  });
+}
+function downloadWebsite(){
+  const token = '<script type="application/json" id="site-content">';
+  const start = PAGE_SNAPSHOT.indexOf(token);
+  const end = PAGE_SNAPSHOT.indexOf("<" + "/script>", start);
+  if (start < 0 || end < 0) return false;
+  const json = JSON.stringify(SITE).replace(/</g, "\\u003c");
+  const html = PAGE_SNAPSHOT.slice(0, start) + token + "\n" + json + "\n" + PAGE_SNAPSHOT.slice(end);
+  const blob = new Blob([html], { type: "text/html" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "sri-maruthi-website.html";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(link.href), 2000);
+  return true;
+}
+function ownerStatus(stored){
+  const el = $("#owner-status");
+  if (!el) return;
+  el.textContent = stored
+    ? "Saved on this phone. Customers will see it after you download the website file and replace the page in the CRM."
+    : "Saved for now. Download the website file before you leave, or the new photos may be lost.";
+}
+function bindOwnerEntry(){
+  const spot = $("#owner-spot");
+  if (!spot) return;
+  let last = 0;
+  spot.addEventListener("pointerup", () => {
+    const now = Date.now();
+    if (now - last < 450){
+      last = 0;
+      ownerTapArm = true;
+      location.hash = "#/manage";
+    } else last = now;
+  });
+}
+function renderManage(){
+  setActiveNav("");
+  const view = $("#view-page");
+  if (!ownerUnlocked()){
+    view.innerHTML = `<div class="page"><div class="page-body"><div class="container">
+      <form class="owner-lock" id="owner-pin-form">
+        <h1>Website editor</h1>
+        <p>Enter the number for this shop.</p>
+        <label for="owner-pin">Number</label>
+        <input id="owner-pin" inputmode="numeric" autocomplete="off" autofocus>
+        <p class="owner-status" id="owner-pin-msg"></p>
+        <div class="owner-row"><button class="btn btn-orange" type="submit">Open</button><a class="btn btn-navy" href="#/">Back</a></div>
+      </form>
+    </div></div></div>`;
+    $("#owner-pin-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const entered = String($("#owner-pin").value || "").replace(/\D/g, "");
+      if (entered && entered === ownerPin()){
+        sessionStorage.setItem("sme-owner-ok", "1");
+        renderManage();
+      } else $("#owner-pin-msg").textContent = "That number is not correct.";
+    });
+    return;
+  }
+  view.innerHTML = `<div class="page"><div class="page-body"><div class="container owner">
+    <div class="owner-bar">
+      <h1>Edit the website</h1>
+      <p>Change prices, photos, descriptions, types and the words on the site. Nothing here needs the CRM picture tools.</p>
+      <div class="owner-actions">
+        <button class="btn btn-orange" id="owner-download" type="button">Download website file</button>
+        <a class="btn btn-navy" href="#/">Back to site</a>
+      </div>
+      <p class="owner-status" id="owner-status"></p>
+    </div>
+    <div class="owner-tabs" id="owner-tabs">
+      <button type="button" data-tab="products">Products</button>
+      <button type="button" data-tab="types">Types &amp; materials</button>
+      <button type="button" data-tab="categories">Categories</button>
+      <button type="button" data-tab="words">Words &amp; phone</button>
+    </div>
+    <div id="owner-panel"></div>
+  </div></div></div>`;
+  $("#owner-download").addEventListener("click", () => {
+    const ok = downloadWebsite();
+    $("#owner-status").textContent = ok
+      ? "File downloaded. In the CRM, open the page HTML, replace everything with this file, then Save and Publish."
+      : "The file could not be prepared.";
+  });
+  $("#owner-tabs").addEventListener("click", e => {
+    const btn = e.target.closest("[data-tab]");
+    if (!btn) return;
+    ownerTab = btn.dataset.tab;
+    paintOwnerTab();
+  });
+  paintOwnerTab();
+}
+function paintOwnerTab(){
+  $$("#owner-tabs button").forEach(btn => btn.classList.toggle("is-active", btn.dataset.tab === ownerTab));
+  const panel = $("#owner-panel");
+  if (!panel) return;
+  if (ownerTab === "types") panel.innerHTML = ownerTypesHTML();
+  else if (ownerTab === "categories") panel.innerHTML = ownerCategoriesHTML();
+  else if (ownerTab === "words") panel.innerHTML = ownerWordsHTML();
+  else panel.innerHTML = ownerProductsHTML();
+  bindOwnerPanel();
+}
+function facetFields(type, current){
+  const facet = type && (type.facet === "style" || type.facet === "material") ? type.facet : "";
+  if (!facet) return `<p class="owner-status">This type has no material or style list yet. Add one under Types &amp; materials.</p>`;
+  const label = facet === "style" ? "Style" : "Material";
+  const options = [{id:"", title:"Not set"}].concat((type.options || []).map(o => ({id:o.title, title:o.title})));
+  return `<label for="own-facet">${label}</label>
+    <select id="own-facet">${optionHTML(options, current || "", o => o.title)}</select>
+    <label for="own-new-facet">Or add a new ${label.toLowerCase()}</label>
+    <input id="own-new-facet" placeholder="Type it here and it is added to the list">`;
+}
+function optionHTML(list, value, labelOf){
+  return (list || []).map(item => {
+    const id = item.id;
+    const label = labelOf(item);
+    return `<option value="${escapeAttr(id)}"${id === value ? " selected" : ""}>${escapeText(label)}</option>`;
+  }).join("");
+}
+function ownerProductsHTML(){
+  const products = [...(SITE.products || [])].sort((a, b) => String(a.name || a.title || "").localeCompare(String(b.name || b.title || "")));
+  if (!ownerProductId || !products.some(p => p.id === ownerProductId)) ownerProductId = products[0] ? products[0].id : "";
+  const product = products.find(p => p.id === ownerProductId) || null;
+  const cat = product ? (ownerCats().find(c => c.id === product.category) || ownerCats()[0]) : ownerCats()[0];
+  const sub = cat ? (ownerSubs(cat).find(s => s.id === (product && (product.subCategory || product.subcategory))) || ownerSubs(cat)[0]) : null;
+  const types = ownerTypes(sub);
+  const type = product ? (types.find(t => t.id === product.type) || types[0]) : types[0];
+  const facet = type && (type.facet === "style" || type.facet === "material") ? type.facet : "";
+  const facetValue = product && facet ? (product[facet] || "") : "";
+  const images = product ? ((product.images && product.images.length) ? product.images : (product.image ? [product.image] : [])) : [];
+  return `<div class="owner-card">
+    <h2>Products</h2>
+    <label for="own-product">Choose a product</label>
+    <select id="own-product">${optionHTML(products, ownerProductId, p => p.name || p.title || p.id)}</select>
+    <div class="owner-row"><button class="btn btn-navy" id="own-add-product" type="button">Add a product</button></div>
+    ${product ? `<form id="own-product-form">
+      <label for="own-name">Name</label>
+      <input id="own-name" value="${escapeAttr(product.name || product.title || "")}">
+      <label for="own-price">Price (numbers only, leave blank if price on request)</label>
+      <input id="own-price" inputmode="numeric" value="${product.price === null || product.price === undefined ? "" : escapeAttr(product.price)}">
+      <label for="own-short">Short description</label>
+      <textarea id="own-short">${escapeText(product.description || product.shortDescription || "")}</textarea>
+      <label for="own-long">Full description</label>
+      <textarea id="own-long">${escapeText(product.longDescription || "")}</textarea>
+      <label for="own-pcat">Category</label>
+      <select id="own-pcat">${optionHTML(ownerCats(), cat && cat.id, c => c.title)}</select>
+      <label for="own-psub">Sub-category</label>
+      <select id="own-psub">${optionHTML(ownerSubs(cat), sub && sub.id, s => s.title)}</select>
+      <label for="own-ptype">Type</label>
+      <select id="own-ptype">${optionHTML(types, type && type.id, t => t.title)}</select>
+      <div id="own-facet-box">${facetFields(type, facetValue)}</div>
+      <label>Photos. The first photo is the main picture. The next ones are the swipe photos.</label>
+      <div class="owner-photos">
+        ${[0,1,2].map(i => `<figure>${images[i] ? `<img src="${escapeAttr(images[i])}" alt="">` : `<img alt="" src="${BLANK_PHOTO}">`}</figure>`).join("")}
+      </div>
+      ${[0,1,2].map(i => `<label for="own-photo-${i}">Photo ${i + 1}${i === 0 ? " (main)" : ""}</label><input id="own-photo-${i}" data-photo="${i}" type="file" accept="image/*">`).join("")}
+      <div class="owner-row">
+        <button class="btn btn-orange" type="submit">Save product</button>
+        <button class="btn btn-navy" id="own-delete-product" type="button">Remove product</button>
+      </div>
+    </form>` : `<p>No products yet. Add one.</p>`}
+  </div>`;
+}
+function ownerTypesHTML(){
+  const cats = ownerCats();
+  if (!ownerCatId) ownerCatId = cats[0] ? cats[0].id : "";
+  const cat = cats.find(c => c.id === ownerCatId) || cats[0];
+  const subs = ownerSubs(cat);
+  if (!ownerSubId || !subs.some(s => s.id === ownerSubId)) ownerSubId = subs[0] ? subs[0].id : "";
+  const sub = subs.find(s => s.id === ownerSubId) || subs[0];
+  const types = ownerTypes(sub);
+  return `<div class="owner-card">
+    <h2>Types and materials</h2>
+    <label for="own-tcat">Category</label>
+    <select id="own-tcat">${optionHTML(cats, cat && cat.id, c => c.title)}</select>
+    <label for="own-tsub">Sub-category</label>
+    <select id="own-tsub">${optionHTML(subs, sub && sub.id, s => s.title)}</select>
+    ${sub ? `<label for="own-sub-name">Sub-category name</label><input id="own-sub-name" value="${escapeAttr(sub.title || "")}">` : ""}
+    ${types.map(type => {
+      const facet = type.facet === "style" || type.facet === "material" ? type.facet : "";
+      const options = type.options || [];
+      return `<div class="owner-type" data-type="${escapeAttr(type.id)}">
+        <label>Type name</label>
+        <input class="own-type-name" value="${escapeAttr(type.title || "")}">
+        <label>Shoppers filter this type by</label>
+        <select class="own-type-facet">
+          <option value=""${facet ? "" : " selected"}>No extra filter</option>
+          <option value="material"${facet === "material" ? " selected" : ""}>Material</option>
+          <option value="style"${facet === "style" ? " selected" : ""}>Style</option>
+        </select>
+        <div class="owner-chip">${options.map(opt => `<button type="button" data-remove-opt="${escapeAttr(opt.id)}">${escapeText(opt.title)} ×</button>`).join("") || "<span>No materials or styles yet.</span>"}</div>
+        <label>Add a material or style</label>
+        <input class="own-type-option" placeholder="Fabric, Teak, 43 inch">
+        <div class="owner-row"><button class="btn btn-orange own-type-save" type="button">Save this type</button></div>
+      </div>`;
+    }).join("")}
+    <div class="owner-type">
+      <h2>Add a type</h2>
+      <label for="own-new-type">Type name</label>
+      <input id="own-new-type" placeholder="L Shape">
+      <label for="own-new-type-facet">Filter</label>
+      <select id="own-new-type-facet"><option value="material">Material</option><option value="style">Style</option><option value="">No extra filter</option></select>
+      <div class="owner-row"><button class="btn btn-orange" id="own-add-type" type="button">Add type</button></div>
+    </div>
+  </div>`;
+}
+function ownerCategoriesHTML(){
+  return `<div class="owner-card"><h2>Category cards</h2>
+    ${ownerCats().map(cat => `<form class="owner-type" data-cat="${escapeAttr(cat.id)}">
+      <label>Name</label>
+      <input class="own-cat-title" value="${escapeAttr(cat.title || "")}">
+      <label>Line under the name</label>
+      <input class="own-cat-desc" value="${escapeAttr(cat.description || "")}">
+      <label>Card picture</label>
+      ${cat.visualAsset ? `<figure class="owner-photos"><img src="${escapeAttr(cat.visualAsset)}" alt=""></figure>` : ""}
+      <input class="own-cat-photo" type="file" accept="image/*">
+      <div class="owner-row"><button class="btn btn-orange" type="submit">Save category</button></div>
+    </form>`).join("")}
+  </div>`;
+}
+function ownerWordsHTML(){
+  const biz = SITE.business || {};
+  const hero = (SITE.homepage && SITE.homepage.hero) || {};
+  const about = (SITE.pages && SITE.pages.about) || {};
+  const mfg = (SITE.pages && SITE.pages.manufacturing) || {};
+  const contact = (SITE.pages && SITE.pages.contact) || {};
+  const appt = (SITE.pages && SITE.pages.appointment) || {};
+  const branches = (SITE.branches && SITE.branches.list) || [];
+  return `<form class="owner-card" id="own-words">
+    <h2>Words and phone</h2>
+    <label for="own-biz-name">Business name</label>
+    <input id="own-biz-name" value="${escapeAttr(biz.name || "")}">
+    <label for="own-caption">Line under the logo. Double-tap this line on the site to open this page.</label>
+    <input id="own-caption" value="${escapeAttr(biz.caption || "")}">
+    <label for="own-phone-show">Phone number as it should look</label>
+    <input id="own-phone-show" value="${escapeAttr(biz.phoneDisplay || "")}">
+    <label for="own-wa">WhatsApp number (country code, digits only)</label>
+    <input id="own-wa" inputmode="numeric" value="${escapeAttr(biz.whatsappNumber || "")}">
+    <label for="own-hours">Opening hours</label>
+    <input id="own-hours" value="${escapeAttr(biz.hours || "")}">
+    <label for="own-hero-title">Homepage heading</label>
+    <input id="own-hero-title" value="${escapeAttr(hero.title || "")}">
+    <label for="own-hero-desc">Homepage line under the heading</label>
+    <input id="own-hero-desc" value="${escapeAttr(hero.description || "")}">
+    <label for="own-hero-sub">Homepage trust line</label>
+    <input id="own-hero-sub" value="${escapeAttr(hero.subline || "")}">
+    <label for="own-shop">Category heading</label>
+    <input id="own-shop" value="${escapeAttr((SITE.homepage && SITE.homepage.shopHeading) || "")}">
+    <label for="own-hero-photo">Homepage photo</label>
+    ${hero.image ? `<figure class="owner-photos"><img src="${escapeAttr(hero.image)}" alt=""></figure>` : ""}
+    <input id="own-hero-photo" type="file" accept="image/*">
+    <label for="own-logo-photo">Logo</label>
+    <input id="own-logo-photo" type="file" accept="image/*">
+    <label for="own-about-title">About heading</label>
+    <input id="own-about-title" value="${escapeAttr(about.title || "")}">
+    <label for="own-about-lead">About introduction</label>
+    <textarea id="own-about-lead">${escapeText(about.lead || "")}</textarea>
+    <label for="own-about-body">About paragraphs (one paragraph, then a blank line)</label>
+    <textarea id="own-about-body">${escapeText((about.paragraphs || []).join("\n\n"))}</textarea>
+    <h2>Manufacturing</h2>
+    <label for="own-mfg-title">Heading</label>
+    <input id="own-mfg-title" value="${escapeAttr((mfg && mfg.title) || "")}">
+    <label for="own-mfg-lead">Introduction</label>
+    <textarea id="own-mfg-lead">${escapeText((mfg && mfg.lead) || "")}</textarea>
+    ${(mfg.steps || []).map((step, i) => `<label>Step ${i + 1} name</label><input data-step="title" data-index="${i}" value="${escapeAttr(step.title || "")}"><label>Step ${i + 1} text</label><input data-step="text" data-index="${i}" value="${escapeAttr(step.text || "")}">`).join("")}
+    <h2>Contact and appointment</h2>
+    <label for="own-contact-title">Contact heading</label>
+    <input id="own-contact-title" value="${escapeAttr((contact && contact.title) || "")}">
+    <label for="own-contact-lead">Contact introduction</label>
+    <input id="own-contact-lead" value="${escapeAttr((contact && contact.lead) || "")}">
+    <label for="own-appt-title">Appointment heading</label>
+    <input id="own-appt-title" value="${escapeAttr((appt && appt.title) || "")}">
+    <label for="own-appt-lead">Appointment introduction</label>
+    <textarea id="own-appt-lead">${escapeText((appt && appt.lead) || "")}</textarea>
+    <h2>Branches</h2>
+    ${branches.map((branch, i) => `<label>Branch ${i + 1} name</label><input data-branch="name" data-index="${i}" value="${escapeAttr(branch.name || "")}"><label>Branch ${i + 1} address</label><input data-branch="address" data-index="${i}" value="${escapeAttr(branch.address || "")}">`).join("")}
+    <div class="owner-row"><button class="btn btn-orange" type="submit">Save words</button></div>
+  </form>`;
+}
+function bindOwnerPanel(){
+  const productPick = $("#own-product");
+  if (productPick) productPick.addEventListener("change", () => { ownerProductId = productPick.value; paintOwnerTab(); });
+  const addProduct = $("#own-add-product");
+  if (addProduct) addProduct.addEventListener("click", () => {
+    const cat = ownerCats()[0];
+    const sub = cat && ownerSubs(cat)[0];
+    const type = sub && ownerTypes(sub)[0];
+    const id = uniqueId(SITE.products || [], "new product");
+    SITE.products = SITE.products || [];
+    SITE.products.push({
+      id, category: cat ? cat.id : "", subCategory: sub ? sub.id : "", type: type ? type.id : "",
+      name: "New product", description: "", longDescription: "", price: null,
+      image: "", images: [], alt: "New product", specs: {}, displayOrder: SITE.products.length + 1
+    });
+    ownerProductId = id;
+    ownerStatus(commitEdits());
+    paintOwnerTab();
+  });
+  const form = $("#own-product-form");
+  if (form){
+    const refill = () => {
+      const cat = ownerCats().find(c => c.id === $("#own-pcat").value) || ownerCats()[0];
+      const sub = ownerSubs(cat).find(s => s.id === $("#own-psub").value) || ownerSubs(cat)[0];
+      $("#own-psub").innerHTML = optionHTML(ownerSubs(cat), sub && sub.id, s => s.title);
+      const types = ownerTypes(sub);
+      const type = types.find(t => t.id === $("#own-ptype").value) || types[0];
+      $("#own-ptype").innerHTML = optionHTML(types, type && type.id, t => t.title);
+      const box = $("#own-facet-box");
+      if (box){
+        const picked = $("#own-facet") ? $("#own-facet").value : "";
+        const typed = $("#own-new-facet") ? $("#own-new-facet").value : "";
+        box.innerHTML = facetFields(type, picked);
+        if ($("#own-new-facet") && typed) $("#own-new-facet").value = typed;
+      }
+    };
+    $("#own-pcat").addEventListener("change", refill);
+    $("#own-psub").addEventListener("change", refill);
+    $("#own-ptype").addEventListener("change", refill);
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      const product = (SITE.products || []).find(p => p.id === ownerProductId);
+      if (!product) return;
+      const cat = ownerCats().find(c => c.id === $("#own-pcat").value);
+      const sub = cat && ownerSubs(cat).find(s => s.id === $("#own-psub").value);
+      const type = sub && ownerTypes(sub).find(t => t.id === $("#own-ptype").value);
+      product.name = $("#own-name").value.trim() || product.name;
+      product.alt = product.name;
+      const price = String($("#own-price").value || "").replace(/[^\d.]/g, "");
+      product.price = price === "" ? null : Number(price);
+      product.description = $("#own-short").value.trim();
+      product.longDescription = $("#own-long").value.trim();
+      product.category = cat ? cat.id : product.category;
+      product.subCategory = sub ? sub.id : "";
+      product.type = type ? type.id : "";
+      const facet = type && (type.facet === "style" || type.facet === "material") ? type.facet : "";
+      const extra = $("#own-new-facet") ? $("#own-new-facet").value.trim() : "";
+      if (facet && extra){
+        type.options = type.options || [];
+        if (!type.options.some(opt => opt.title.toLowerCase() === extra.toLowerCase())){
+          type.options.push({ id: uniqueId(type.options, extra), title: extra });
+        }
+        product[facet] = extra;
+      } else if (facet && $("#own-facet")) product[facet] = $("#own-facet").value;
+      if (facet === "style") delete product.material;
+      if (facet === "material") delete product.style;
+      const images = (product.images && product.images.slice()) || [];
+      while (images.length < 3) images.push("");
+      for (const input of $$("#own-product-form input[type=file][data-photo]")){
+        const file = input.files && input.files[0];
+        if (!file) continue;
+        images[Number(input.dataset.photo)] = await readPhotoFile(file);
+      }
+      product.images = images.filter(Boolean);
+      product.image = product.images[0] || "";
+      clearUploadSlot("product:" + product.id);
+      for (let i = 0; i < 3; i++) clearUploadSlot("product:" + product.id + ":" + i);
+      ownerStatus(commitEdits());
+      paintOwnerTab();
+    });
+    const remove = $("#own-delete-product");
+    if (remove) remove.addEventListener("click", () => {
+      if (!confirm("Remove this product from the website?")) return;
+      SITE.products = (SITE.products || []).filter(p => p.id !== ownerProductId);
+      ownerProductId = "";
+      ownerStatus(commitEdits());
+      paintOwnerTab();
+    });
+  }
+  const tcat = $("#own-tcat");
+  if (tcat){
+    tcat.addEventListener("change", () => { ownerCatId = tcat.value; ownerSubId = ""; paintOwnerTab(); });
+    $("#own-tsub").addEventListener("change", () => { ownerSubId = $("#own-tsub").value; paintOwnerTab(); });
+    const subName = $("#own-sub-name");
+    if (subName) subName.addEventListener("change", () => {
+      const cat = ownerCats().find(c => c.id === ownerCatId);
+      const sub = cat && ownerSubs(cat).find(s => s.id === ownerSubId);
+      if (!sub) return;
+      sub.title = subName.value.trim() || sub.title;
+      ownerStatus(commitEdits());
+    });
+    $$(".own-type-save").forEach(btn => btn.addEventListener("click", () => {
+      const box = btn.closest("[data-type]");
+      const cat = ownerCats().find(c => c.id === ownerCatId);
+      const sub = cat && ownerSubs(cat).find(s => s.id === ownerSubId);
+      const type = sub && ownerTypes(sub).find(t => t.id === box.dataset.type);
+      if (!type) return;
+      type.title = box.querySelector(".own-type-name").value.trim() || type.title;
+      const facet = box.querySelector(".own-type-facet").value;
+      type.facet = facet === "style" || facet === "material" ? facet : "";
+      if (!type.facet) type.options = [];
+      const added = box.querySelector(".own-type-option").value.trim();
+      if (added){
+        if (!type.facet) type.facet = "material";
+        type.options = type.options || [];
+        if (!type.options.some(opt => opt.title.toLowerCase() === added.toLowerCase())){
+          type.options.push({ id: uniqueId(type.options, added), title: added });
+        }
+      }
+      ownerStatus(commitEdits());
+      paintOwnerTab();
+    }));
+    panelRemoveOpts();
+    const addType = $("#own-add-type");
+    if (addType) addType.addEventListener("click", () => {
+      const cat = ownerCats().find(c => c.id === ownerCatId);
+      const sub = cat && ownerSubs(cat).find(s => s.id === ownerSubId);
+      const name = $("#own-new-type").value.trim();
+      if (!sub || !name) return;
+      const facet = $("#own-new-type-facet").value;
+      sub.types = sub.types || [];
+      sub.types.push({
+        id: uniqueId(sub.types, name),
+        title: name,
+        description: "",
+        image: sub.image || "",
+        facet: facet === "style" || facet === "material" ? facet : "",
+        options: []
+      });
+      ownerStatus(commitEdits());
+      paintOwnerTab();
+    });
+  }
+  $$("#owner-panel form[data-cat]").forEach(form => form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const cat = ownerCats().find(c => c.id === form.dataset.cat);
+    if (!cat) return;
+    cat.title = form.querySelector(".own-cat-title").value.trim() || cat.title;
+    cat.description = form.querySelector(".own-cat-desc").value.trim();
+    const file = form.querySelector(".own-cat-photo").files[0];
+    if (file){
+      cat.visualAsset = await readPhotoFile(file);
+      clearUploadSlot("visual:" + cat.id);
+    }
+    ownerStatus(commitEdits());
+    paintOwnerTab();
+  }));
+  const words = $("#own-words");
+  if (words) words.addEventListener("submit", async e => {
+    e.preventDefault();
+    const biz = SITE.business = SITE.business || {};
+    biz.name = $("#own-biz-name").value.trim() || biz.name;
+    biz.caption = $("#own-caption").value.trim() || biz.caption;
+    biz.phoneDisplay = $("#own-phone-show").value.trim();
+    const digits = String($("#own-wa").value || "").replace(/\D/g, "");
+    if (digits){
+      biz.whatsappNumber = digits;
+      biz.phone = "+" + digits;
+    }
+    biz.hours = $("#own-hours").value.trim();
+    SITE.homepage = SITE.homepage || {};
+    SITE.homepage.hero = SITE.homepage.hero || {};
+    SITE.homepage.hero.title = $("#own-hero-title").value.trim();
+    SITE.homepage.hero.description = $("#own-hero-desc").value.trim();
+    SITE.homepage.hero.subline = $("#own-hero-sub").value.trim();
+    SITE.homepage.shopHeading = $("#own-shop").value.trim();
+    const heroFile = $("#own-hero-photo").files && $("#own-hero-photo").files[0];
+    if (heroFile){
+      SITE.homepage.hero.image = await readPhotoFile(heroFile);
+      clearUploadSlot("hero");
+    }
+    const logoFile = $("#own-logo-photo").files && $("#own-logo-photo").files[0];
+    if (logoFile){
+      biz.logo = await readPhotoFile(logoFile);
+      clearUploadSlot("logo");
+    }
+    SITE.pages = SITE.pages || {};
+    SITE.pages.about = SITE.pages.about || {};
+    SITE.pages.about.title = $("#own-about-title").value.trim();
+    SITE.pages.about.lead = $("#own-about-lead").value.trim();
+    SITE.pages.about.paragraphs = $("#own-about-body").value.split(/\n\s*\n/).map(t => t.trim()).filter(Boolean);
+    SITE.pages.manufacturing = SITE.pages.manufacturing || {};
+    SITE.pages.manufacturing.title = $("#own-mfg-title").value.trim();
+    SITE.pages.manufacturing.lead = $("#own-mfg-lead").value.trim();
+    $$("#own-words [data-step]").forEach(input => {
+      const step = SITE.pages.manufacturing.steps && SITE.pages.manufacturing.steps[Number(input.dataset.index)];
+      if (step) step[input.dataset.step] = input.value.trim();
+    });
+    SITE.pages.contact = SITE.pages.contact || {};
+    SITE.pages.contact.title = $("#own-contact-title").value.trim();
+    SITE.pages.contact.lead = $("#own-contact-lead").value.trim();
+    SITE.pages.appointment = SITE.pages.appointment || {};
+    SITE.pages.appointment.title = $("#own-appt-title").value.trim();
+    SITE.pages.appointment.lead = $("#own-appt-lead").value.trim();
+    $$("#own-words [data-branch]").forEach(input => {
+      const branch = SITE.branches && SITE.branches.list && SITE.branches.list[Number(input.dataset.index)];
+      if (!branch) return;
+      branch[input.dataset.branch] = input.value.trim();
+      if (input.dataset.branch === "address") branch.mapQuery = branch.address;
+    });
+    ownerStatus(commitEdits());
+  });
+}
+function panelRemoveOpts(){
+  $$("[data-remove-opt]").forEach(btn => btn.addEventListener("click", () => {
+    const box = btn.closest("[data-type]");
+    const cat = ownerCats().find(c => c.id === ownerCatId);
+    const sub = cat && ownerSubs(cat).find(s => s.id === ownerSubId);
+    const type = sub && ownerTypes(sub).find(t => t.id === box.dataset.type);
+    if (!type) return;
+    type.options = (type.options || []).filter(opt => opt.id !== btn.dataset.removeOpt);
+    ownerStatus(commitEdits());
+    paintOwnerTab();
+  }));
+}
+
 function showHome(on){
   document.body.classList.toggle("home-mode", on);
   $("#view-home").classList.toggle("is-active", on);
@@ -4764,6 +5372,7 @@ function route(){
   if (top === "manufacturing") return renderManufacturing();
   if (top === "contact") return renderContact();
   if (top === "appointment") return renderAppointment();
+  if (top === "manage") return renderManage();
   showHome(true);
 }
 
@@ -4832,7 +5441,14 @@ function init(){
   window.addEventListener("hashchange", route);
   // Some page builders cancel normal link clicks inside their preview.
   // These in-page links (#/categories, #/about, …) still switch section here.
+  bindOwnerEntry();
   window.addEventListener("click", e => {
+    if (ownerTapArm){
+      ownerTapArm = false;
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     const img = e.target.closest && e.target.closest("img");
     // In the CRM, a click on a picture selects it for Upload. It does not open the page.
     if (img){
