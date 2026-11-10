@@ -145,11 +145,12 @@ The shop owner does not need the JSON or the CRM picture tools.
 1. On the website, double-tap the small line under the logo that says **Since 2020.**
 2. Enter the number **441142** and press Open.
 3. Edit products (name, price, descriptions, type, material or style, up to 3 photos), types and materials, category cards, and the words, phone, hours and page headings.
-4. Press the save button on that section. The phone remembers it.
-5. Press **Download website file**.
-6. In the CRM, open the page HTML, select all, paste this downloaded file in its place, then Save and Publish.
+4. Press the save button on that section. The page renders the new text, price, or photo. Press **Show the page** to see it.
+5. Press **Publish** in the CRM. The builder is given the updated page, the same as if the HTML had been edited there, and the published site renders that version.
 
-Customers see the changes only after that file is published. Until then, the edits stay on the phone that made them. The number is only a door into this page. It is stored in the page, so do not treat it like a bank password.
+If Publish still shows the old page, press **Download website file**, replace the page HTML with that file, then Save and Publish.
+
+The number is only a door into this page. It is stored in the page, so do not treat it like a bank password.
 
 Words, prices, and phone numbers still live in the JSON block if you prefer to edit them by hand. Pictures can be set either way.
 
@@ -230,4 +231,4 @@ A normal photo stays a normal photo. It does not become the drawn 3D category ic
 | Old version still showing on your phone | The phone cached it. Close the tab and reopen the link, or clear site data. |
 | WhatsApp button opens the wrong number | Change `business.whatsappNumber` (digits only, no `+`, no spaces). |
 | Category picture click opens the category instead of Upload | Click the picture, not the name. Paste the latest `index.html` into the page so the picture is not inside the link. |
-| Visual text edits disappeared | Headings and prices come from the saved website file. Double-tap **Since 2020.**, enter 441142, edit there, download the file, and replace the page HTML. |
+| Visual text edits disappeared | Double-tap **Since 2020.**, enter 441142, edit, then press Publish in the CRM so it renders the new page. |

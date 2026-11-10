@@ -731,6 +731,7 @@ a.tile-body{display:block;color:inherit;text-decoration:none}
 .owner-photos img{width:100%;height:100%;object-fit:cover}
 .owner-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .owner-status{margin-top:10px;font-size:13px;font-weight:700;color:var(--orange-dark,#c2410c)}
+.owner-status a{color:var(--navy);margin-left:6px}
 .owner-lock{max-width:420px;margin:24px auto;background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px}
 .owner-type{border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
 .owner-chip{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
@@ -3623,7 +3624,10 @@ function writeInlineJson(){
   if (!inline) return;
   const pasted = inline.textContent.trim();
   if (!pasted || pasted.includes("PASTE data/content.json HERE")) return;
-  inline.textContent = JSON.stringify(SITE);
+  inline.textContent = JSON.stringify(SITE).replace(/</g, "\\u003c");
+  document.documentElement.setAttribute("data-content-revision", String(SITE.updatedAt || Date.now()));
+  inline.dispatchEvent(new Event("input", { bubbles: true }));
+  document.dispatchEvent(new Event("input", { bubbles: true }));
 }
 // Keeps a CRM upload on the matching JSON field so the next page draw uses the same link.
 function setBySlot(slot, url){
@@ -4806,6 +4810,99 @@ function clearUploadSlot(slot){
   UPLOADS.delete(slot);
   if (SITE._uploads) delete SITE._uploads[slot];
 }
+let lastHostSync = false;
+function websiteHtml(){
+  const token = "<" + "script type=\"application/json\" id=\"site-content\">";
+  const start = PAGE_SNAPSHOT.indexOf(token);
+  const end = PAGE_SNAPSHOT.indexOf("<" + "/script>", start);
+  if (start < 0 || end < 0) return "";
+  const json = JSON.stringify(SITE).replace(/</g, "\\u003c");
+  return PAGE_SNAPSHOT.slice(0, start) + token + "\n" + json + "\n" + PAGE_SNAPSHOT.slice(end);
+}
+function looksLikeSiteSource(value){
+  const text = String(value || "");
+  return text.length > 5000 && text.includes("site-content") && text.includes("owner-spot");
+}
+function setControlValue(el, html, view){
+  const win = view || window;
+  const proto = el.tagName === "TEXTAREA" ? win.HTMLTextAreaElement.prototype : win.HTMLInputElement.prototype;
+  const desc = Object.getOwnPropertyDescriptor(proto, "value");
+  if (desc && desc.set) desc.set.call(el, html);
+  else el.value = html;
+  el.dispatchEvent(new Event("input", { bubbles: true }));
+  el.dispatchEvent(new Event("change", { bubbles: true }));
+}
+function publishToCrm(html){
+  if (!html) return false;
+  let updated = false;
+  const visit = (win) => {
+    let doc = null;
+    try { doc = win.document; } catch (err) { return; }
+    if (!doc || doc === document) return;
+    doc.querySelectorAll("textarea, input").forEach(el => {
+      if (!looksLikeSiteSource(el.value || "")) return;
+      setControlValue(el, html, win);
+      updated = true;
+    });
+    doc.querySelectorAll(".CodeMirror").forEach(node => {
+      const cm = node.CodeMirror;
+      if (!cm || typeof cm.getValue !== "function" || !looksLikeSiteSource(cm.getValue())) return;
+      cm.setValue(html);
+      updated = true;
+    });
+    try {
+      const monaco = win.monaco;
+      if (monaco && monaco.editor && monaco.editor.getModels){
+        monaco.editor.getModels().forEach(model => {
+          if (!looksLikeSiteSource(model.getValue())) return;
+          model.setValue(html);
+          updated = true;
+        });
+      }
+    } catch (err) {}
+    const editors = [];
+    try { if (win.editor && win.editor.getWrapper) editors.push(win.editor); } catch (err) {}
+    try {
+      if (win.grapesjs && win.grapesjs.editors) editors.push.apply(editors, win.grapesjs.editors);
+    } catch (err) {}
+    editors.forEach(editor => {
+      let comps = [];
+      try { comps = editor.getWrapper().find("*"); } catch (err) { comps = []; }
+      comps.forEach(comp => {
+        ["content", "custom-code-plugin__code"].forEach(key => {
+          let val = "";
+          try { val = comp.get(key); } catch (err) { val = ""; }
+          if (typeof val !== "string" || !looksLikeSiteSource(val)) return;
+          try { comp.set(key, html); updated = true; } catch (err) {}
+          try { if (comp.view && comp.view.render) comp.view.render(); } catch (err) {}
+        });
+      });
+      try { if (updated && editor.trigger) editor.trigger("update"); } catch (err) {}
+    });
+  };
+  let current = window;
+  for (let depth = 0; depth < 4; depth++){
+    let parent = null;
+    try { parent = current.parent; } catch (err) { break; }
+    if (!parent || parent === current) break;
+    visit(parent);
+    current = parent;
+  }
+  try {
+    const frame = window.frameElement;
+    const srcdoc = frame && (frame.getAttribute("srcdoc") || "");
+    if (frame && looksLikeSiteSource(srcdoc)){
+      frame.setAttribute("srcdoc", html);
+      frame.dispatchEvent(new Event("input", { bubbles: true }));
+      frame.dispatchEvent(new Event("change", { bubbles: true }));
+      updated = true;
+    }
+  } catch (err) {}
+  if (updated){
+    try { window.parent.postMessage({ type: "sme-site-html", html: html }, "*"); } catch (err) {}
+  }
+  return updated;
+}
 function commitEdits(){
   SITE.updatedAt = Date.now();
   applyBusiness(SITE.business);
@@ -4821,6 +4918,7 @@ function commitEdits(){
     stored = false;
   }
   writeInlineJson();
+  lastHostSync = publishToCrm(websiteHtml());
   return stored;
 }
 function readPhotoFile(file){
@@ -4842,12 +4940,8 @@ function readPhotoFile(file){
   });
 }
 function downloadWebsite(){
-  const token = '<script type="application/json" id="site-content">';
-  const start = PAGE_SNAPSHOT.indexOf(token);
-  const end = PAGE_SNAPSHOT.indexOf("<" + "/script>", start);
-  if (start < 0 || end < 0) return false;
-  const json = JSON.stringify(SITE).replace(/</g, "\\u003c");
-  const html = PAGE_SNAPSHOT.slice(0, start) + token + "\n" + json + "\n" + PAGE_SNAPSHOT.slice(end);
+  const html = websiteHtml();
+  if (!html) return false;
   const blob = new Blob([html], { type: "text/html" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
@@ -4861,9 +4955,13 @@ function downloadWebsite(){
 function ownerStatus(stored){
   const el = $("#owner-status");
   if (!el) return;
-  el.textContent = stored
-    ? "Saved on this phone. Customers will see it after you download the website file and replace the page in the CRM."
-    : "Saved for now. Download the website file before you leave, or the new photos may be lost.";
+  const href = ownerTab === "products" && ownerProductId ? "#/product/" + ownerProductId : "#/";
+  const message = lastHostSync
+    ? "Saved into the CRM page. It will render this version. Press Publish in the CRM."
+    : stored
+      ? "Saved. The page is showing this version on this phone. Press Publish in the CRM if you are editing there."
+      : "Saved for now. Download the website file before you leave, or the new photos may be lost.";
+  el.innerHTML = escapeText(message) + ` <a href="${escapeAttr(href)}">Show the page</a>`;
 }
 function bindOwnerEntry(){
   const spot = $("#owner-spot");
@@ -4923,7 +5021,7 @@ function renderManage(){
   $("#owner-download").addEventListener("click", () => {
     const ok = downloadWebsite();
     $("#owner-status").textContent = ok
-      ? "File downloaded. In the CRM, open the page HTML, replace everything with this file, then Save and Publish."
+      ? "File downloaded. In the CRM, replace the page HTML with this file, then Save and Publish."
       : "The file could not be prepared.";
   });
   $("#owner-tabs").addEventListener("click", e => {
