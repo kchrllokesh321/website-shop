@@ -144,8 +144,15 @@ The shop owner does not need the JSON or the CRM picture tools.
 
 1. On the website, double-tap the small line under the logo that says **Since 2020.**
 2. Enter the number **441142** and press Open.
-3. Edit products (name, price, descriptions, type, material or style, up to 3 photos), types and materials, category cards, and the words, phone, hours and page headings.
+3. Pick a tab and edit:
+   - **Products**: find a product by name or category, or press **Add a new product**. Set the name, price, stock (In stock or Out of stock), descriptions, category, sub-category and type, material or style, details such as size, the branches that sell it, and up to 3 photos. A type that is missing can be added from the product form.
+   - **Categories & types**: add, rename, re-picture or remove a category, a sub-category, or a type, and the materials or styles of each type. Anything that still has products cannot be removed until those products are moved or removed.
+   - **Branches**: names, addresses, the Google Maps search, and Open or Opening soon. Tirupati is listed as Opening soon. On the opening day, set it to Open and press **Make every product available here** if it sells everything.
+   - **Filters**: turn the price, material or style, branch, in stock and detail filters on or off, edit the price ranges, add details such as Colour, and set the number of sample cards (0 hides them).
+   - **Words & phone**: phone, WhatsApp, hours, homepage words and photo, logo, and page headings.
 4. Press the save button on that section. The page renders the new text, price, or photo. Press **Show the page** to see it.
+
+To take a product off the site: **Out of stock** keeps it visible with an Out of stock tag, unticking **Show this product on the website** hides it without deleting it, and **Remove product** (press twice) deletes it.
 5. Press **Publish** in the CRM. The builder is given the updated page, the same as if the HTML had been edited there, and the published site renders that version.
 
 If Publish still shows the old page, press **Download website file**, replace the page HTML with that file, then Save and Publish.

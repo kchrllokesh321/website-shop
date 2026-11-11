@@ -8,7 +8,11 @@
     "sizes     → pixel sizes for hero text, category cards, product cards, header/footer height.",
     "catalog   → categories → subCategories → types, filters, placeholder settings.",
     "products  → one object per product. Add an object to add a product, delete it to remove it.",
-    "Image fields accept any hosted URL. You can paste the link here, or click the picture in the CRM and press Upload."
+    "Image fields accept any hosted URL. You can paste the link here, or click the picture in the CRM and press Upload.",
+    "products  → \"stock\": \"out\" shows an Out of stock tag. \"hidden\": true keeps it off the site. \"branches\": [branch ids] where it is sold; leave it out for every open branch.",
+    "branches  → each branch has an id that products point at. \"status\": \"upcoming\" shows Opening soon.",
+    "catalog.filters.enabled → turn price, facet, branch, stock and attributes filters on (true) or off (false).",
+    "Easiest way to edit: double-tap the line under the logo, enter the shop number, and use the editor."
   ],
   "assetBase": "",
   "updatedAt": 0,
@@ -45,17 +49,30 @@
       {
         "name": "Rajampet — Main (placeholder name)",
         "address": "Main Road, Rajampet, Andhra Pradesh",
-        "mapQuery": "Rajampet, Andhra Pradesh"
+        "mapQuery": "Rajampet, Andhra Pradesh",
+        "id": "rajampet-main",
+        "status": "open"
       },
       {
         "name": "Rajampet — Bypass",
         "address": "Bypass Road, Rajampet, Andhra Pradesh",
-        "mapQuery": "Rajampet Bypass, Andhra Pradesh"
+        "mapQuery": "Rajampet Bypass, Andhra Pradesh",
+        "id": "rajampet-bypass",
+        "status": "open"
       },
       {
         "name": "Railway Koduru",
         "address": "Railway Koduru, Andhra Pradesh",
-        "mapQuery": "Railway Kodur, Andhra Pradesh"
+        "mapQuery": "Railway Kodur, Andhra Pradesh",
+        "id": "railway-koduru",
+        "status": "open"
+      },
+      {
+        "id": "tirupati",
+        "name": "Tirupati",
+        "address": "",
+        "mapQuery": "",
+        "status": "upcoming"
       }
     ]
   },
@@ -220,13 +237,22 @@
       "attributes": [
         {
           "key": "material",
-          "label": "Material"
+          "label": "Material",
+          "enabled": true
         },
         {
           "key": "size",
-          "label": "Size"
+          "label": "Size",
+          "enabled": true
         }
-      ]
+      ],
+      "enabled": {
+        "price": true,
+        "facet": true,
+        "branch": true,
+        "stock": true,
+        "attributes": true
+      }
     },
     "categories": [
       {
