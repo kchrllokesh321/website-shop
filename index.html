@@ -156,13 +156,17 @@ body:not(.home-mode){
 }
 .brand-caption{
   display:block;
+  position:relative;
+  z-index:2;
+  width:max-content;
   color:var(--orange);
   font-size:9px;
   letter-spacing:.08em;
   font-weight:600;
   line-height:1;
   text-transform:uppercase;
-  margin-top:3px;
+  padding:8px 10px;
+  margin:-5px -10px -8px;
 }
 .nav-links{
   margin-left:auto;
@@ -735,6 +739,23 @@ a.tile-body{display:block;color:inherit;text-decoration:none}
 .owner-lock{max-width:420px;margin:24px auto;background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px}
 .owner-type{border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
 .owner-chip{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.owner-opt{display:flex;gap:6px;align-items:center;margin-top:6px}
+.owner-opt input{flex:1;width:auto}
+.owner-opt button{width:auto;flex:0 0 auto}
+.media-fallback{
+  width:100%;
+  height:100%;
+  min-height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#10284d;
+  color:#fff;
+  font-size:40px;
+  font-weight:700;
+}
+.card-visual .media-fallback{position:absolute;inset:0;background:transparent;font-size:34px}
+.tile-img .media-fallback,.product-box-image .media-fallback{min-height:0}
 @media (max-width:600px){.owner-photos{grid-template-columns:1fr}}
 .product-box-image{position:relative}
 .stock-badge{position:absolute;top:10px;left:10px;background:#1f2937;color:#fff;font-size:11px;font-weight:800;line-height:1;padding:6px 9px;border-radius:999px}
@@ -3495,9 +3516,9 @@ function applyText(){
   setText(".shop-head h2", (SITE.homepage || {}).shopHeading);
   setText("#branches-toggle strong", br.summary);
   const dash = `<i class="footer-dash">–</i> `;
-  const brandLine = $(".footer-brand > span"); if (brandLine && biz.tagline) brandLine.innerHTML = dash + biz.tagline;
-  const branchLine = $("#branches-toggle span"); if (branchLine && br.tagline) branchLine.innerHTML = dash + br.tagline;
-  const copyLine = $(".footer-social-zone > span"); if (copyLine && biz.copyright) copyLine.innerHTML = dash + biz.copyright;
+  const brandLine = $(".footer-brand > span"); if (brandLine && biz.tagline) brandLine.innerHTML = dash + escapeText(biz.tagline);
+  const branchLine = $("#branches-toggle span"); if (branchLine && br.tagline) branchLine.innerHTML = dash + escapeText(br.tagline);
+  const copyLine = $(".footer-social-zone > span"); if (copyLine && biz.copyright) copyLine.innerHTML = dash + escapeText(biz.copyright);
   setText(".footer-mobile-line", [biz.tagline, biz.copyrightShort].filter(Boolean).join(" · "));
   const social = CONTENT.social || {};
   $$(".footer-social a").forEach(a => {
@@ -3562,7 +3583,7 @@ async function loadSite(){
   const fromFile = embedded() ? null : await readContentFile();
   SITE = fromFile || inlineData;
   if (!SITE) throw new Error("Site content is missing");
-  const ownerDraft = readOwnerDraft();
+  const ownerDraft = await readOwnerDraftAsync();
   if (ownerDraft && Number(ownerDraft.updatedAt) > Number(SITE.updatedAt || 0)) SITE = ownerDraft.site;
   ensureBranchIds();
   if (SITE.assetBase){
@@ -3630,6 +3651,13 @@ function escapeAttr(value){
 function escapeText(value){
   return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
+function textHTML(value){
+  return escapeText(value).replace(/\n/g, "<br>");
+}
+function initialOf(value){
+  const letter = String(value || "").trim().charAt(0).toUpperCase();
+  return letter || "?";
+}
 function imageUrl(slot, jsonSrc){
   const uploaded = slot ? UPLOADS.get(slot) : "";
   if (isHttp(uploaded)) return uploaded;
@@ -3637,7 +3665,7 @@ function imageUrl(slot, jsonSrc){
   if (json) return json;
   return uploaded || "";
 }
-const BLANK_PHOTO = "assets/products/empty.webp";
+const BLANK_PHOTO = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="#e7edf4"/><rect x="22" y="26" width="36" height="28" rx="3" fill="none" stroke="#8aa0b8" stroke-width="2.5"/><circle cx="33" cy="36" r="3" fill="#8aa0b8"/><path d="M26 50l10-9 7 6 5-4 10 10" fill="none" stroke="#8aa0b8" stroke-width="2.5" stroke-linejoin="round"/></svg>');
 const GALLERY_SLOTS = 3;
 let galleryWatch = null;
 // The first photo is the main picture. Later photos are the ones you swipe to.
@@ -3795,6 +3823,8 @@ function embedded(){
 
 function catById(id){ return CATEGORIES.find(c => c.id === id); }
 function subsOf(catId){ return SUBCATEGORIES[catId] || []; }
+function publicSubs(catId){ return subsOf(catId).filter(sub => (sub.types || []).length); }
+function publicCategories(){ return CATEGORIES.filter(cat => publicSubs(cat.id).length); }
 function subById(catId, subId){ return subsOf(catId).find(s => s.id === subId) || null; }
 function typeById(sub, typeId){ return sub ? (sub.types || []).find(t => t.id === typeId) || null : null; }
 // Legacy links used the type id directly under the category; map them to their sub-category.
@@ -3906,9 +3936,9 @@ function placeholderProduct(cat, sub, type, n){
     subcategory: sub.id,
     type: type.id,
     facetValue: "",
-    title: `${type.title} — Product ${n}`,
-    shortDescription: "Placeholder product. Replace with the showroom listing.",
-    longDescription: `Placeholder listing under ${path}. Add the real entry to the products list in data/content.json with the CRM image link.`,
+    title: n === 1 ? type.title : `${type.title} (${n})`,
+    shortDescription: "Ask in store for what is available now.",
+    longDescription: `Message us about ${type.title} for the current price and photos. It sits under ${path}.`,
     priceValue: null,
     price: "Price on request",
     image,
@@ -3950,7 +3980,7 @@ function placeholderById(id){
         if (option){
           const card = placeholderProduct(cat, sub, type, Number(match[2]));
           card.facetValue = option.title;
-          card.title = `${option.title} ${type.title} — Product ${match[2]}`;
+          card.title = `${option.title} ${type.title}`;
           return card;
         }
       }
@@ -3967,18 +3997,23 @@ async function productById(id){
 function crumbHTML(items){
   const parts = items.map((item, index) => {
     const last = index === items.length - 1;
-    return last || !item.href ? `<span aria-current="page">${item.label}</span>` : `<a href="${item.href}">${item.label}</a>`;
+    const label = escapeText(item.label);
+    return last || !item.href ? `<span aria-current="page">${label}</span>` : `<a href="${escapeAttr(item.href)}">${label}</a>`;
   });
   return `<nav class="crumb" aria-label="Breadcrumb">${parts.join(" / ")}</nav>`;
 }
 
+function cardVisualHTML(cat){
+  const src = categoryPicture(cat, "visual");
+  if (!src) return `<div class="card-visual"><div class="media-fallback">${escapeText(initialOf(cat.title))}</div></div>`;
+  return `<div class="card-visual">
+      <img class="card-object card-object-${escapeAttr(cat.id)}" data-slot="visual:${escapeAttr(cat.id)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(cat.alt || cat.title)}">
+    </div>`;
+}
 function cardHTML(cat){
   const href = `#/category/${cat.id}`;
-  const src = categoryPicture(cat, "visual");
   return `<article class="category-card" data-cat="${escapeAttr(cat.id)}" data-href="${href}">
-    <div class="card-visual">
-      <img class="card-object card-object-${escapeAttr(cat.id)}" data-slot="visual:${escapeAttr(cat.id)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(cat.alt || cat.title)}">
-    </div>
+    ${cardVisualHTML(cat)}
     <a class="card-open" href="${href}" aria-label="Open ${escapeAttr(cat.title)} category">
       <h3>${escapeText(cat.title)}</h3>
       <p>${escapeText(cat.description || "")}</p>
@@ -3990,7 +4025,7 @@ function cardHTML(cat){
 function renderHomeCards(){
   const track = $("#carousel-track");
   if (!track) return;
-  const items = [...CATEGORIES].sort((a,b)=>a.displayOrder-b.displayOrder);
+  const items = publicCategories().sort((a,b)=>a.displayOrder-b.displayOrder);
   // No catalog yet: keep the five cards written in the page.
   if (!items.length) return;
   const keep = new Set(items.map(cat => cat.id));
@@ -4003,11 +4038,27 @@ function renderHomeCards(){
     if (!card) return;
     const href = `#/category/${cat.id}`;
     card.setAttribute("data-href", href);
-    const img = card.querySelector("img");
-    applyImg(img, "visual:" + cat.id, cat.visualAsset || cat.icon || "");
-    if (img){
-      img.classList.add("card-object", "card-object-" + cat.id);
-      img.alt = cat.alt || cat.title || "";
+    const src = categoryPicture(cat, "visual");
+    const visual = card.querySelector(".card-visual");
+    let img = card.querySelector("img");
+    if (!src){
+      if (img) img.remove();
+      const letter = initialOf(cat.title);
+      const fallback = visual && visual.querySelector(".media-fallback");
+      if (fallback) fallback.textContent = letter;
+      else if (visual) visual.insertAdjacentHTML("afterbegin", `<div class="media-fallback">${escapeText(letter)}</div>`);
+    } else if (visual){
+      const fallback = visual.querySelector(".media-fallback");
+      if (fallback) fallback.remove();
+      if (!img){
+        visual.insertAdjacentHTML("afterbegin", `<img class="card-object card-object-${escapeAttr(cat.id)}" data-slot="visual:${escapeAttr(cat.id)}" draggable="false" alt="">`);
+        img = visual.querySelector("img");
+      }
+      applyImg(img, "visual:" + cat.id, cat.visualAsset || cat.icon || "");
+      if (img){
+        img.classList.add("card-object", "card-object-" + cat.id);
+        img.alt = cat.alt || cat.title || "";
+      }
     }
     const title = card.querySelector("h3");
     const copy = card.querySelector("p");
@@ -4175,19 +4226,23 @@ function pageFrame(title, lead, inner, nav){
   setActiveNav(nav);
   return `<div class="page">
     <div class="page-hero"><div class="container">
-      <h1>${title}</h1>
-      ${lead ? `<p>${lead}</p>` : ""}
+      <h1>${escapeText(title)}</h1>
+      ${lead ? `<p>${escapeText(lead)}</p>` : ""}
     </div></div>
     <div class="page-body"><div class="container">${inner}</div></div>
   </div>`;
 }
 
+function tilePictureHTML(src, alt, slot){
+  if (!src) return `<div class="media-fallback">${escapeText(initialOf(alt))}</div>`;
+  return `<img data-slot="${escapeAttr(slot || "")}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(alt || "")}">`;
+}
 function renderCategories(){
-  const cards = [...CATEGORIES].sort((a,b)=>a.displayOrder-b.displayOrder).map(c => {
+  const cards = publicCategories().sort((a,b)=>a.displayOrder-b.displayOrder).map(c => {
     const href = `#/category/${c.id}`;
     const src = categoryPicture(c, "icon");
     return `<article class="tile" data-href="${href}">
-      <div class="tile-img"><img data-slot="icon:${escapeAttr(c.id)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(c.alt || c.title)}"></div>
+      <div class="tile-img">${tilePictureHTML(src, c.alt || c.title, "icon:" + c.id)}</div>
       <a class="tile-body" href="${href}"><h3>${escapeText(c.title)}</h3><p>${escapeText(c.description || "")}</p></a>
     </article>`;
   }).join("");
@@ -4198,13 +4253,13 @@ function renderCategories(){
 // Single card template: every product on every listing page goes through this.
 function renderProductCard(p){
   const href = `#/product/${p.id}`;
-  const src = frameSrc(p.id, 0, p.image) || p.image || "";
+  const src = frameSrc(p.id, 0, p.image) || p.image || BLANK_PHOTO;
   const out = p.stock === "out";
   return `<article class="product-box${out ? " is-out" : ""}" data-id="${escapeAttr(p.id)}" data-href="${href}">
     <div class="product-box-image"><img data-slot="product:${escapeAttr(p.id)}:0" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(p.alt)}">${out ? `<span class="stock-badge">Out of stock</span>` : ""}</div>
     <div class="product-box-body">
       <h3><a href="${href}">${escapeText(p.title)}</a></h3>
-      <p>${p.shortDescription}</p>
+      <p>${textHTML(p.shortDescription)}</p>
       <p class="product-price">${p.price}</p>
       <div class="product-box-actions">
         <a class="btn btn-orange" href="${buildEnquireLink(p)}" target="_blank" rel="noopener">Enquire</a>
@@ -4228,7 +4283,7 @@ function tileGridHTML(items, hrefFor, fallbackImage, slotFor){
     const slot = slotFor ? slotFor(item) : "";
     const src = imageUrl(slot, item.image || fallbackImage || "");
     return `<article class="tile" data-href="${escapeAttr(href)}">
-      <div class="tile-img"><img data-slot="${escapeAttr(slot)}" draggable="false" src="${escapeAttr(src)}" alt="${escapeAttr(item.title)}"></div>
+      <div class="tile-img">${tilePictureHTML(src, item.title, slot)}</div>
       <a class="tile-body" href="${escapeAttr(href)}"><h3>${escapeText(item.title)}</h3>${item.description ? `<p>${escapeText(item.description)}</p>` : ""}</a>
     </article>`;
   }).join("");
@@ -4238,7 +4293,7 @@ function levelPageHTML(crumbs, title, lead, tiles, emptyText){
     <div class="container">
       ${crumbHTML(crumbs)}
       <div class="catalog-heading">
-        <div><h1>${title}</h1>${lead ? `<p>${lead}</p>` : ""}</div>
+        <div><h1>${escapeText(title)}</h1>${lead ? `<p>${escapeText(lead)}</p>` : ""}</div>
       </div>
       <div class="sub-grid">${tiles || `<p>${emptyText}</p>`}</div>
     </div>
@@ -4257,7 +4312,7 @@ function renderCategory(catId, subId, typeId, variantId){
 
   // Level 2: sub-categories
   if (!subId){
-    const tiles = tileGridHTML(subsOf(catId), s => catalogHref(cat, s), cat.icon, s => `sub:${cat.id}:${s.id}`);
+    const tiles = tileGridHTML(publicSubs(catId), s => catalogHref(cat, s), cat.icon, s => `sub:${cat.id}:${s.id}`);
     view.innerHTML = levelPageHTML([{label:"Home", href:"#/"},{label:cat.title}], cat.title, cat.description || leads.sub, tiles, "Sub-categories coming soon.");
     return;
   }
@@ -4314,7 +4369,8 @@ function attributeOptions(products, facetKey){
 
 function filterGroups(attributes, state, products){
   const groups = [];
-  const priceBtns = filterOn("price") ? FILTERS.priceRanges.map(r => `
+  const priced = products.some(p => p.priceValue !== null && !Number.isNaN(p.priceValue));
+  const priceBtns = filterOn("price") && priced ? FILTERS.priceRanges.map(r => `
     <button type="button" class="chip ${state.price === r.id ? "is-active" : ""}" data-filter="price" data-value="${escapeAttr(r.id)}" aria-pressed="${state.price === r.id}">${escapeText(r.label)}</button>`).join("") : "";
   if (priceBtns) groups.push(`
     <fieldset class="filter-group">
@@ -4361,7 +4417,7 @@ async function renderProductListing(cat, sub, type){
           <h4>${facet.label.toUpperCase()}</h4>
           <div class="side-list" id="facet-list">
             <button type="button" data-facet="">All</button>
-            ${facet.values.map(v => `<button type="button" data-facet="${v.replace(/"/g, "&quot;")}">${v.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</button>`).join("")}
+            ${facet.values.map(v => `<button type="button" data-facet="${escapeAttr(v)}">${escapeText(v)}</button>`).join("")}
           </div>
         </aside>` : "";
 
@@ -4373,7 +4429,7 @@ async function renderProductListing(cat, sub, type){
         ${side}
         <div class="listing">
           <div class="catalog-heading">
-            <div><h1>${type.title}</h1>${type.description ? `<p class="catalog-lead">${type.description}</p>` : ""}<p id="result-count">Loading products…</p></div>
+            <div><h1>${escapeText(type.title)}</h1>${type.description ? `<p class="catalog-lead">${escapeText(type.description)}</p>` : ""}<p id="result-count">Loading products…</p></div>
             <button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="filter-panel">Filters</button>
           </div>
           <form class="filter-panel" id="filter-panel" aria-label="Product filters"></form>
@@ -4410,7 +4466,10 @@ async function renderProductListing(cat, sub, type){
     const matches = applyFilters(all, state);
     const visible = matches.slice(0, state.shown);
     grid.innerHTML = visible.map(renderProductCard).join("") || `<p class="no-results">No products match these filters.</p>`;
-    count.textContent = `${matches.length} ${matches.length === 1 ? "product" : "products"} found`;
+    const realMatches = matches.filter(p => !p.placeholder).length;
+    count.textContent = !realMatches && matches.length
+      ? "Ask in store for the current range."
+      : `${matches.length} ${matches.length === 1 ? "product" : "products"} found`;
     moreWrap.hidden = matches.length <= state.shown;
     const n = activeCount();
     toggle.textContent = n ? `Filters (${n})` : "Filters";
@@ -4492,7 +4551,7 @@ async function renderProduct(id){
   const frames = galleryFrames(p);
   const shown = src => src || BLANK_PHOTO;
   const specs = (p.specifications || DEFAULT_SPECS).map(([label,value]) => `
-    <div class="spec-item"><strong>${label}</strong><span>${value}</span></div>`).join("");
+    <div class="spec-item"><strong>${escapeText(label)}</strong><span>${escapeText(value)}</span></div>`).join("");
   setActiveNav("categories");
   $("#view-page").innerHTML = `<div class="product-detail-page">
     <div class="container">
@@ -4510,12 +4569,12 @@ async function renderProduct(id){
           </div>`).join("")}</div>
       </div>
       <div class="detail-copy">
-        <h1>${p.title}</h1>
-        <p class="muted">${p.shortDescription}</p>
+        <h1>${escapeText(p.title)}</h1>
+        <p class="muted">${textHTML(p.shortDescription)}</p>
         <p class="detail-price">${p.price}</p>
         ${p.placeholder ? "" : `<p class="stock-line${p.stock === "out" ? " is-out" : ""}">${p.stock === "out" ? "Out of stock. Ask us when it will be back." : "In stock"}</p>`}
         ${availabilityText(p.branches || []) ? `<p class="branch-line">${escapeText(availabilityText(p.branches || []))}</p>` : ""}
-        <p class="detail-desc">${p.longDescription}</p>
+        <p class="detail-desc">${textHTML(p.longDescription)}</p>
         <div class="spec-list detail-specs">${specs}</div>
         <div class="hero-actions">
           <a class="btn btn-orange" href="${buildEnquireLink(p)}" target="_blank" rel="noopener">Enquire on WhatsApp</a>
@@ -4605,16 +4664,16 @@ async function renderProduct(id){
   });
   $$(".tab-btn").forEach(button => button.addEventListener("click", () => {
     $$(".tab-btn").forEach(item => item.classList.toggle("is-active", item === button));
-    if (button.dataset.tab === "description") $("#tab-panel").innerHTML = p.longDescription;
+    if (button.dataset.tab === "description") $("#tab-panel").innerHTML = textHTML(p.longDescription);
     if (button.dataset.tab === "specifications") $("#tab-panel").innerHTML = `<div class="spec-list">${specs}</div>`;
-    if (button.dataset.tab === "care") $("#tab-panel").innerHTML = p.careInstructions || DEFAULT_CARE;
+    if (button.dataset.tab === "care") $("#tab-panel").innerHTML = textHTML(p.careInstructions || DEFAULT_CARE);
   }));
 }
 
 function renderAbout(){
   const pg = (SITE.pages || {}).about || {};
-  const paragraphs = (pg.paragraphs || []).map(t => `<p>${t}</p>`).join("");
-  const points = (pg.points || []).map(t => `<div class="point"><span>—</span>${t}</div>`).join("");
+  const paragraphs = (pg.paragraphs || []).map(t => `<p>${textHTML(t)}</p>`).join("");
+  const points = (pg.points || []).map(t => `<div class="point"><span>—</span>${textHTML(t)}</div>`).join("");
   $("#view-page").innerHTML = pageFrame(pg.title || "About", pg.lead || "", `
     <div class="split">
       <div class="prose">
@@ -4628,7 +4687,7 @@ function renderAbout(){
 
 function renderManufacturing(){
   const pg = (SITE.pages || {}).manufacturing || {};
-  const steps = (pg.steps || []).map((st, i) => `<div class="mfg-card"><strong>${String(i + 1).padStart(2, "0")}</strong><h3>${st.title}</h3><p>${st.text || ""}</p></div>`).join("");
+  const steps = (pg.steps || []).map((st, i) => `<div class="mfg-card"><strong>${String(i + 1).padStart(2, "0")}</strong><h3>${escapeText(st.title)}</h3><p>${textHTML(st.text || "")}</p></div>`).join("");
   $("#view-page").innerHTML = pageFrame(pg.title || "Manufacturing", pg.lead || "", `
     <div class="mfg-grid">
       ${pg.image ? `<img data-slot="page:manufacturing" draggable="false" src="${escapeAttr(imageUrl("page:manufacturing", pg.image))}" alt="${escapeAttr(pg.imageAlt || "")}" style="width:100%;height:100%;min-height:280px;object-fit:cover;border-radius:18px">` : ""}
@@ -4908,15 +4967,25 @@ function ownerCats(){ return ((SITE.catalog || {}).categories) || []; }
 function ownerSubs(cat){ return (cat && (cat.subCategories || cat.subcategories)) || []; }
 function ownerTypes(sub){ return (sub && sub.types) || []; }
 function slugId(text){
-  const base = String(text || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  return base || "item";
+  return String(text || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 function uniqueId(list, text){
   const ids = new Set((list || []).map(item => item && item.id));
-  let id = slugId(text);
+  let stem = slugId(text);
+  if (!stem){
+    let hash = 2166136261;
+    for (const ch of String(text || "item")) hash = Math.imul(hash ^ ch.codePointAt(0), 16777619);
+    stem = "n" + (hash >>> 0).toString(36);
+  }
+  let id = stem;
   let n = 2;
-  while (ids.has(id)) id = slugId(text) + "-" + (n++);
+  while (ids.has(id)) id = stem + "-" + (n++);
   return id;
+}
+function nameTaken(list, name, exceptId){
+  const key = String(name || "").trim().toLowerCase();
+  if (!key) return false;
+  return (list || []).some(item => item && item.id !== exceptId && String(item.title || "").trim().toLowerCase() === key);
 }
 function clearUploadSlot(slot){
   UPLOADS.delete(slot);
@@ -5010,12 +5079,60 @@ function publishToCrm(html){
       updated = true;
     }
   } catch (err) {}
-  if (updated){
-    try { window.parent.postMessage({ type: "sme-site-html", html: html }, "*"); } catch (err) {}
-  }
+  try {
+    if (window.parent && window.parent !== window) window.parent.postMessage({ type: "sme-site-html", html: html }, "*");
+  } catch (err) {}
   return updated;
 }
-function commitEdits(){
+function openOwnerDb(){
+  return new Promise((resolve, reject) => {
+    if (!window.indexedDB){ reject(new Error("no idb")); return; }
+    const req = indexedDB.open("sme-owner", 1);
+    req.onupgradeneeded = () => {
+      if (!req.result.objectStoreNames.contains("draft")) req.result.createObjectStore("draft");
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error("idb"));
+  });
+}
+async function writeOwnerDraft(payload){
+  let stored = false;
+  try {
+    localStorage.setItem("sme-owner-edits", JSON.stringify(payload));
+    stored = true;
+  } catch (err) {}
+  try {
+    const db = await openOwnerDb();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction("draft", "readwrite");
+      tx.objectStore("draft").put(payload, "edits");
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error || new Error("idb"));
+      tx.onabort = () => reject(tx.error || new Error("idb"));
+    });
+    db.close();
+    stored = true;
+  } catch (err) {}
+  return stored;
+}
+async function readOwnerDraftAsync(){
+  const local = readOwnerDraft();
+  let saved = null;
+  try {
+    const db = await openOwnerDb();
+    saved = await new Promise((resolve, reject) => {
+      const tx = db.transaction("draft", "readonly");
+      const req = tx.objectStore("draft").get("edits");
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error || new Error("idb"));
+    });
+    db.close();
+  } catch (err) {}
+  if (!saved || !saved.site || !Array.isArray(saved.site.products)) return local;
+  if (!local || Number(saved.updatedAt) >= Number(local.updatedAt)) return saved;
+  return local;
+}
+async function commitEdits(){
   SITE.updatedAt = Date.now();
   applyBusiness(SITE.business);
   applyCatalog(SITE.catalog || {});
@@ -5024,15 +5141,18 @@ function commitEdits(){
   applyText();
   renderHomeCards();
   renderBranches();
-  let stored = true;
-  try {
-    localStorage.setItem("sme-owner-edits", JSON.stringify({ updatedAt: SITE.updatedAt, site: SITE }));
-  } catch (err) {
-    stored = false;
-  }
+  const stored = await writeOwnerDraft({ updatedAt: SITE.updatedAt, site: SITE });
   writeInlineJson();
   lastHostSync = publishToCrm(websiteHtml());
   return stored;
+}
+function canvasHasAlpha(ctx, width, height){
+  const data = ctx.getImageData(0, 0, width, height).data;
+  const step = Math.max(4, Math.floor(data.length / 16000) * 4);
+  for (let i = 3; i < data.length; i += step){
+    if (data[i] < 250) return true;
+  }
+  return false;
 }
 function readPhotoFile(file){
   return new Promise((resolve, reject) => {
@@ -5044,9 +5164,12 @@ function readPhotoFile(file){
       const canvas = document.createElement("canvas");
       canvas.width = Math.max(1, Math.round(img.width * scale));
       canvas.height = Math.max(1, Math.round(img.height * scale));
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      const ctx = canvas.getContext("2d", { alpha: true });
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL("image/jpeg", 0.72));
+      const keepAlpha = canvasHasAlpha(ctx, canvas.width, canvas.height);
+      resolve(keepAlpha ? canvas.toDataURL("image/png") : canvas.toDataURL("image/jpeg", 0.72));
     };
     img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("photo")); };
     img.src = url;
@@ -5070,19 +5193,23 @@ function ownerStatus(stored){
   if (!el) return;
   const href = ownerTab === "products" && ownerProductId ? "#/product/" + ownerProductId : "#/";
   const message = lastHostSync
-    ? "Saved into the CRM page. It will render this version. Press Publish in the CRM."
+    ? "Saved into the CRM page. Press Publish in the CRM to make it live."
     : stored
-      ? "Saved. The page is showing this version on this phone. Press Publish in the CRM if you are editing there."
-      : "Saved for now. Download the website file before you leave, or the new photos may be lost.";
+      ? "Saved on this phone. The CRM editor was not updated from here. Download the website file, replace the page HTML in the CRM, then Save and Publish."
+      : "The draft is too big to keep in this browser. Download the website file before you leave, or the new photos may be lost.";
   el.innerHTML = escapeText(message) + ` <a href="${escapeAttr(href)}">Show the page</a>`;
 }
 function bindOwnerEntry(){
   const spot = $("#owner-spot");
   if (!spot) return;
   let last = 0;
+  spot.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+  });
   spot.addEventListener("pointerup", () => {
     const now = Date.now();
-    if (now - last < 450){
+    if (now - last < 700){
       last = 0;
       ownerTapArm = true;
       location.hash = "#/manage";
@@ -5141,9 +5268,9 @@ function renderManage(){
   });
   $("#owner-tabs").addEventListener("click", e => {
     const btn = e.target.closest("[data-tab]");
-    if (!btn) return;
-    ownerTab = btn.dataset.tab;
-    paintOwnerTab();
+    if (!btn || btn.dataset.tab === ownerTab) return;
+    const next = btn.dataset.tab;
+    confirmLeave(() => { ownerTab = next; paintOwnerTab(); });
   });
   paintOwnerTab();
 }
@@ -5154,11 +5281,16 @@ function ownerNote(text){
   if (el) el.textContent = text;
 }
 // confirm() is blocked inside many builder previews, so removal asks for a second press instead.
-function armTwice(btn, action){
+function armTwice(btn, action, warn){
   if (!btn) return;
   const label = btn.textContent;
   btn.addEventListener("click", () => {
     if (btn.dataset.armed !== "1"){
+      if (typeof warn === "function"){
+        const message = warn();
+        if (message === false) return;
+        if (message) ownerNote(message);
+      }
       btn.dataset.armed = "1";
       btn.textContent = "Press again to remove";
       setTimeout(() => {
@@ -5169,8 +5301,30 @@ function armTwice(btn, action){
     action();
   });
 }
-function saveAndRepaint(note){
-  ownerStatus(commitEdits());
+let ownerDirty = false;
+let ownerLeaveArmed = false;
+function markOwnerDirty(e){
+  const target = e && e.target;
+  if (target && target.closest && target.closest("#own-ccat, #own-csub, #own-list-cat, #own-search, #own-new-cat, #own-new-sub, #own-new-type, #own-new-type-facet, #own-quick-type, #own-quick-facet, #own-cat-shift, #own-sub-shift, #own-sub-move")) return;
+  if (target && target.matches && target.matches("[data-type-shift]")) return;
+  ownerDirty = true;
+  ownerLeaveArmed = false;
+}
+function confirmLeave(then){
+  if (!ownerDirty){ then(); return; }
+  if (ownerLeaveArmed){
+    ownerDirty = false;
+    ownerLeaveArmed = false;
+    then();
+    return;
+  }
+  ownerLeaveArmed = true;
+  ownerNote("You have changes that are not saved. Press that control again to leave them.");
+  setTimeout(() => { ownerLeaveArmed = false; }, 5000);
+}
+async function saveAndRepaint(note){
+  const stored = await commitEdits();
+  ownerStatus(stored);
   paintOwnerTab();
   if (note) ownerNote(note);
 }
@@ -5187,6 +5341,9 @@ function ownerPath(p){
 }
 function paintOwnerTab(){
   if (ownerTab === "types" || ownerTab === "categories") ownerTab = "catalog";
+  if (ownerListCat && !ownerCats().some(c => c.id === ownerListCat)) ownerListCat = "";
+  ownerDirty = false;
+  ownerLeaveArmed = false;
   $$("#owner-tabs button").forEach(btn => btn.classList.toggle("is-active", btn.dataset.tab === ownerTab));
   const panel = $("#owner-panel");
   if (!panel) return;
@@ -5200,6 +5357,8 @@ function paintOwnerTab(){
   else if (ownerTab === "filters") bindOwnerFilters();
   else if (ownerTab === "words") bindOwnerWords();
   else bindOwnerProducts();
+  panel.addEventListener("input", markOwnerDirty);
+  panel.addEventListener("change", markOwnerDirty);
 }
 function facetOf(type){
   return type && (type.facet === "style" || type.facet === "material") ? type.facet : "";
@@ -5287,6 +5446,7 @@ function ownerProductForm(product){
       <select id="own-psub">${optionHTML(ownerSubs(cat), sub && sub.id, s => s.title)}</select>
       <label for="own-ptype">Type</label>
       <select id="own-ptype">${optionHTML(types, type && type.id, t => t.title)}</select>
+      ${type ? "" : `<p class="owner-help">Shoppers cannot find a product until it has a sub-category and a type. Add those under Categories &amp; types first.</p>`}
       <label for="own-quick-type">Type not in the list? Add it to this sub-category</label>
       <div class="owner-row">
         <input id="own-quick-type" placeholder="L Shape Sofa">
@@ -5308,6 +5468,32 @@ function ownerProductForm(product){
       </div>
     </form>`;
 }
+function firstProductPlace(){
+  const cats = ownerListCat ? ownerCats().filter(c => c.id === ownerListCat) : ownerCats();
+  for (const cat of cats){
+    for (const sub of ownerSubs(cat)){
+      const type = ownerTypes(sub)[0];
+      if (type) return { cat, sub, type };
+    }
+  }
+  return null;
+}
+async function addOwnerProduct(place){
+  SITE.products = SITE.products || [];
+  const id = uniqueId(SITE.products, "new product");
+  const order = SITE.products.reduce((n, p) => Math.max(n, Number(p.displayOrder) || 0), 0) + 1;
+  SITE.products.push({
+    id, category: place.cat.id, subCategory: place.sub.id, type: place.type.id,
+    name: "New product", description: "", longDescription: "", price: null,
+    image: "", images: [], alt: "New product", specs: {}, stock: "in",
+    branches: openBranches().map(b => b.id), displayOrder: order
+  });
+  ownerProductId = id;
+  ownerSearch = "";
+  await saveAndRepaint("New product added. Fill in the name, price and photos below, then press Save product.");
+  const name = $("#own-name");
+  if (name){ name.focus(); name.select(); }
+}
 function bindOwnerProducts(){
   const search = $("#own-search");
   search.addEventListener("input", () => {
@@ -5320,30 +5506,22 @@ function bindOwnerProducts(){
   });
   $("#own-list").addEventListener("click", e => {
     const row = e.target.closest("[data-pick]");
-    if (!row) return;
-    ownerProductId = row.dataset.pick;
-    paintOwnerTab();
-    const edit = $("#own-edit");
-    if (edit && edit.scrollIntoView) edit.scrollIntoView({ block: "start" });
+    if (!row || row.dataset.pick === ownerProductId) return;
+    const nextId = row.dataset.pick;
+    confirmLeave(() => {
+      ownerProductId = nextId;
+      paintOwnerTab();
+      const edit = $("#own-edit");
+      if (edit && edit.scrollIntoView) edit.scrollIntoView({ block: "start" });
+    });
   });
   $("#own-add-product").addEventListener("click", () => {
-    const cat = ownerCats().find(c => c.id === ownerListCat) || ownerCats()[0];
-    const sub = cat && ownerSubs(cat)[0];
-    const type = sub && ownerTypes(sub)[0];
-    SITE.products = SITE.products || [];
-    const id = uniqueId(SITE.products, "new product");
-    const order = SITE.products.reduce((n, p) => Math.max(n, Number(p.displayOrder) || 0), 0) + 1;
-    SITE.products.push({
-      id, category: cat ? cat.id : "", subCategory: sub ? sub.id : "", type: type ? type.id : "",
-      name: "New product", description: "", longDescription: "", price: null,
-      image: "", images: [], alt: "New product", specs: {}, stock: "in",
-      branches: openBranches().map(b => b.id), displayOrder: order
-    });
-    ownerProductId = id;
-    ownerSearch = "";
-    saveAndRepaint("New product added. Fill in the name, price, type and photos below, then press Save product.");
-    const name = $("#own-name");
-    if (name){ name.focus(); name.select(); }
+    const place = firstProductPlace();
+    if (!place){
+      ownerNote("Add a category, a sub-category and a type under Categories & types before adding a product. A product without them does not show on the website.");
+      return;
+    }
+    confirmLeave(() => addOwnerProduct(place));
   });
   const form = $("#own-product-form");
   if (!form) return;
@@ -5365,17 +5543,18 @@ function bindOwnerProducts(){
   $("#own-pcat").addEventListener("change", refill);
   $("#own-psub").addEventListener("change", refill);
   $("#own-ptype").addEventListener("change", refill);
-  $("#own-quick-type-add").addEventListener("click", () => {
+  $("#own-quick-type-add").addEventListener("click", async () => {
     const name = $("#own-quick-type").value.trim();
     const cat = ownerCats().find(c => c.id === $("#own-pcat").value);
     const sub = cat && ownerSubs(cat).find(s => s.id === $("#own-psub").value);
     if (!name){ ownerNote("Type the name of the new type first."); return; }
     if (!sub){ ownerNote("Choose a sub-category first. Add one under Categories & types if it is missing."); return; }
+    if (nameTaken(sub.types, name)){ ownerNote(`${name} is already a type in ${sub.title}. Open it instead.`); return; }
     sub.types = sub.types || [];
     const facet = $("#own-quick-facet").value;
     const type = { id: uniqueId(sub.types, name), title: name, description: "", image: sub.image || "", facet: facet === "style" || facet === "material" ? facet : "", options: [] };
     sub.types.push(type);
-    ownerStatus(commitEdits());
+    ownerStatus(await commitEdits());
     $("#own-quick-type").value = "";
     $("#own-ptype").innerHTML = optionHTML(sub.types, type.id, t => t.title);
     refill();
@@ -5388,6 +5567,10 @@ function bindOwnerProducts(){
     const cat = ownerCats().find(c => c.id === $("#own-pcat").value);
     const sub = cat && ownerSubs(cat).find(s => s.id === $("#own-psub").value);
     const type = sub && ownerTypes(sub).find(t => t.id === $("#own-ptype").value);
+    if (!sub || !type){
+      ownerNote("Choose a sub-category and a type. Without them this product stays off the website.");
+      return;
+    }
     product.name = $("#own-name").value.trim() || product.name;
     product.alt = product.name;
     const price = String($("#own-price").value || "").replace(/[^\d.]/g, "");
@@ -5437,6 +5620,85 @@ function bindOwnerProducts(){
     saveAndRepaint("Product removed. If it is only sold out, you can add it again and set Out of stock instead.");
   });
 }
+function productsIn(catId, subId, typeId){
+  return (SITE.products || []).filter(p => {
+    if (catId && p.category !== catId) return false;
+    if (subId && (p.subCategory || p.subcategory) !== subId) return false;
+    if (typeId && p.type !== typeId) return false;
+    return true;
+  });
+}
+function moveById(list, id, dir){
+  const index = (list || []).findIndex(item => item && item.id === id);
+  const next = index + dir;
+  if (index < 0 || next < 0 || next >= list.length) return false;
+  const [item] = list.splice(index, 1);
+  list.splice(next, 0, item);
+  return true;
+}
+function ensureSubList(cat){
+  if (!Array.isArray(cat.subCategories)) cat.subCategories = ownerSubs(cat).slice();
+  delete cat.subcategories;
+  return cat.subCategories;
+}
+function catalogPlaces(skip){
+  const places = [];
+  ownerCats().forEach(cat => {
+    ownerSubs(cat).forEach(sub => {
+      ownerTypes(sub).forEach(type => {
+        if (skip && skip(cat, sub, type)) return;
+        places.push({ cat, sub, type, label: cat.title + " › " + sub.title + " › " + type.title });
+      });
+    });
+  });
+  return places;
+}
+function placeOptions(skip){
+  return catalogPlaces(skip).map(place => `<option value="${escapeAttr(place.cat.id + "|" + place.sub.id + "|" + place.type.id)}">${escapeText(place.label)}</option>`).join("");
+}
+function placeFromValue(value){
+  const parts = String(value || "").split("|");
+  const cat = ownerCats().find(item => item.id === parts[0]);
+  const sub = cat && ownerSubs(cat).find(item => item.id === parts[1]);
+  const type = sub && ownerTypes(sub).find(item => item.id === parts[2]);
+  return cat && sub && type ? { cat, sub, type } : null;
+}
+function shiftProducts(list, place){
+  const facet = facetOf(place.type);
+  list.forEach(product => {
+    const value = product.style || product.material || "";
+    product.category = place.cat.id;
+    product.subCategory = place.sub.id;
+    delete product.subcategory;
+    product.type = place.type.id;
+    if (facet && value){
+      place.type.options = place.type.options || [];
+      let option = place.type.options.find(item => String(item.title).toLowerCase() === String(value).toLowerCase());
+      if (!option){
+        option = { id: uniqueId(place.type.options, value), title: value };
+        place.type.options.push(option);
+      }
+      product[facet] = option.title;
+    }
+    if (facet !== "material") delete product.material;
+    if (facet !== "style") delete product.style;
+  });
+}
+function optionEditor(type){
+  const options = type.options || [];
+  if (!options.length) return `<p class="owner-help">No materials or styles yet. Type one below, then press Save this type.</p>`;
+  return options.map(opt => `<div class="owner-opt" data-opt="${escapeAttr(opt.id)}">
+      <input class="own-opt-name" value="${escapeAttr(opt.title)}" aria-label="${escapeAttr(opt.title)}">
+      <button type="button" data-remove-opt="${escapeAttr(opt.id)}">Remove</button>
+    </div>`).join("");
+}
+function shiftControls(id, skip, label){
+  const options = placeOptions(skip);
+  if (!options) return "";
+  return `<label for="${id}">${escapeText(label)}</label>
+    <select id="${id}">${options}</select>
+    <div class="owner-row"><button type="button" class="btn btn-navy" id="${id}-btn">Move products</button></div>`;
+}
 function ownerCatalogHTML(){
   const cats = ownerCats();
   if (!cats.some(c => c.id === ownerCatId)) ownerCatId = cats[0] ? cats[0].id : "";
@@ -5445,27 +5707,33 @@ function ownerCatalogHTML(){
   if (!subs.some(s => s.id === ownerSubId)) ownerSubId = subs[0] ? subs[0].id : "";
   const sub = subs.find(s => s.id === ownerSubId) || null;
   const types = ownerTypes(sub);
+  const catCount = cat ? productsIn(cat.id).length : 0;
+  const subCount = cat && sub ? productsIn(cat.id, sub.id).length : 0;
+  const otherCats = cat ? ownerCats().filter(item => item.id !== cat.id) : [];
   return `<div class="owner-card">
     <h2>1. Category</h2>
-    <p class="owner-help">The big cards on the homepage, like Furniture.</p>
-    ${cats.length ? `<label for="own-ccat">Category</label><select id="own-ccat">${optionHTML(cats, ownerCatId, c => c.title)}</select>` : ""}
+    <p class="owner-help">The big cards on the homepage, like Furniture. Shoppers see a category after it has a sub-category and a type.</p>
+    ${cats.length ? `<label for="own-ccat">Category</label><select id="own-ccat">${optionHTML(cats, ownerCatId, c => c.title)}</select>
+      <div class="owner-row"><button class="btn btn-navy" type="button" id="own-cat-up">Move up</button><button class="btn btn-navy" type="button" id="own-cat-down">Move down</button></div>` : ""}
     ${cat ? `<form id="own-cat-form">
       <label for="own-cat-title">Name</label>
       <input id="own-cat-title" value="${escapeAttr(cat.title || "")}">
       <label for="own-cat-desc">Line under the name</label>
       <input id="own-cat-desc" value="${escapeAttr(cat.description || "")}">
-      <label for="own-cat-photo">Card picture</label>
+      <label for="own-cat-photo">Card picture. A cut-out with a clear background stays clear.</label>
       ${cat.visualAsset ? `<div class="owner-photos"><figure><img src="${escapeAttr(cat.visualAsset)}" alt=""></figure></div>` : ""}
       <input id="own-cat-photo" type="file" accept="image/*">
       <div class="owner-row"><button class="btn btn-orange" type="submit">Save category</button><button class="owner-remove" type="button" id="own-cat-remove">Remove category</button></div>
-    </form>` : ""}
+    </form>
+    ${catCount ? shiftControls("own-cat-shift", item => item.id === cat.id, "Move all " + catCount + " products out of " + cat.title) : ""}` : ""}
     <label for="own-new-cat">Add a new category</label>
     <div class="owner-row"><input id="own-new-cat" placeholder="Kitchen"><button type="button" class="btn btn-navy" id="own-add-cat">Add category</button></div>
   </div>
   ${cat ? `<div class="owner-card">
     <h2>2. Sub-category in ${escapeText(cat.title)}</h2>
-    <p class="owner-help">The next cards, like Sofa or Cots.</p>
-    ${subs.length ? `<label for="own-csub">Sub-category</label><select id="own-csub">${optionHTML(subs, ownerSubId, s => s.title)}</select>` : `<p class="owner-help">No sub-categories yet.</p>`}
+    <p class="owner-help">The next cards, like Sofa or Cots. A sub-category shows after it has a type.</p>
+    ${subs.length ? `<label for="own-csub">Sub-category</label><select id="own-csub">${optionHTML(subs, ownerSubId, s => s.title)}</select>
+      <div class="owner-row"><button class="btn btn-navy" type="button" id="own-sub-up">Move up</button><button class="btn btn-navy" type="button" id="own-sub-down">Move down</button></div>` : `<p class="owner-help">No sub-categories yet.</p>`}
     ${sub ? `<form id="own-sub-form">
       <label for="own-sub-title">Name</label>
       <input id="own-sub-title" value="${escapeAttr(sub.title || "")}">
@@ -5475,16 +5743,20 @@ function ownerCatalogHTML(){
       ${sub.image ? `<div class="owner-photos"><figure><img src="${escapeAttr(sub.image)}" alt=""></figure></div>` : ""}
       <input id="own-sub-photo" type="file" accept="image/*">
       <div class="owner-row"><button class="btn btn-orange" type="submit">Save sub-category</button><button class="owner-remove" type="button" id="own-sub-remove">Remove sub-category</button></div>
-    </form>` : ""}
+    </form>
+    ${otherCats.length ? `<label for="own-sub-move">Move ${escapeText(sub.title)} to another category</label>
+      <select id="own-sub-move">${otherCats.map(item => `<option value="${escapeAttr(item.id)}">${escapeText(item.title)}</option>`).join("")}</select>
+      <div class="owner-row"><button type="button" class="btn btn-navy" id="own-sub-move-btn">Move sub-category</button></div>` : ""}
+    ${subCount ? shiftControls("own-sub-shift", (item, child) => item.id === cat.id && child.id === sub.id, "Move all " + subCount + " products out of " + sub.title) : ""}` : ""}
     <label for="own-new-sub">Add a sub-category to ${escapeText(cat.title)}</label>
     <div class="owner-row"><input id="own-new-sub" placeholder="Wardrobes"><button type="button" class="btn btn-navy" id="own-add-sub">Add sub-category</button></div>
   </div>` : ""}
   ${sub ? `<div class="owner-card">
     <h2>3. Types in ${escapeText(sub.title)}</h2>
-    <p class="owner-help">The last cards before the products, like 3 Seater. A type can have a Material or Style list that shoppers use to filter.</p>
+    <p class="owner-help">The last cards before the products, like 3 Seater. Edit a material or style name, then press Save this type. Switching Material and Style keeps the list and the products.</p>
     ${types.map(type => {
       const facet = facetOf(type);
-      const options = type.options || [];
+      const count = productsIn(cat.id, sub.id, type.id).length;
       return `<div class="owner-type" data-type="${escapeAttr(type.id)}">
         <label>Type name</label>
         <input class="own-type-name" value="${escapeAttr(type.title || "")}">
@@ -5494,12 +5766,20 @@ function ownerCatalogHTML(){
           <option value="material"${facet === "material" ? " selected" : ""}>Material</option>
           <option value="style"${facet === "style" ? " selected" : ""}>Style</option>
         </select>
-        <div class="owner-chip">${options.map(opt => `<button type="button" data-remove-opt="${escapeAttr(opt.id)}">${escapeText(opt.title)} ×</button>`).join("") || "<span>No materials or styles yet.</span>"}</div>
+        <label>Materials or styles</label>
+        ${optionEditor(type)}
         <label>Add a material or style</label>
         <input class="own-type-option" placeholder="Fabric, Teak, 43 inch">
         <label>Card picture</label>
+        ${type.image ? `<div class="owner-photos"><figure><img src="${escapeAttr(type.image)}" alt=""></figure></div>` : ""}
         <input class="own-type-photo" type="file" accept="image/*">
-        <div class="owner-row"><button class="btn btn-orange own-type-save" type="button">Save this type</button><button class="owner-remove own-type-remove" type="button">Remove type</button></div>
+        <div class="owner-row">
+          <button class="btn btn-navy" type="button" data-move-type="-1">Move up</button>
+          <button class="btn btn-navy" type="button" data-move-type="1">Move down</button>
+          <button class="btn btn-orange own-type-save" type="button">Save this type</button>
+          <button class="owner-remove own-type-remove" type="button">Remove type</button>
+        </div>
+        ${count && placeOptions((item, child, kind) => item.id === cat.id && child.id === sub.id && kind.id === type.id) ? `<label>Move all ${count} products in ${escapeText(type.title)}</label><select data-type-shift>${placeOptions((item, child, kind) => item.id === cat.id && child.id === sub.id && kind.id === type.id)}</select><div class="owner-row"><button type="button" class="btn btn-navy" data-shift-type>Move products</button></div>` : ""}
       </div>`;
     }).join("") || `<p class="owner-help">No types yet.</p>`}
     <div class="owner-type">
@@ -5516,27 +5796,63 @@ function bindOwnerCatalog(){
   const cat = ownerCats().find(c => c.id === ownerCatId) || null;
   const sub = cat ? ownerSubs(cat).find(s => s.id === ownerSubId) || null : null;
   const ccat = $("#own-ccat");
-  if (ccat) ccat.addEventListener("change", () => { ownerCatId = ccat.value; ownerSubId = ""; paintOwnerTab(); });
+  if (ccat) ccat.addEventListener("change", () => {
+    const next = ccat.value;
+    if (next === ownerCatId) return;
+    confirmLeave(() => { ownerCatId = next; ownerSubId = ""; paintOwnerTab(); });
+    if ($("#own-ccat") && ownerCatId !== next) $("#own-ccat").value = ownerCatId;
+  });
   const csub = $("#own-csub");
-  if (csub) csub.addEventListener("change", () => { ownerSubId = csub.value; paintOwnerTab(); });
+  if (csub) csub.addEventListener("change", () => {
+    const next = csub.value;
+    if (next === ownerSubId) return;
+    confirmLeave(() => { ownerSubId = next; paintOwnerTab(); });
+    if ($("#own-csub") && ownerSubId !== next) $("#own-csub").value = ownerSubId;
+  });
+  const moveCat = dir => {
+    if (!cat) return;
+    confirmLeave(() => {
+      const ordered = ownerCats().slice().sort((a, b) => (Number(a.displayOrder) || 99) - (Number(b.displayOrder) || 99));
+      const index = ordered.findIndex(item => item.id === cat.id);
+      const next = index + dir;
+      if (index < 0 || next < 0 || next >= ordered.length){
+        ownerNote(dir < 0 ? "This category is already first." : "This category is already last.");
+        return;
+      }
+      ordered.forEach((item, i) => { item.displayOrder = i + 1; });
+      const from = ordered[index].displayOrder;
+      ordered[index].displayOrder = ordered[next].displayOrder;
+      ordered[next].displayOrder = from;
+      saveAndRepaint("Category order updated.");
+    });
+  };
+  const upCat = $("#own-cat-up");
+  const downCat = $("#own-cat-down");
+  if (upCat) upCat.addEventListener("click", () => moveCat(-1));
+  if (downCat) downCat.addEventListener("click", () => moveCat(1));
   $("#own-add-cat").addEventListener("click", () => {
     const name = $("#own-new-cat").value.trim();
     if (!name){ ownerNote("Type the name of the new category first."); return; }
-    SITE.catalog = SITE.catalog || {};
-    SITE.catalog.categories = SITE.catalog.categories || [];
-    const list = SITE.catalog.categories;
-    const id = uniqueId(list, name);
-    const order = list.reduce((n, c) => Math.max(n, Number(c.displayOrder) || 0), 0) + 1;
-    list.push({ id, title: name, description: "", icon: "", visualAsset: "", alt: name, displayOrder: order, subCategories: [] });
-    ownerCatId = id;
-    ownerSubId = "";
-    saveAndRepaint(`Category "${name}" added. Add a card picture, then a sub-category and a type so products can go in it.`);
+    if (nameTaken(ownerCats(), name)){ ownerNote(name + " is already a category. Open it from the list."); return; }
+    confirmLeave(() => {
+      SITE.catalog = SITE.catalog || {};
+      SITE.catalog.categories = SITE.catalog.categories || [];
+      const list = SITE.catalog.categories;
+      const id = uniqueId(list, name);
+      const order = list.reduce((n, item) => Math.max(n, Number(item.displayOrder) || 0), 0) + 1;
+      list.push({ id, title: name, description: "", icon: "", visualAsset: "", alt: name, displayOrder: order, subCategories: [] });
+      ownerCatId = id;
+      ownerSubId = "";
+      saveAndRepaint("Category \"" + name + "\" added. It stays off the homepage until you add a sub-category and a type.");
+    });
   });
   const catForm = $("#own-cat-form");
   if (catForm && cat){
     catForm.addEventListener("submit", async e => {
       e.preventDefault();
-      cat.title = $("#own-cat-title").value.trim() || cat.title;
+      const title = $("#own-cat-title").value.trim() || cat.title;
+      if (nameTaken(ownerCats(), title, cat.id)){ ownerNote(title + " is already a category."); return; }
+      cat.title = title;
       cat.alt = cat.title;
       cat.description = $("#own-cat-desc").value.trim();
       const file = $("#own-cat-photo").files[0];
@@ -5550,100 +5866,256 @@ function bindOwnerCatalog(){
       saveAndRepaint();
     });
     armTwice($("#own-cat-remove"), () => {
-      const n = (SITE.products || []).filter(p => p.category === cat.id).length;
-      if (n){ ownerNote(`${cat.title} still has ${n} products. Move them to another category or remove them first.`); paintOwnerTab(); return; }
-      SITE.catalog.categories = ownerCats().filter(c => c.id !== cat.id);
+      const removed = cat.title;
+      SITE.catalog.categories = ownerCats().filter(item => item.id !== cat.id);
       ownerCatId = "";
-      saveAndRepaint(`Category "${cat.title}" removed.`);
+      saveAndRepaint("Category \"" + removed + "\" removed.");
+    }, () => {
+      const count = productsIn(cat.id).length;
+      if (count){
+        ownerNote(cat.title + " still has " + count + " products. Move them with the list below, or remove them from Products.");
+        return false;
+      }
+      const children = ownerSubs(cat);
+      const typeCount = children.reduce((n, item) => n + ownerTypes(item).length, 0);
+      if (children.length) return "This also removes " + children.length + " " + (children.length === 1 ? "sub-category" : "sub-categories") + " and " + typeCount + " " + (typeCount === 1 ? "type" : "types") + ". Press the button again.";
+      return "Press the button again to remove " + cat.title + ".";
+    });
+    const shiftCat = $("#own-cat-shift-btn");
+    if (shiftCat) shiftCat.addEventListener("click", () => {
+      const place = placeFromValue($("#own-cat-shift").value);
+      const list = productsIn(cat.id);
+      if (!place || !list.length){ ownerNote("Choose where the products should go."); return; }
+      shiftProducts(list, place);
+      saveAndRepaint(list.length + " products moved to " + place.type.title + ".");
     });
   }
   const addSub = $("#own-add-sub");
   if (addSub && cat) addSub.addEventListener("click", () => {
     const name = $("#own-new-sub").value.trim();
     if (!name){ ownerNote("Type the name of the new sub-category first."); return; }
-    if (!Array.isArray(cat.subCategories)) cat.subCategories = ownerSubs(cat).slice();
-    delete cat.subcategories;
-    const id = uniqueId(cat.subCategories, name);
-    cat.subCategories.push({ id, title: name, description: "", image: "", types: [] });
-    ownerSubId = id;
-    saveAndRepaint(`Sub-category "${name}" added. Now add at least one type below.`);
+    if (nameTaken(ownerSubs(cat), name)){ ownerNote(name + " is already in " + cat.title + "."); return; }
+    confirmLeave(() => {
+      const list = ensureSubList(cat);
+      const id = uniqueId(list, name);
+      list.push({ id, title: name, description: "", image: "", types: [] });
+      ownerSubId = id;
+      saveAndRepaint("Sub-category \"" + name + "\" added. It stays hidden until you add a type below.");
+    });
   });
+  const moveSub = dir => {
+    if (!cat || !sub) return;
+    confirmLeave(() => {
+      const list = ensureSubList(cat);
+      if (!moveById(list, sub.id, dir)){
+        ownerNote(dir < 0 ? "This sub-category is already first." : "This sub-category is already last.");
+        return;
+      }
+      saveAndRepaint("Sub-category order updated.");
+    });
+  };
+  const upSub = $("#own-sub-up");
+  const downSub = $("#own-sub-down");
+  if (upSub) upSub.addEventListener("click", () => moveSub(-1));
+  if (downSub) downSub.addEventListener("click", () => moveSub(1));
   const subForm = $("#own-sub-form");
   if (subForm && sub){
     subForm.addEventListener("submit", async e => {
       e.preventDefault();
-      sub.title = $("#own-sub-title").value.trim() || sub.title;
+      const title = $("#own-sub-title").value.trim() || sub.title;
+      if (nameTaken(ownerSubs(cat), title, sub.id)){ ownerNote(title + " is already in " + cat.title + "."); return; }
+      sub.title = title;
       sub.description = $("#own-sub-desc").value.trim();
       const file = $("#own-sub-photo").files[0];
       if (file){
         sub.image = await readPhotoFile(file);
-        clearUploadSlot(`sub:${cat.id}:${sub.id}`);
+        clearUploadSlot("sub:" + cat.id + ":" + sub.id);
       }
       saveAndRepaint();
     });
     armTwice($("#own-sub-remove"), () => {
-      const n = (SITE.products || []).filter(p => p.category === cat.id && (p.subCategory || p.subcategory) === sub.id).length;
-      if (n){ ownerNote(`${sub.title} still has ${n} products. Move them or remove them first.`); paintOwnerTab(); return; }
-      const list = ownerSubs(cat);
+      const removed = sub.title;
+      const list = ensureSubList(cat);
       list.splice(list.indexOf(sub), 1);
       ownerSubId = "";
-      saveAndRepaint(`Sub-category "${sub.title}" removed.`);
+      saveAndRepaint("Sub-category \"" + removed + "\" removed.");
+    }, () => {
+      const count = productsIn(cat.id, sub.id).length;
+      if (count){
+        ownerNote(sub.title + " still has " + count + " products. Move them with the list below, or remove them from Products.");
+        return false;
+      }
+      const typeCount = ownerTypes(sub).length;
+      if (typeCount) return "This also removes " + typeCount + " " + (typeCount === 1 ? "type" : "types") + ". Press the button again.";
+      return "Press the button again to remove " + sub.title + ".";
+    });
+    const moveBtn = $("#own-sub-move-btn");
+    if (moveBtn) moveBtn.addEventListener("click", () => {
+      const target = ownerCats().find(item => item.id === $("#own-sub-move").value);
+      if (!target || target.id === cat.id){ ownerNote("Choose a different category."); return; }
+      if (nameTaken(ownerSubs(target), sub.title)){
+        ownerNote(target.title + " already has a sub-category named " + sub.title + ". Rename it first.");
+        return;
+      }
+      const moving = productsIn(cat.id, sub.id);
+      const from = ensureSubList(cat);
+      from.splice(from.indexOf(sub), 1);
+      const dest = ensureSubList(target);
+      if (dest.some(item => item.id === sub.id)){
+        const nextId = uniqueId(dest, sub.title);
+        moving.forEach(product => { product.subCategory = nextId; delete product.subcategory; });
+        sub.id = nextId;
+      }
+      dest.push(sub);
+      moving.forEach(product => {
+        product.category = target.id;
+        product.subCategory = sub.id;
+        delete product.subcategory;
+      });
+      ownerCatId = target.id;
+      ownerSubId = sub.id;
+      saveAndRepaint(sub.title + " is now in " + target.title + ".");
+    });
+    const shiftSub = $("#own-sub-shift-btn");
+    if (shiftSub) shiftSub.addEventListener("click", () => {
+      const place = placeFromValue($("#own-sub-shift").value);
+      const list = productsIn(cat.id, sub.id);
+      if (!place || !list.length){ ownerNote("Choose where the products should go."); return; }
+      shiftProducts(list, place);
+      saveAndRepaint(list.length + " products moved to " + place.type.title + ".");
     });
   }
   $$(".own-type-save").forEach(btn => btn.addEventListener("click", async () => {
     const box = btn.closest("[data-type]");
-    const type = sub && ownerTypes(sub).find(t => t.id === box.dataset.type);
-    if (!type) return;
-    type.title = box.querySelector(".own-type-name").value.trim() || type.title;
-    const facet = box.querySelector(".own-type-facet").value;
-    type.facet = facet === "style" || facet === "material" ? facet : "";
-    if (!type.facet) type.options = [];
+    const type = sub && ownerTypes(sub).find(item => item.id === box.dataset.type);
+    if (!type || !sub) return;
+    const nextTitle = box.querySelector(".own-type-name").value.trim();
+    if (!nextTitle){ ownerNote("Type a name for this type."); return; }
+    if (nameTaken(ownerTypes(sub), nextTitle, type.id)){ ownerNote(nextTitle + " is already a type in " + sub.title + "."); return; }
+    const requested = box.querySelector(".own-type-facet").value;
+    const nextFacet = requested === "style" || requested === "material" ? requested : "";
+    const prevFacet = facetOf(type);
+    if (!nextFacet && prevFacet && (type.options || []).length && btn.dataset.armed !== "1"){
+      const oldLabel = btn.textContent;
+      btn.dataset.armed = "1";
+      btn.textContent = "Press again to remove the filter";
+      ownerNote("This removes the filter list (" + (type.options || []).map(item => item.title).join(", ") + "). Products keep those values. Press Save again to remove it.");
+      setTimeout(() => { if (btn.isConnected){ btn.dataset.armed = ""; btn.textContent = oldLabel; } }, 5000);
+      return;
+    }
+    const planned = [];
+    const seen = new Set();
+    let duplicate = "";
+    box.querySelectorAll(".owner-opt").forEach(row => {
+      const option = (type.options || []).find(item => item.id === row.dataset.opt);
+      if (!option) return;
+      const title = row.querySelector(".own-opt-name").value.trim() || option.title;
+      const key = title.toLowerCase();
+      if (seen.has(key)) duplicate = title;
+      seen.add(key);
+      planned.push({ option, title });
+    });
+    if (duplicate){ ownerNote(duplicate + " is already in this list. Use a different name."); return; }
+    const using = productsIn(cat.id, sub.id, type.id);
+    planned.forEach(change => {
+      if (change.title === change.option.title) return;
+      using.forEach(product => {
+        if (prevFacet && product[prevFacet] === change.option.title) product[prevFacet] = change.title;
+        if (product.material === change.option.title) product.material = change.title;
+        if (product.style === change.option.title) product.style = change.title;
+      });
+      change.option.title = change.title;
+    });
+    if (prevFacet && nextFacet && prevFacet !== nextFacet){
+      using.forEach(product => {
+        const value = product[prevFacet] || "";
+        if (value) product[nextFacet] = value;
+        delete product[prevFacet];
+      });
+    }
+    type.facet = nextFacet;
+    if (!nextFacet) type.options = [];
+    type.title = nextTitle;
     const added = box.querySelector(".own-type-option").value.trim();
     if (added){
       if (!type.facet) type.facet = "material";
       type.options = type.options || [];
-      if (!type.options.some(opt => opt.title.toLowerCase() === added.toLowerCase())){
+      if (!type.options.some(item => item.title.toLowerCase() === added.toLowerCase())){
         type.options.push({ id: uniqueId(type.options, added), title: added });
       }
     }
     const file = box.querySelector(".own-type-photo").files[0];
     if (file){
       type.image = await readPhotoFile(file);
-      clearUploadSlot(`type:${cat.id}:${sub.id}:${type.id}`);
+      clearUploadSlot("type:" + cat.id + ":" + sub.id + ":" + type.id);
     }
     saveAndRepaint();
   }));
+  $$("[data-move-type]").forEach(btn => btn.addEventListener("click", () => {
+    if (!sub) return;
+    const box = btn.closest("[data-type]");
+    const dir = Number(btn.dataset.moveType);
+    confirmLeave(() => {
+      sub.types = ownerTypes(sub);
+      if (!moveById(sub.types, box.dataset.type, dir)){
+        ownerNote(dir < 0 ? "This type is already first." : "This type is already last.");
+        return;
+      }
+      saveAndRepaint("Type order updated.");
+    });
+  }));
   $$(".own-type-remove").forEach(btn => armTwice(btn, () => {
     const box = btn.closest("[data-type]");
-    const type = sub && ownerTypes(sub).find(t => t.id === box.dataset.type);
+    const type = sub && ownerTypes(sub).find(item => item.id === box.dataset.type);
     if (!type) return;
-    const n = (SITE.products || []).filter(p => p.category === cat.id && (p.subCategory || p.subcategory) === sub.id && p.type === type.id).length;
-    if (n){ ownerNote(`${type.title} still has ${n} products. Move them to another type or remove them first.`); paintOwnerTab(); return; }
-    sub.types = ownerTypes(sub).filter(t => t !== type);
-    saveAndRepaint(`Type "${type.title}" removed.`);
+    sub.types = ownerTypes(sub).filter(item => item !== type);
+    saveAndRepaint("Type \"" + type.title + "\" removed.");
+  }, () => {
+    const box = btn.closest("[data-type]");
+    const type = sub && ownerTypes(sub).find(item => item.id === box.dataset.type);
+    if (!type) return false;
+    const count = productsIn(cat.id, sub.id, type.id).length;
+    if (count){
+      ownerNote(type.title + " still has " + count + " products. Move them with the list below, or remove them from Products.");
+      return false;
+    }
+    return "Press the button again to remove " + type.title + ".";
+  }));
+  $$("[data-shift-type]").forEach(btn => btn.addEventListener("click", () => {
+    const box = btn.closest("[data-type]");
+    const type = sub && ownerTypes(sub).find(item => item.id === box.dataset.type);
+    const place = placeFromValue(box.querySelector("[data-type-shift]").value);
+    const list = type ? productsIn(cat.id, sub.id, type.id) : [];
+    if (!place || !list.length){ ownerNote("Choose where the products should go."); return; }
+    shiftProducts(list, place);
+    saveAndRepaint(list.length + " products moved to " + place.type.title + ".");
   }));
   $$("[data-remove-opt]").forEach(btn => btn.addEventListener("click", () => {
     const box = btn.closest("[data-type]");
-    const type = sub && ownerTypes(sub).find(t => t.id === box.dataset.type);
+    const type = sub && ownerTypes(sub).find(item => item.id === box.dataset.type);
     if (!type) return;
-    type.options = (type.options || []).filter(opt => opt.id !== btn.dataset.removeOpt);
-    saveAndRepaint();
+    const removed = (type.options || []).find(item => item.id === btn.dataset.removeOpt);
+    type.options = (type.options || []).filter(item => item.id !== btn.dataset.removeOpt);
+    saveAndRepaint(removed ? removed.title + " was removed from the filter. Products that used it no longer match that choice." : "");
   }));
   const addType = $("#own-add-type");
   if (addType) addType.addEventListener("click", () => {
     const name = $("#own-new-type").value.trim();
     if (!sub || !name){ ownerNote("Type the name of the new type first."); return; }
+    if (nameTaken(ownerTypes(sub), name)){ ownerNote(name + " is already a type in " + sub.title + "."); return; }
     const facet = $("#own-new-type-facet").value;
-    sub.types = sub.types || [];
-    sub.types.push({
-      id: uniqueId(sub.types, name),
-      title: name,
-      description: "",
-      image: sub.image || "",
-      facet: facet === "style" || facet === "material" ? facet : "",
-      options: []
+    confirmLeave(() => {
+      sub.types = sub.types || [];
+      sub.types.push({
+        id: uniqueId(sub.types, name),
+        title: name,
+        description: "",
+        image: sub.image || "",
+        facet: facet === "style" || facet === "material" ? facet : "",
+        options: []
+      });
+      saveAndRepaint("Type \"" + name + "\" added. Add its materials or styles, then put products in it from the Products tab.");
     });
-    saveAndRepaint(`Type "${name}" added. Add its materials or styles, then put products in it from the Products tab.`);
   });
 }
 function ownerBranchesHTML(){
